@@ -1,0 +1,9 @@
+*.hex
+*.o
+*.d
+*.eep
+*.elf
+*HEAD*
+*info*
+*hooks*
+*config*
