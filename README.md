@@ -1,2 +1,2 @@
-# avr-api
-api library for Atmel AVR
+# AVR-API 
+Basic API library for Atmel AVR with reverce compartability with Arduino library
