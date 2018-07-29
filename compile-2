@@ -1,0 +1,7 @@
+#!/bin/bash
+
+avr-g++ -c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=atmega328p -DF_CPU=16000000L "USART.cpp" -o "USART.o"
+avr-g++ -c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=atmega328p -DF_CPU=16000000L "avr-api.cpp" -o "avr-api.o"
+avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p  -o "avr-api.elf" "avr-api.o" -lm
+avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0  "avr-api.elf" "avr-api.eep"
+avr-objcopy -O ihex -R .eeprom  "avr-api.elf" "avr-api.hex"

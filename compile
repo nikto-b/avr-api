@@ -1,0 +1,44 @@
+#!/bin/bash
+
+MCUNAME=atmega328p
+XTAL=16000000
+FILENAME=avr-api
+
+#cd ../
+
+#avr-g++ -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics  -flto -fno-devirtualize -fno-use-cxa-atexit -w -x c++ -E -CC -mmcu=$MCUNAME -DF_CPU=$XTAL -DARDUINO=10805 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR "-I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino" "-I/usr/share/arduino/hardware/archlinux-arduino/avr/variants/standard" "./USART.cpp" -o "/dev/null"
+#avr-g++ -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics  -flto -fno-devirtualize -fno-use-cxa-atexit -w -x c++ -E -CC -mmcu=$MCUNAME -DF_CPU=$XTAL -DARDUINO=10805 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR "-I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino" "-I/usr/share/arduino/hardware/archlinux-arduino/avr/variants/standard" "./ADC.cpp" -o "/dev/null"
+#avr-g++ -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics  -flto -fno-devirtualize -fno-use-cxa-atexit -w -x c++ -E -CC -mmcu=$MCUNAME -DF_CPU=$XTAL -DARDUINO=10805 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR "-I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino" "-I/usr/share/arduino/hardware/archlinux-arduino/avr/variants/standard" "USART.cpp" "./$FILENAME.cpp" -o "/dev/null"
+#avr-g++ -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics  -flto -fno-devirtualize -fno-use-cxa-atexit -w -x c++ -E -CC -mmcu=$MCUNAME -DF_CPU=$XTAL -DARDUINO=10805 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR "-I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino" "-I/usr/share/arduino/hardware/archlinux-arduino/avr/variants/standard" "./USART.cpp" -o "/dev/null"
+
+#avr-g++ -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions 
+#-ffunction-sections -fdata-sections -fno-threadsafe-statics  -flto 
+#-fno-devirtualize -fno-use-cxa-atexit -w -x c++ -E -CC -mmcu=$MCUNAME 
+#-DF_CPU=$XTAL -DARDUINO=10805 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR 
+#"-I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino" 
+#"-I/usr/share/arduino/hardware/archlinux-arduino/avr/variants/standard" 
+#"./$FILENAME.cpp" -o "./ctags_target_for_gcc_minus_e.cpp"
+
+#arduino-ctags -u --language-force=c++ -f - --c++-kinds=svpf 
+#--fields=KSTtzns --line-directives "./ctags_target_for_gcc_minus_e.cpp"
+
+#avr-g++ -c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$MCUNAME -DF_CPU=$XTAL -DARDUINO=10805 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR   "-I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino" "-I/usr/share/arduino/hardware/archlinux-arduino/avr/variants/standard" "./USART.cpp" -o "./USART.o"
+#avr-g++ -c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$MCUNAME -DF_CPU=$XTAL -DARDUINO=10805 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR   "-I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino" "-I/usr/share/arduino/hardware/archlinux-arduino/avr/variants/standard" "./ADC.cpp" -o "./ADC.o"
+#avr-g++ -c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$MCUNAME -DF_CPU=$XTAL -DARDUINO=10805 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR   "-I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino" "-I/usr/share/arduino/hardware/archlinux-arduino/avr/variants/standard" "./USART.cpp" -o "./USART.elf"
+avr-g++ -c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$MCUNAME -DF_CPU=$XTAL -DARDUINO=10805 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR   "-I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino" "-I/usr/share/arduino/hardware/archlinux-arduino/avr/variants/standard" "./$FILENAME.cpp" -o "./$FILENAME.elf"
+avr-g++ -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$MCUNAME -DF_CPU=$XTAL "USART.cpp" "./$FILENAME.cpp" -o "./$FILENAME.elf"
+#avr-g++ -c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=atmega328p -DF_CPU=16000000 -DARDUINO=10805 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR   "-I/usr/share/arduino/hardware/archlinux-arduino/avr/cores/arduino" "-I/usr/share/arduino/hardware/archlinux-arduino/avr/variants/standard" "./avr-api.cpp" -o "./avr-api.elf"
+#avr-g++ -c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit "./USART.cpp" -o "./USART.elf"
+
+#avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=$MCUNAME  -o "./USART.elf" "./USART.o" 
+#avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=$MCUNAME  -o "./ADC.elf" "./ADC.o" 
+avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=$MCUNAME "USART.cpp" "./$FILENAME.elf" -o "./$FILENAME.o"
+#avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p  -o "./avr-api.elf" "./avr-api.o"
+
+#avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0 "./USART.elf" "./USART.eep"
+#avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0 "./ADC.elf" "./ADC.eep"
+#avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0 "./$FILENAME.elf" "./$FILENAME.eep"
+
+#avr-objcopy -O ihex -R .eeprom  "./USART.elf" "./USART.hex"
+#avr-objcopy -O ihex -R .eeprom  "./ADC.elf" "./ADC.hex"
+#avr-objcopy -O ihex -R .eeprom  "./$FILENAME.elf" "./$FILENAME.hex"
