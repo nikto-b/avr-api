@@ -133,20 +133,6 @@ char* decToBin(int _in, uint16_t _count)
 	return _res;
 }
 
-inline void setMotorDirectionC(uint8_t port, uint8_t pin, uint8_t direction)
-{
-  *(&port) = (*(&port) & ~(1 << pin)) | (direction << pin);
-}
-inline void doOneStepC(uint8_t pin, uint64_t delayMicros)
-{
-  //*(&port) = (*(&port) & ~(1 << pin)) | (1 << pin);//enable pins
-  digitalWrite(pin, 1);
-  delayMicroseconds(delayMicros);  
-  digitalWrite(pin, 0);
-  //*(&port) = (*(&port) & ~(1 << pin)) | (0 << pin);//disable pins
-  delayMicroseconds(delayMicros);  
-}
-
 
 int main()
 {
@@ -159,33 +145,13 @@ int main()
 	
 	
 	funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR] = USART_RX;
-	/*PORTB = (1 << 9) - 1;
-	PORTC = (1 << 9) - 1;
-	PORTD |= ((1 << 9) - 1) << 2;*/
-	//PORTD = 1 << PD4;
 	PORTB = 1;
 	USARTBegin(9600);
 	TIMER0Init(TIMER0_MODE_CTC, TIMER0_CLOCK_EXTERNAL_RISING, 10);
-	//funcs[TIMER0_COMPA_CUSTOMFUNC_ADDR] = TIMER0_CTC;
 	funcs[TIMER0_COMPB_CUSTOMFUNC_ADDR] = TIMER0_CTC;
 	sei();
 	while(1)
 	{
-		//doOneStepC((8 * 1) + 3, 100);
-		/*if((!((PIND >> 7) & 1)) && wannaStopArmCC)
-		{
-			PORTC &= ~(1 << PC5);
-			PORTD &= ~(1 << PD6);
-			wannaStopArmCC = 0;
-			USARTPrint("AA\n");
-		}
-		if((!(PINB & 1)) && wannaStopArmC)
-		{
-			PORTC &= ~(1 << PC5);
-			PORTD &= ~(1 << PD6);
-			wannaStopArmC = 0;
-			USARTPrint("AA\n");
-		}*/
 	}
 	return 0;
 }
