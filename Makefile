@@ -1,5 +1,5 @@
 MAINFILENAME=main
-MCU=atmega328p
+MCU=atmega2560
 XTAL=16000000L
 USBPORT=/dev/ttyUSB0
 PROGRAMMER=arduino
@@ -29,9 +29,6 @@ clean:
 
 remove: clean
 	rm -rf ./*.hex
-
-run:
-	avrdude -C/etc/avrdude.conf -v -p$(MCU) -P$(USBPORT) -c$(PROGRAMMER) -b$(BAUDRATE) -D -U flash:w:./$(FILENAME).hex:i
 
 size:
 	avr-size -B $(MAINFILENAME).hex

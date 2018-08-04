@@ -5,18 +5,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEVICE atmega328p		//define with AVR name
+#define DEVICE atmega2560		//define with AVR name
 //#define BOOTLOADER_ADDRESS 0x7000	//define with addr of bootloader in mem
 #define NUM_OF_ANALOG_PINS 7
-#define ARDUINO_SUPPORT 1
-#define USE_ADC 1
+#define ARDUINO_SUPPORT 0
+#define USE_ADC 0
 
 //---------TIMERS----------
-#define USE_TIMERS 1
+#define USE_TIMERS 0
 
 //---------USART----------
 #define USE_USART 1
 #define USE_USART0 1
+#define USE_USART0_OUTPUT 1
 
 //---------CUSTOM_INTERRUPTS----------
 #define USE_CUSTOM_INTERRUPTS 1
@@ -56,56 +57,56 @@ void USART_RX()
 	{
 		case '0':
 		{
-			PORTC ^= (1 << PC4);
+			/*PORTC ^= (1 << PC4);
 			_delay_ms(1000);
-			PORTC ^= (1 << PC4);
+			PORTC ^= (1 << PC4);*/
 			break;
 		}
 		case '1':
 		{
-			PORTC ^= (1 << PC3);
+			/*PORTC ^= (1 << PC3);
 			_delay_ms(1000);
-			PORTC ^= (1 << PC3);
+			PORTC ^= (1 << PC3);*/
 			break;
 		}
 		case '2':
 		{
-			PORTC ^= (1 << PC5);
-			wannaStopArmC = !wannaStopArmC;		
+			/*PORTC ^= (1 << PC5);
+			wannaStopArmC = !wannaStopArmC;	*/	
 			break;
 		}
 		case '3':
 		{
-			PORTD ^= (1 << PD6);
-			wannaStopArmCC = !wannaStopArmCC;
+			/*PORTD ^= (1 << PD6);
+			wannaStopArmCC = !wannaStopArmCC;*/
 			break;
 		}
 		case '4':
 		{
-			PORTD ^= (1 << PD4);
+			/*PORTD ^= (1 << PD4);
 			_delay_ms(1000);
-			PORTD ^= (1 << PD4);	
+			PORTD ^= (1 << PD4);	*/
 			break;
 		}
 		case '5':
 		{
-			PORTD ^= (1 << PD5);
+			/*PORTD ^= (1 << PD5);
 			_delay_ms(1000);
-			PORTD ^= (1 << PD5);			
+			PORTD ^= (1 << PD5);*/			
 			break;
 		}
 		case '6':
 		{
-			PORTD ^= (1 << PD3);
+			/*PORTD ^= (1 << PD3);
 			_delay_ms(1000);
-			PORTD ^= (1 << PD3);	
+			PORTD ^= (1 << PD3);	*/
 			break;
 		}
 		case '7':
 		{
-			PORTD ^= (1 << PD2);
+			/*PORTD ^= (1 << PD2);
 			_delay_ms(1000);
-			PORTD ^= (1 << PD2);
+			PORTD ^= (1 << PD2);*/
 			break;
 		}
 		case '8':
@@ -136,7 +137,7 @@ char* decToBin(int _in, uint16_t _count)
 
 int main()
 {
-	DDRB = ((1 << PB0) | (1 << PB1));//8, 9 output
+	DDRB = ((1 << PB0) | (1 << PB1) | (1 << PB7));//8, 9, 13 output
 	DDRC = ((1 << PC5) | (1 << PC4) | (1 << PC3));//A0,1,2 output
 	DDRD = ((1 << PD2) | (1 << PD3) | (0 << PD4) | (1 << PD5) | (1 << PD6) | (1 << PD7));//2,3,4,5,6,7 output
 	//DDRD = 1 << PD4;
@@ -144,15 +145,37 @@ int main()
 	
 	
 	
-	funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR] = USART_RX;
-	PORTB = 1;
-	USARTBegin(9600);
-	TIMER0Init(TIMER0_MODE_CTC, TIMER0_CLOCK_EXTERNAL_RISING, 10);
-	funcs[TIMER0_COMPB_CUSTOMFUNC_ADDR] = TIMER0_CTC;
+	//funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR] = USART_RX;
+	//PORTB = 1;
+	PORTB |= ~(1 << PB7);
+	USARTBegin(115200);
+	//TIMER0Init(TIMER0_MODE_CTC, TIMER0_CLOCK_EXTERNAL_RISING, 10);
+	//funcs[TIMER0_COMPB_CUSTOMFUNC_ADDR] = TIMER0_CTC;
+	_delay_ms(500);
 	sei();
+	/*USARTSend('A');
+	USARTSend('B');
+	USARTSend('C');
+		_delay_ms(500);
+		_delay_ms(500);
+		_delay_ms(500);*/
 	while(1)
 	{
+		//PORTB ^= 1 << PB7;
+		USARTPrint("this is fucking C-string\n");
+		/*USARTSend('t');
+		USARTSend('h');
+		USARTSend('i');
+		USARTSend('s');
+		USARTSend(' ');
+		USARTSend('i');
+		USARTSend('s');
+		USARTSend(' ');
+		USARTSend('C');
+		USARTSend('\n');*/
+		_delay_ms(500);
+		//USARTPrint("this is clusterfucking C\n");
+		//_delay_ms(500);
 	}
 	return 0;
 }
-#pragma message "don't forgot to allow interrupts and good luck with debugging!    :)"

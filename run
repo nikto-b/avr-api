@@ -1,10 +1,12 @@
 #!/bin/bash
 
-MCUNAME=atmega328p
-#PROGRAMMER=wiring
-PROGRAMMER=arduino
-FILENAME=avr-api
-USBPORT=/dev/ttyUSB1
+MCUNAME=atmega2560
+PROGRAMMER=wiring
+#PROGRAMMER=arduino
+FILENAME=main
+USBPORT=/dev/ttyUSB0
 BAUDRATE=115200
+
+make all 
 
 avrdude -C/etc/avrdude.conf -v -p$MCUNAME -P$USBPORT -c$PROGRAMMER -b$BAUDRATE -D -U flash:w:./$FILENAME.hex:i
