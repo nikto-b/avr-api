@@ -18,6 +18,8 @@
 #define USE_USART 1
 #define USE_USART0 1
 #define USE_USART0_OUTPUT 1
+#define USE_USART0_INPUT 1
+#define USE_SERIAL_FASTBAUD 0
 
 //---------CUSTOM_INTERRUPTS----------
 #define USE_CUSTOM_INTERRUPTS 1
@@ -47,79 +49,11 @@ void usartGotCharFunc()
 	}
 #endif
 
-bool wannaStopArmC = false;
-bool wannaStopArmCC = false;
+bool fuck = false;
 
 void USART_RX()
 {
-	USARTPrint("GOT\n");
-	switch(USARTRead())
-	{
-		case '0':
-		{
-			/*PORTC ^= (1 << PC4);
-			_delay_ms(1000);
-			PORTC ^= (1 << PC4);*/
-			break;
-		}
-		case '1':
-		{
-			/*PORTC ^= (1 << PC3);
-			_delay_ms(1000);
-			PORTC ^= (1 << PC3);*/
-			break;
-		}
-		case '2':
-		{
-			/*PORTC ^= (1 << PC5);
-			wannaStopArmC = !wannaStopArmC;	*/	
-			break;
-		}
-		case '3':
-		{
-			/*PORTD ^= (1 << PD6);
-			wannaStopArmCC = !wannaStopArmCC;*/
-			break;
-		}
-		case '4':
-		{
-			/*PORTD ^= (1 << PD4);
-			_delay_ms(1000);
-			PORTD ^= (1 << PD4);	*/
-			break;
-		}
-		case '5':
-		{
-			/*PORTD ^= (1 << PD5);
-			_delay_ms(1000);
-			PORTD ^= (1 << PD5);*/			
-			break;
-		}
-		case '6':
-		{
-			/*PORTD ^= (1 << PD3);
-			_delay_ms(1000);
-			PORTD ^= (1 << PD3);	*/
-			break;
-		}
-		case '7':
-		{
-			/*PORTD ^= (1 << PD2);
-			_delay_ms(1000);
-			PORTD ^= (1 << PD2);*/
-			break;
-		}
-		case '8':
-		{
-			
-			break;
-		}
-		case '9':
-		{
-			
-			break;
-		}
-	}
+	fuck = true;
 }
 
 char* decToBin(int _in, uint16_t _count)
@@ -151,31 +85,11 @@ int main()
 	USARTBegin(115200);
 	//TIMER0Init(TIMER0_MODE_CTC, TIMER0_CLOCK_EXTERNAL_RISING, 10);
 	//funcs[TIMER0_COMPB_CUSTOMFUNC_ADDR] = TIMER0_CTC;
-	_delay_ms(500);
+	funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR] = USART_RX;
 	sei();
-	/*USARTSend('A');
-	USARTSend('B');
-	USARTSend('C');
-		_delay_ms(500);
-		_delay_ms(500);
-		_delay_ms(500);*/
 	while(1)
 	{
-		//PORTB ^= 1 << PB7;
-		USARTPrint("this is fucking C-string\n");
-		/*USARTSend('t');
-		USARTSend('h');
-		USARTSend('i');
-		USARTSend('s');
-		USARTSend(' ');
-		USARTSend('i');
-		USARTSend('s');
-		USARTSend(' ');
-		USARTSend('C');
-		USARTSend('\n');*/
-		_delay_ms(500);
-		//USARTPrint("this is clusterfucking C\n");
-		//_delay_ms(500);
+		USARTPrint("OK!\n");
 	}
 	return 0;
 }

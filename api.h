@@ -1,4 +1,4 @@
-#pragma message USE_CUSTOM_INTERRUPTS
+void (*funcs[21])();
 #include "settings.h"
 
 #include "digitalRegisters.h"

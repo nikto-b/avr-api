@@ -1,6 +1,7 @@
 
 
 #if USE_TIMERS == 1
+	#include "timerCustomfuncAddrs.h"
 	#if defined(TCCR0A)//if mcu have TIMER0
 		#pragma message "TIMER0 found"
 		
