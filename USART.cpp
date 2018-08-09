@@ -13,7 +13,6 @@
 			 */
 		}
 		
-		
 		void USARTPrint(char* _data)	//send C-string to USART
 		{	
 			while(*_data != 0x00)
@@ -22,7 +21,6 @@
 				_data++;
 			}
 		}
-		
 		
 		ISR(USART0_TX_vect)//interrupt handler called aftar transmitting data
 		{			
@@ -35,27 +33,30 @@
 	
 	#if USE_USART0_INPUT == 1
 		
-		#ifndef _MAX_BUF_SIZE_
-			#define _MAX_BUF_SIZE_ 256
-		#endif //ifndef _MAX_BUF_SIZE_
-		
+		#define _MAX_BUF_SIZE_ 256
+			
 		char _inputBuf_[_MAX_BUF_SIZE_];//buffer for input from USART
 		uint8_t _inputBufCounterInput_ = 0;//index of last char placed by system
 		uint8_t _inputBufCounterOutput_ = 0;//index of last char gotted by user
-		uint8_t _inputBufEmpty_ = false;
+		uint8_t _inputBufEmpty_ = true;
 		
-		unsigned char USARTData = 0;//input USART buffer
-		ISR(USART0_RX_vect)	       //TODO: define all interrupt vectors
-		{						  //interrupt handler called after recieving data
-			
-			if(_inputBufCounterInput_ >= _MAX_BUF_SIZE_
-					|| _inputBufEmpty_)
+		
+		
+		ISR(USART0_RX_vect)		   //interrupt handler called after recieving data
+		{					
+			if(_inputBufCounterInput_ >= _MAX_BUF_SIZE_	//check that counters are in borders of buf size
+					|| _inputBufEmpty_)					//or buf empty
 			{
-				_inputBufCounterInput_ = 0;
+				_inputBufCounterInput_ = 0;				//start writing from zero
 			}
 			
-			_inputBuf_[_inputBufCounterInput_] = UDR0;
-			_inputBufCounterInput_++;
+			_inputBuf_[_inputBufCounterInput_] = UDR0;	//save data
+			
+			if(_inputBuf_[_inputBufCounterInput_] != NULL)//check for garbage
+			{
+				_inputBufEmpty_ = false;				//set empty flag down
+				_inputBufCounterInput_++;				//go next index for writing
+			}
 			
 			if(funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR] != NULL)
 				funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR]();//call custom function
@@ -63,26 +64,46 @@
 		
 		char USARTRead()//get data from input USART buffer
 		{
-			char __ret = _inputBuf_[_inputBufCounterOutput_];	//save data from buf
-			_inputBuf_[_inputBufCounterOutput_] = NULL;			//delete data in buf
-			_inputBufCounterOutput_++;
-			if(_inputBufCounterOutput_ >= _MAX_BUF_SIZE_
-			|| _inputBufCounterOutput_ >= _inputBufCounterInput_)
+			if(_inputBufCounterOutput_ >= _MAX_BUF_SIZE_)	//check that counters are in borders of buf size
 			{
-				_inputBufCounterOutput_ = 0;
-				_inputBufCounterInput_ = 0;
-				_inputBufEmpty_ = true;
+				_inputBufCounterOutput_ = 0;				//start from zero
+				_inputBufEmpty_ = true;						//with empty buf
 			}
-			else if(!_inputBufEmpty_)
+			else if(_inputBufCounterOutput_ >= _inputBufCounterInput_)//check that counter for output not overtaked input
 			{
-				return __ret;
+				char ___ret___ = _inputBuf_[_inputBufCounterOutput_];//save data to temp var
+				_inputBufCounterOutput_ = 0;						//set counters to zero
+				_inputBufCounterInput_  = 0;
+				_inputBufEmpty_ = true;								//empty buf
+				return ___ret___;									//return data
 			}
-			return NULL;
+			else if(!_inputBufEmpty_)								//if have data
+			{
+				char ___ret___ = _inputBuf_[_inputBufCounterOutput_];//save data to temp var
+				_inputBufCounterOutput_++;							//go to next index for reading
+				if(_inputBufCounterOutput_ >= _MAX_BUF_SIZE_)		//check that counter is in borders of buf size
+				{
+					_inputBufCounterOutput_ = 0;					//start from zero	
+					_inputBufEmpty_ = true;							//empty buf
+				}
+				return ___ret___;									//return data
+			}
+			else
+			{
+				return NULL;					//ERROR
+			}
 		}
 		
 		bool USARTAvailable()
 		{
-			return _inputBufEmpty_;
+			if(_inputBufCounterOutput_ >= _inputBufCounterInput_	//check that counter for output not overtaked input
+			|| _inputBufCounterOutput_ >= _MAX_BUF_SIZE_)
+			{
+				_inputBufCounterOutput_ = 0;
+				_inputBufCounterInput_  = 0;
+				_inputBufEmpty_ = true;								//empty buf
+			}
+			return !_inputBufEmpty_;
 		}
 
 	#endif //if USE_USART0_INPUT == 1
@@ -90,6 +111,14 @@
 
 	void USARTBegin(uint64_t _baud)
 	{		
+		#if USE_USART0_INPUT == 1
+		
+			for(int i = 0; i < _MAX_BUF_SIZE_; i++)
+			{
+				_inputBuf_[i] = NULL;
+			}
+		#endif //if USE_USART0_INPUT == 1
+		
 		UCSR0A = 1 <<  U2X0;									 //double speed mode
 		uint16_t _baudPrescaller =  ((F_CPU / (8 * _baud))) - 1;//((Clock rate / (16 * baudrate))) - 1
 															   //for U2X0 mode: 

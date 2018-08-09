@@ -5,8 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEVICE atmega2560		//define with AVR name
-//#define BOOTLOADER_ADDRESS 0x7000	//define with addr of bootloader in mem
 #define NUM_OF_ANALOG_PINS 7
 #define ARDUINO_SUPPORT 0
 #define USE_ADC 0
@@ -75,13 +73,9 @@ int main()
 	DDRC = ((1 << PC5) | (1 << PC4) | (1 << PC3));//A0,1,2 output
 	DDRD = ((1 << PD2) | (1 << PD3) | (0 << PD4) | (1 << PD5) | (1 << PD6) | (1 << PD7));//2,3,4,5,6,7 output
 	//DDRD = 1 << PD4;
-	
-	
-	
-	
 	//funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR] = USART_RX;
 	//PORTB = 1;
-	PORTB |= ~(1 << PB7);
+	PORTB &= ~(1 << PB7);
 	USARTBegin(115200);
 	//TIMER0Init(TIMER0_MODE_CTC, TIMER0_CLOCK_EXTERNAL_RISING, 10);
 	//funcs[TIMER0_COMPB_CUSTOMFUNC_ADDR] = TIMER0_CTC;
@@ -89,7 +83,15 @@ int main()
 	sei();
 	while(1)
 	{
-		USARTPrint("OK!\n");
+		//USARTPrint("OK!\n");
+		if(USARTAvailable())
+		{	  
+			//PORTB = 1 << PB7;
+			USARTPrint("found!\n");
+			USARTSend(USARTRead());
+			USARTSend('\n');
+		}
+		_delay_ms(1);
 	}
 	return 0;
 }
