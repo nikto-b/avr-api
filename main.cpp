@@ -25,13 +25,10 @@
 #include "api.h"//custom api for AVR
 
 
-using namespace std;
-
 
 void usartGotCharFunc()
 {
 	USARTPrint("GOT MESSAGE!");
-	//USARTPrint(USARTRead());
 	USARTSend(USARTRead());
 	USARTPrint("\n");
 }

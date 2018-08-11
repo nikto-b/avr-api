@@ -11,7 +11,6 @@ void (*funcs[21])();
 
 #include "delayMicroseconds.cpp"
 
-
 void delayMicroseconds(uint64_t _us);
 
 #if USE_TIMERS == 1
