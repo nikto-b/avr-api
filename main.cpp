@@ -84,11 +84,11 @@ int main()
 		if(USARTAvailable())
 		{	  
 			//PORTB = 1 << PB7;
-			USARTPrint("found!\n");
+			USARTPrintln("found!");
 			USARTSend(USARTRead());
 			//USARTSend('\n');
-			USARTSend((char)(str2int(int2str(2)) + '0'));
-			USARTSend('\n');
+			USARTPrintln((char)(str2int(int2str(2))));
+			USARTPrintln();
 		}
 		_delay_ms(1);
 	}

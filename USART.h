@@ -15,6 +15,7 @@
 		
 		//send char array function
 		void USARTPrint(char*);
+		void USARTPrint(int, int);
 	#endif //if USE_USART0_OUTPUT == 1
 	
 	

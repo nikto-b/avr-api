@@ -25,6 +25,11 @@
 		#define DEC 0
 		#define BIN 1
 		
+		void USARTPrint(int __data__)
+		{
+			USARTPrint(int2str(__data__));
+		}
+		
 		void USARTPrint(int __data__, byte __mode__)
 		{
 			switch(__mode__)
@@ -45,6 +50,12 @@
 					break;
 				}
 			}
+		}
+		
+		inline void USARTPrintln(int __data__)
+		{
+			USARTPrint(__data__);
+			USARTSend('\n');
 		}
 		
 		inline void USARTPrintln(int __data__, byte __mode__)
