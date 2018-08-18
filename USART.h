@@ -24,6 +24,8 @@
 		char USARTRead(void);
 	#endif //if USE_USART0_INPUT == 1
 
+#include "stringFuncs.h"
+
 	
 #endif //if USE_USART0 == 1
 

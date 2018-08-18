@@ -13,13 +13,55 @@
 			 */
 		}
 		
-		void USARTPrint(char* _data)	//send C-string to USART
+		void USARTPrint(char* _data_)	//send C-string to USART
 		{	
 			while(*_data != 0x00)
 			{
-				USARTSend(*_data);
-				_data++;
+				USARTSend(*_data_);
+				_data_++;
 			}
+		}
+		
+		#define DEC 0
+		#define BIN 1
+		
+		void USARTPrint(int _data_, byte _mode_)
+		{
+			switch(_mode_)
+			{
+				case DEC:
+				{
+					USARTPrint(int2str(_data_));
+					break;
+				}
+				case BIN:
+				{
+					USARTPrint(dec2bin(_data_));
+					break;
+				}
+				default:
+				{
+					USARTPrint(int2str(_data_));
+					break;
+				}
+			}
+		}
+		
+		inline void USARTPrintln(int _data_, byte _mode_)
+		{
+			USARTPrint(_data_, _mode_);
+			USARTSend('\n');
+		}
+		
+		inline void USARTPrintln(char* _data_)
+		{
+			USARTPrint(_data_);
+			USARTSend('\n');
+		}
+		
+		inline void USARTPrintln()
+		{
+			USARTSend('\n');
 		}
 		
 		ISR(USART0_TX_vect)//interrupt handler called aftar transmitting data

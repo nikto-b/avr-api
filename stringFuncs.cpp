@@ -1,7 +1,4 @@
 
-#define byte uint8_t
-#define bool uint8_t
-
 
 byte getCountsOfDigits(int __number__) //get count of digits for int
 {
@@ -63,8 +60,10 @@ char* dec2bin(int __in__)//convert dec num to bin C-string
 
 int bin2dec(char* __in__)//convert bin num to dec int
 {
-	int __ret__ = 0;
-	while(*__in__ != 0x00)
+	int __ret__ = 0;			//unsafe func! check for "none-numeric input
+	while(*__in__ >= '0' 
+	&& *__in__ <= '9'
+	&& *__in__ != 0x00)//WARNING! test this part
 	{
 		__ret__ <<= 1;
 		__ret__ |= ((*__in__)) - '0';
@@ -76,7 +75,9 @@ int bin2dec(char* __in__)//convert bin num to dec int
 int str2int(char* __in__)//convert C-string to int
 {
 	int __ret__ = 0;			//unsafe func! check for "none-numeric input
-	while(*__in__ != 0x00)
+	while(*__in__ >= '0' 
+	&& *__in__ <= '9'
+	&& *__in__ != 0x00)//WARNING! test this part
 	{
 		__ret__ *= 10;
 		__ret__ += (*__in__) - '0';
@@ -87,7 +88,9 @@ int str2int(char* __in__)//convert C-string to int
 long str2long(char* __in__)//convert C-string to long
 {
 	long __ret__ = 0;			//unsafe func! check for "none-numeric input
-	while(*__in__ != 0x00)
+	while(*__in__ >= '0' 
+	&& *__in__ <= '9'
+	&& *__in__ != 0x00)//WARNING! test this part
 	{
 		__ret__ *= 10;
 		__ret__ += (*__in__) - '0';
@@ -98,7 +101,9 @@ long str2long(char* __in__)//convert C-string to long
 byte str2byte(char* __in__)//convert C-string to byte
 {
 	byte __ret__ = 0;			//unsafe func! check for "none-numeric input
-	while(*__in__ != 0x00)
+	while(*__in__ >= '0' 
+	&& *__in__ <= '9'
+	&& *__in__ != 0x00)//WARNING! test this part
 	{
 		__ret__ *= 10;
 		__ret__ += (*__in__) - '0';
@@ -110,7 +115,8 @@ byte str2byte(char* __in__)//convert C-string to byte
 char* int2str(int __in__)//convert int var to char array
 {
 	uint8_t __len__ = getCountsOfDigits(__in__);
-	char* __ret__ = (char*)malloc(__len__);
+	char* __ret__ = (char*)malloc(__len__ + 1);
+	__ret__[__len__] = 0x00;
 	while(__len__)
 	{
 		__len__--;
@@ -122,7 +128,8 @@ char* int2str(int __in__)//convert int var to char array
 char* long2str(long __in__)//convert long var to char array
 {
 	uint8_t __len__ = getCountsOfDigits(__in__);
-	char* __ret__ = (char*)malloc(__len__);
+	char* __ret__ = (char*)malloc(__len__ + 1);
+	__ret__[__len__] = 0x00;
 	while(__len__)
 	{
 		__len__--;
@@ -153,17 +160,4 @@ char* bool2str(bool __in__)//convert bool var to char array
 	{
 		return (char*)"false";
 	}
-}
-
-
-int main()
-{
-	std::cout << (str2int("1") + str2int("2"));
-	std::cout << dec2bin(0) << std::=endl;
-	std::cout << getCountsOfBits(0) << std::endl;
-	std::cout << int2str(0);
-	std::cout << bin2dec(dec2bin(0));
-	
-	std::cout << std::endl;
-	return 0;
 }

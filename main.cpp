@@ -86,6 +86,8 @@ int main()
 			//PORTB = 1 << PB7;
 			USARTPrint("found!\n");
 			USARTSend(USARTRead());
+			//USARTSend('\n');
+			USARTSend((char)(str2int(int2str(2)) + '0'));
 			USARTSend('\n');
 		}
 		_delay_ms(1);

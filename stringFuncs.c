@@ -1,8 +1,3 @@
-
-#define byte uint8_t
-#define bool uint8_t
-
-
 byte getCountsOfDigits(int __number__) //get count of digits for int
 {
 	int __count__ = __number__ == 0;
@@ -153,17 +148,4 @@ char* bool2str(bool __in__)//convert bool var to char array
 	{
 		return (char*)"false";
 	}
-}
-
-
-int main()
-{
-	std::cout << (str2int("1") + str2int("2"));
-	std::cout << dec2bin(0) << std::=endl;
-	std::cout << getCountsOfBits(0) << std::endl;
-	std::cout << int2str(0);
-	std::cout << bin2dec(dec2bin(0));
-	
-	std::cout << std::endl;
-	return 0;
 }
