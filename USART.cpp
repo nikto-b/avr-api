@@ -2,10 +2,10 @@
 
 	#if USE_USART0_OUTPUT == 1
 	
-		void USARTSend(char data)			//send 1 byte to USART
+		void USARTSend(char __data__)			//send 1 byte to USART
 		{	
 			while(!(UCSR0A & (1 << UDRE0))){}
-			UDR0 = data;
+			UDR0 = __data__;
 			/*
 			 * The transmit buffer can only be written 
 			 * when the UDRE0 Flag in the UCSR0A Register is set 
@@ -13,49 +13,49 @@
 			 */
 		}
 		
-		void USARTPrint(char* _data_)	//send C-string to USART
+		void USARTPrint(char* __data__)	//send C-string to USART
 		{	
-			while(*_data != 0x00)
+			while(*__data__ != 0x00)
 			{
-				USARTSend(*_data_);
-				_data_++;
+				USARTSend(*__data__);
+				__data__++;
 			}
 		}
 		
 		#define DEC 0
 		#define BIN 1
 		
-		void USARTPrint(int _data_, byte _mode_)
+		void USARTPrint(int __data__, byte __mode__)
 		{
-			switch(_mode_)
+			switch(__mode__)
 			{
 				case DEC:
 				{
-					USARTPrint(int2str(_data_));
+					USARTPrint(int2str(__data__));
 					break;
 				}
 				case BIN:
 				{
-					USARTPrint(dec2bin(_data_));
+					USARTPrint(dec2bin(__data__));
 					break;
 				}
 				default:
 				{
-					USARTPrint(int2str(_data_));
+					USARTPrint(int2str(__data__));
 					break;
 				}
 			}
 		}
 		
-		inline void USARTPrintln(int _data_, byte _mode_)
+		inline void USARTPrintln(int __data__, byte __mode__)
 		{
-			USARTPrint(_data_, _mode_);
+			USARTPrint(__data__, __mode__);
 			USARTSend('\n');
 		}
 		
-		inline void USARTPrintln(char* _data_)
+		inline void USARTPrintln(char* __data__)
 		{
-			USARTPrint(_data_);
+			USARTPrint(__data__);
 			USARTSend('\n');
 		}
 		

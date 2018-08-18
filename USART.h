@@ -1,5 +1,6 @@
 #if USE_USART0 == 1
 
+	#include "stringFuncs.h"
 	#include "USART.cpp"
 	
 	//init function, baudrate on input
@@ -24,7 +25,6 @@
 		char USARTRead(void);
 	#endif //if USE_USART0_INPUT == 1
 
-#include "stringFuncs.h"
 
 	
 #endif //if USE_USART0 == 1
