@@ -13,20 +13,19 @@ main: Usart.o Timers.o ADC.o
 	avr-objcopy -O ihex -R .eeprom  "$(MAINFILENAME).elf" "$(MAINFILENAME).hex"
 
 Usart.o:
-	avr-g++ $(CFLAGS) "USART.cpp" -o "USART.o"
+	avr-g++ $(CFLAGS) "USART.c" -o "USART.o"
 
 Timers.o:
-	avr-g++ $(CFLAGS) -DF_CPU=$(XTAL) "Timers.cpp" -o "Timers.o"
+	avr-g++ $(CFLAGS) -DF_CPU=$(XTAL) "Timers.c" -o "Timers.o"
 
 ADC.o:
-	avr-g++ $(CFLAGS) "ADC.cpp" -o "ADC.o"
+	avr-g++ $(CFLAGS) "ADC.c" -o "ADC.o"
 
 stringFuncs.o:
-	avr-g++ $(CFLAGS) "stringFuncs.cpp" -o "stringFuncs.o"
+	avr-g++ $(CFLAGS) "stringFuncs.c" -o "stringFuncs.o"
 
 clean: 
-	rm -rf ./*.o ./*.d ./*.eep ./*.elf
-	rm -rf ./*.hex
+	rm -rf ./*.o ./*.d ./*.eep ./*.elf ./*.hex
 
 size:
 	avr-size -B $(MAINFILENAME).hex

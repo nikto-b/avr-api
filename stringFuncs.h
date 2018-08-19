@@ -9,7 +9,7 @@
 	//#define bool uint8_t		//define for bool var because C has not bool or boolean variable
 #endif //ifndef bool
 
-#include "stringFuncs.cpp"
+#include "stringFuncs.c"
 
 byte getCountsOfDigits(int __number__); //get count of digits for int
 byte getCountsOfDigits(long __number__); //get count of digits for long

@@ -1,7 +1,7 @@
 #if USE_TIMERS == 1
 
 	#include "timerCustomfuncAddrs.h"
-	#include "Timers.cpp"
+	#include "Timers.c"
 	//#include "TimerModes.h"
 	
 	#ifdef TCCR0A 	//TIMER0

@@ -1,4 +1,4 @@
-#include "digitalRegisters.cpp"
+#include "digitalRegisters.c"
 
 //for counting ports
 #define PA 0

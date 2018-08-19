@@ -4,7 +4,7 @@
 		#define ADC_H_
 	#endif 
 
-	#include "ADC.cpp"
+	#include "ADC.c"
 
 	void ADC_init(void);
 

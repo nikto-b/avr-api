@@ -9,12 +9,12 @@ void (*funcs[21])();
 #define cbi(_sfr, _bit) (_SFR_BYTE(_sfr) &= ~_BV(_bit))
 #define sbi(_sfr, _bit) (_SFR_BYTE(_sfr) |= _BV(_bit))
 
-#include "delayMicroseconds.cpp"
+#include "delayMicroseconds.c"
 
 void delayMicroseconds(uint64_t _us);
 
 #if USE_TIMERS == 1
-	#include "TimerModes_2560" //TODO: refactor
+	#include "TimerModes_2560.h" //TODO: refactor
 	#include "Timers.h"
 #endif //if USE_TIMERS == 1
 

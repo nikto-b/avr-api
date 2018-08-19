@@ -9,7 +9,7 @@
 	#endif //ifndef DEC
 	
 	#include "stringFuncs.h"
-	#include "USART.cpp"
+	#include "USART.c"
 	
 	//init function, baudrate on input
 	void USARTBegin(uint64_t _baud);
