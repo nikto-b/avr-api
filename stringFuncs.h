@@ -1,6 +1,6 @@
 
-#define bool uint8_t		//define for bool var because C has not bool or boolean variable
-#define byte uint8_t		//define for 8 bit var
+//#define bool uint8_t		//define for bool var because C has not bool or boolean variable
+//#define byte uint8_t		//define for 8 bit var
 #ifndef byte
 	//#define byte uint8_t		//define for 8 bit var
 #endif //ifndef byte
@@ -9,6 +9,7 @@
 	//#define bool uint8_t		//define for bool var because C has not bool or boolean variable
 #endif //ifndef bool
 
+#include "stringFuncs.cpp"
 
 byte getCountsOfDigits(int __number__); //get count of digits for int
 byte getCountsOfDigits(long __number__); //get count of digits for long
@@ -29,4 +30,3 @@ char* long2str(long __in__);//convert long var to char array
 char* byte2str(byte __in__);//convert byte var to char array
 char* bool2str(bool __in__);//convert bool var to char array
 
-#include "stringFuncs.cpp"

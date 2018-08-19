@@ -2,7 +2,7 @@
 
 	#if USE_USART0_OUTPUT == 1
 	
-		void USARTSend(char __data__)			//send 1 byte to USART
+		void USART0Send(char __data__)			//send 1 byte to USART0
 		{	
 			while(!(UCSR0A & (1 << UDRE0))){}
 			UDR0 = __data__;
@@ -13,66 +13,63 @@
 			 */
 		}
 		
-		void USARTPrint(char* __data__)	//send C-string to USART
+		void USART0Print(char* __data__)	//send C-string to USART0
 		{	
 			while(*__data__ != 0x00)
 			{
-				USARTSend(*__data__);
+				USART0Send(*__data__);
 				__data__++;
 			}
 		}
 		
-		#define DEC 0
-		#define BIN 1
-		
-		void USARTPrint(int __data__)
+		void USART0Print(int __data__)
 		{
-			USARTPrint(int2str(__data__));
+			USART0Print(int2str(__data__));
 		}
 		
-		void USARTPrint(int __data__, byte __mode__)
+		void USART0Print(int __data__, byte __mode__)
 		{
 			switch(__mode__)
 			{
 				case DEC:
 				{
-					USARTPrint(int2str(__data__));
+					USART0Print(int2str(__data__));
 					break;
 				}
 				case BIN:
 				{
-					USARTPrint(dec2bin(__data__));
+					USART0Print(dec2bin(__data__));
 					break;
 				}
 				default:
 				{
-					USARTPrint(int2str(__data__));
+					USART0Print(int2str(__data__));
 					break;
 				}
 			}
 		}
 		
-		inline void USARTPrintln(int __data__)
+		inline void USART0Println(int __data__)
 		{
-			USARTPrint(__data__);
-			USARTSend('\n');
+			USART0Print(__data__);
+			USART0Send('\n');
 		}
 		
-		inline void USARTPrintln(int __data__, byte __mode__)
+		inline void USART0Println(int __data__, byte __mode__)
 		{
-			USARTPrint(__data__, __mode__);
-			USARTSend('\n');
+			USART0Print(__data__, __mode__);
+			USART0Send('\n');
 		}
 		
-		inline void USARTPrintln(char* __data__)
+		inline void USART0Println(char* __data__)
 		{
-			USARTPrint(__data__);
-			USARTSend('\n');
+			USART0Print(__data__);
+			USART0Send('\n');
 		}
 		
-		inline void USARTPrintln()
+		inline void USART0Println()
 		{
-			USARTSend('\n');
+			USART0Send('\n');
 		}
 		
 		ISR(USART0_TX_vect)//interrupt handler called aftar transmitting data
@@ -88,7 +85,7 @@
 		
 		#define _MAX_BUF_SIZE_ 256
 			
-		char _inputBuf_[_MAX_BUF_SIZE_];//buffer for input from USART
+		char _inputBuf_[_MAX_BUF_SIZE_];//buffer for input from USART0
 		uint8_t _inputBufCounterInput_ = 0;//index of last char placed by system
 		uint8_t _inputBufCounterOutput_ = 0;//index of last char gotted by user
 		uint8_t _inputBufEmpty_ = true;
@@ -115,7 +112,7 @@
 				funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR]();//call custom function
 		}
 		
-		char USARTRead()//get data from input USART buffer
+		char USART0Read()//get data from input USART0 buffer
 		{
 			if(_inputBufCounterOutput_ >= _MAX_BUF_SIZE_)	//check that counters are in borders of buf size
 			{
@@ -147,7 +144,7 @@
 			}
 		}
 		
-		bool USARTAvailable()
+		bool USART0Available()
 		{
 			if(_inputBufCounterOutput_ >= _inputBufCounterInput_	//check that counter for output not overtaked input
 			|| _inputBufCounterOutput_ >= _MAX_BUF_SIZE_)
@@ -162,7 +159,7 @@
 	#endif //if USE_USART0_INPUT == 1
 
 
-	void USARTBegin(uint64_t _baud)
+	void USART0Begin(uint64_t _baud)
 	{		
 		#if USE_USART0_INPUT == 1
 		
@@ -195,7 +192,7 @@
 			UCSR0B |= (1 << TXEN0) | (1 << TXCIE0);//enable trancieve and interrupt on trancieve
 		#endif //if USE_USART0_OUTPUT == 1		  //
 												 //TODO: changable bit size
-		UCSR0C = (1 << UCSZ00) | (1 << UCSZ01); //set USART Character Size to 8 bit
+		UCSR0C = (1 << UCSZ00) | (1 << UCSZ01); //set USART0 Character Size to 8 bit
 		/*
 		 * ATMEGA328P Character Size table:
 		 * 000 5-bit

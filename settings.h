@@ -2,25 +2,52 @@
 	#define USE_TIMERS 0
 #endif //ifndef USE_TIMERS
 
+
+
 #if USE_TIMERS == 1
-	#define TIMER0_USE_COMPA 1			//TIMER0
+
+			//TIMER0
+	#define TIMER0_USE_COMPA 1
 	#define TIMER0_USE_COMPB 1
 	#define TIMER0_USE_OVF 1
-	#define TIMER1_USE_COMPA 1				//TIMER1
+	
+			//TIMER1
+	#define TIMER1_USE_COMPA 1
 	#define TIMER1_USE_COMPB 1
 	#define TIMER1_USE_OVF 1
-	#define TIMER2_USE_COMPA 1				//TIMER2
+	
+			//TIMER2
+	#define TIMER2_USE_COMPA 1
+	#define TIMER2_USE_COMPB 1
+	#define TIMER2_USE_OVF 1
+	
+			//TIMER3
+	#define TIMER2_USE_COMPA 1
+	#define TIMER2_USE_COMPB 1
+	#define TIMER2_USE_OVF 1
+	
+			//TIMER4
+	#define TIMER2_USE_COMPA 1
+	#define TIMER2_USE_COMPB 1
+	#define TIMER2_USE_OVF 1
+	
+			//TIMER5
+	#define TIMER2_USE_COMPA 1
 	#define TIMER2_USE_COMPB 1
 	#define TIMER2_USE_OVF 1
 #endif //if USE_TIMERS == 1
+
+
 
 #ifndef USE_USART
 	#define USE_USART 0
 #endif //ifndef USE_USART
 
+
 #ifndef USE_USART0
 	#define USE_USART0 0
 #endif //ifndef USE_USART0
+
 
 #if USE_USART0 == 1
 

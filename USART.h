@@ -1,5 +1,13 @@
 #if USE_USART0 == 1
 
+	#ifndef DEC
+		#define DEC 0
+	#endif //ifndef DEC
+	
+	#ifndef BIN
+		#define BIN 1
+	#endif //ifndef DEC
+	
 	#include "stringFuncs.h"
 	#include "USART.cpp"
 	
@@ -15,7 +23,9 @@
 		
 		//send char array function
 		void USARTPrint(char*);
+		void USARTPrint(int);
 		void USARTPrint(int, int);
+		void USARTPrint(int, byte);
 	#endif //if USE_USART0_OUTPUT == 1
 	
 	

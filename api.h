@@ -14,6 +14,7 @@ void (*funcs[21])();
 void delayMicroseconds(uint64_t _us);
 
 #if USE_TIMERS == 1
+	#include "TimerModes_2560" //TODO: refactor
 	#include "Timers.h"
 #endif //if USE_TIMERS == 1
 
