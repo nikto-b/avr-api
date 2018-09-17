@@ -5,7 +5,7 @@ CFLAGS=-c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunct
 
 all: main
 	
-main: Usart.o Timers.o ADC.o 
+main: Usart.o Timers.o ADC.o FuncProtector.o
 	avr-g++ $(CFLAGS) "$(MAINFILENAME).cpp" -o "$(MAINFILENAME).o"
 	avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=$(MCU)  -o "$(MAINFILENAME).elf" "$(MAINFILENAME).o" -lm
 	avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0  "$(MAINFILENAME).elf" "$(MAINFILENAME).eep"
@@ -21,6 +21,9 @@ Timers.o:
 
 ADC.o:
 	avr-g++ $(CFLAGS) "ADC.c" -o "ADC.o"
+
+FuncProtector.o:
+	avr-g++ $(CFLAGS) "FuncsInputProtector.c" -o "FuncsInputProtector.o"
 
 stringFuncs.o:
 	avr-g++ $(CFLAGS) "stringFuncs.c" -o "stringFuncs.o"

@@ -1,6 +1,10 @@
 void (*funcs[21])();
 #include "settings.h"
 
+#if USE_FUNC_INPUT_PROTECTOR == 1
+	#include "FuncsInputProtector.h"//because of dependences on TimerModes
+#endif //if USE_FUNC_INPUT_PROTECTOR == 1
+
 #include "digitalRegisters.h"
 
 #define byte uint8_t		//define for 8 bit var
@@ -22,3 +26,7 @@ void delayMicroseconds(uint64_t _us);
 	#pragma message "using USART"
 	#include "USART.h"
 #endif
+
+#if USE_FUNC_INPUT_PROTECTOR == 1
+	#include "FuncsInputProtector.c"
+#endif //if USE_FUNC_INPUT_PROTECTOR == 1

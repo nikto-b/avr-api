@@ -9,10 +9,13 @@
 	#endif //ifndef DEC
 	
 	#include "stringFuncs.h"
+	#include "USARTModes.h"
 	#include "USART.c"
-	
+		
+	//set bit settings of USART, mode on input
+	void USART0SetBitSettings(uint8_t);
 	//init function, baudrate on input
-	void USARTBegin(uint64_t _baud);
+	void USARTBegin(uint64_t);
 	
 	
 	#if USE_USART0_OUTPUT == 1//if using output
@@ -34,6 +37,11 @@
 		
 		//get recieved data
 		char USARTRead(void);
+		//get is any data recieved
+		bool USART0Available(void);
+		//remove all recieved data
+		void USART0Flush(void);
+
 	#endif //if USE_USART0_INPUT == 1
 
 

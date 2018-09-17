@@ -3,7 +3,7 @@
 #pragma message "using timer mode table for atmega2560"
 
 //																			TIMER0
-#define TIMER0_MODE_NORMAL 0
+#define TIMER0_MODE_NORMAL (0)
 #define TIMER0_MODE_PWM_PHC (1 << WGM00)														//PWM PHASE CORRECT
 #define TIMER0_MODE_CTC (1 << WGM01)															//CLEAR-ON-COMPARE; TOP - OCR1A
 #define TIMER0_MODE_FASTPWM ((1 << WGM00) | (1 << WGM01))										//FAST-PWM
@@ -93,12 +93,12 @@
 //-------------------------------------------------------------------------TIMER DIVIDERS---------------------------------------------------------------------------------------
 
 //																			TIMER0	
-#define TIMER0_CLOCK_NONE 0														//T/C STOPPED
+#define TIMER0_CLOCK_NONE (0)													//T/C STOPPED
 #define TIMER0_CLOCK_1 (1 << CS00)												//NO PRESCALING
 #define TIMER0_CLOCK_8 (1 << CS01)												//FROM PRESCALER, CLK/8
 #define TIMER0_CLOCK_64 ((1 << CS00) | (1 << CS01))								//FROM PRESCALER, CLK/64
 #define TIMER0_CLOCK_256 (1 << CS02)											//FROM PRESCALER, CLK/256
-#define TIMER0_CLOCK_1024 ((1 << CS02) | (1 << CS00)							//FROM PRESCALER, CLK/1024
+#define TIMER0_CLOCK_1024 ((1 << CS02) | (1 << CS00))							//FROM PRESCALER, CLK/1024
 #define TIMER0_CLOCK_EXTERNAL_FALLING ((1 << CS02) | (1 << CS01))				//EXTERNAL SOURCE ON T0
 #define TIMER0_CLOCK_EXTERNAL_RISING ((1 << CS02) | (1 << CS01) | (CS00))		//EXTERNAL SOURCE ON T0
 
@@ -109,18 +109,18 @@
 #define TIMER1_CLOCK_64 ((1 << CS10) | (1 << CS11))								//FROM PRESCALER, CLK/64
 #define TIMER1_CLOCK_256 (1 << CS12)											//FROM PRESCALER, CLK/256
 #define TIMER1_CLOCK_1024 ((1 << CS12) | (1 << CS10))							//FROM PRESCALER, CLK/1024
-#define TIMER1_CLOCK_EXTERNAL_FALLING ((1 << CS11) | (1 << CS12)				//EXTERNAL SOURCE ON T1
+#define TIMER1_CLOCK_EXTERNAL_FALLING ((1 << CS11) | (1 << CS12))				//EXTERNAL SOURCE ON T1
 #define TIMER1_CLOCK_EXTERNAL_RISING ((1 << CS10) | (1 << CS11) | (1 << CS12))	//EXTERNAL SOURCE ON T1
 
 //																			TIMER2
 #define TIMER2_CLOCK_NONE 0														//T/C STOPPED
 #define TIMER2_CLOCK_1	(1 << CS20)												//NO PRESCALING
-#define TIMER2_CLOCK_8 (1 << CA21)												//FROM PRESCALER, CLK/8
-#define TIMER2_CLOCK_32 ((1 << CS20) | (1 << CA21))								//FROM PRESCALER, CLK/32
-#define TIMER2_CLOCK_64 (1 << CA22)												//FROM PRESCALER, CLK/64
-#define TIMER2_CLOCK_128 ((1 << CS20) | (1 << CA22))							//FROM PRESCALER, CLK/128
-#define TIMER2_CLOCK_256 ((1 << CA21) | 1 << CA22))								//FROM PRESCALER, CLK/256
-#define TIMER2_CLOCK_1024 ((1 << CA22) | (1 << CA21) | (1 << CS20))				//FROM PRESCALER, CLK/1024
+#define TIMER2_CLOCK_8 	(1 << CS21)												//FROM PRESCALER, CLK/8
+#define TIMER2_CLOCK_32 ((1 << CS20) | (1 << CS21))								//FROM PRESCALER, CLK/32
+#define TIMER2_CLOCK_64 (1 << CS22)												//FROM PRESCALER, CLK/64
+#define TIMER2_CLOCK_128 ((1 << CS20) | (1 << CS22))							//FROM PRESCALER, CLK/128
+#define TIMER2_CLOCK_256 ((1 << CS21) | (1 << CS22))								//FROM PRESCALER, CLK/256
+#define TIMER2_CLOCK_1024 ((1 << CS22) | (1 << CS21) | (1 << CS20))				//FROM PRESCALER, CLK/1024
 
 //																			TIMER3
 #define TIMER3_CLOCK_NONE 0														//T/C STOPPED

@@ -3,23 +3,37 @@
 		#pragma message "TIMER0 found"
 		
 
-		void TIMER0Init(uint8_t __mode__)
+		void TIMER0Init(uint8_t __mode)
 		{
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				#pragma message "using func input protector"
+				if(!validateTimer0Mode(__mode))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
 			TCCR0B = 0;
 			TIMSK0 = 0;//set param regs to zero
 			
-			TCCR0B |= __mode__;//set mode
+			TCCR0B |= __mode;//set mode
 		}
 		
-		inline void TIMER0SetCLK(uint8_t __source__)
+		void TIMER0SetCLK(uint8_t __source)
 		{
-			TCCR0B = (TCCR0B & ~__source__) | __source__;
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer0CLK(__source))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
+			
+			TCCR0B = (TCCR0B & ~__source) | __source;
 		}
 		
-		void TIMER0Init(uint8_t __mode__, uint8_t __source__)
+		void TIMER0Init(uint8_t __mode, uint8_t __source)
 		{
-			TIMER0Init(__mode__);
-			TIMER0SetCLK(__source__);
+			TIMER0Init(__mode);
+			TIMER0SetCLK(__source);
 		}
 		
 
@@ -121,23 +135,36 @@
 		#pragma message "TIMER1 found"
 		
 
-		void TIMER1Init(uint8_t __mode__)
+		void TIMER1Init(uint8_t __mode)
 		{
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer1Mode(__mode))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
 			TCCR1B = 0;
 			TIMSK1 = 0;//set param regs to zero
 			
-			TCCR1B |= __mode__;//set mode
+			TCCR1B |= __mode;//set mode
 		}
 		
-		inline void TIMER1SetCLK(uint8_t __source__)
+		inline void TIMER1SetCLK(uint8_t __source)
 		{
-			TCCR1B = (TCCR1B & ~__source__) | __source__;
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer1CLK(__source))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
+			
+			TCCR1B = (TCCR1B & ~__source) | __source;
 		}
 		
-		void TIMER1Init(uint8_t __mode__, uint8_t __source__)
+		void TIMER1Init(uint8_t __mode, uint8_t __source)
 		{
-			TIMER1Init(__mode__);
-			TIMER1SetCLK(__source__);
+			TIMER1Init(__mode);
+			TIMER1SetCLK(__source);
 		}
 		
 
@@ -239,23 +266,37 @@
 		#pragma message "TIMER2 found"
 		
 
-		void TIMER2Init(uint8_t __mode__)
+		void TIMER2Init(uint8_t __mode)
 		{
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer2Mode(__mode))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
+			
 			TCCR2B = 0;
 			TIMSK2 = 0;//set param regs to zero
 			
-			TCCR2B |= __mode__;//set mode
+			TCCR2B |= __mode;//set mode
 		}
 		
-		inline void TIMER2SetCLK(uint8_t __source__)
+		inline void TIMER2SetCLK(uint8_t __source)
 		{
-			TCCR2B = (TCCR2B & ~__source__) | __source__;
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer2CLK(__source))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
+			
+			TCCR2B = (TCCR2B & ~__source) | __source;
 		}
 		
-		void TIMER2Init(uint8_t __mode__, uint8_t __source__)
+		void TIMER2Init(uint8_t __mode, uint8_t __source)
 		{
-			TIMER2Init(__mode__);
-			TIMER2SetCLK(__source__);
+			TIMER2Init(__mode);
+			TIMER2SetCLK(__source);
 		}
 		
 
@@ -357,23 +398,37 @@
 		#pragma message "TIMER3 found"
 		
 
-		void TIMER3Init(uint8_t __mode__)
+		void TIMER3Init(uint8_t __mode)
 		{
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer3Mode(__mode))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
+			
 			TCCR3B = 0;
 			TIMSK3 = 0;//set param regs to zero
 			
-			TCCR3B |= __mode__;//set mode
+			TCCR3B |= __mode;//set mode
 		}
 		
-		inline void TIMER3SetCLK(uint8_t __source__)
+		inline void TIMER3SetCLK(uint8_t __source)
 		{
-			TCCR3B = (TCCR3B & ~__source__) | __source__;
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer3CLK(__source))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
+			
+			TCCR3B = (TCCR3B & ~__source) | __source;
 		}
 		
-		void TIMER3Init(uint8_t __mode__, uint8_t __source__)
+		void TIMER3Init(uint8_t __mode, uint8_t __source)
 		{
-			TIMER3Init(__mode__);
-			TIMER3SetCLK(__source__);
+			TIMER3Init(__mode);
+			TIMER3SetCLK(__source);
 		}
 		
 
@@ -475,23 +530,35 @@
 		#pragma message "TIMER4 found"
 		
 
-		void TIMER4Init(uint8_t __mode__)
+		void TIMER4Init(uint8_t __mode)
 		{
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer4Mode(__mode))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
 			TCCR4B = 0;
 			TIMSK4 = 0;//set param regs to zero
 			
-			TCCR4B |= __mode__;//set mode
+			TCCR4B |= __mode;//set mode
 		}
 		
-		inline void TIMER4SetCLK(uint8_t __source__)
+		inline void TIMER4SetCLK(uint8_t __source)
 		{
-			TCCR4B = (TCCR4B & ~__source__) | __source__;
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer4CLK(__source))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
+			TCCR4B = (TCCR4B & ~__source) | __source;
 		}
 		
-		void TIMER4Init(uint8_t __mode__, uint8_t __source__)
+		void TIMER4Init(uint8_t __mode, uint8_t __source)
 		{
-			TIMER4Init(__mode__);
-			TIMER4SetCLK(__source__);
+			TIMER4Init(__mode);
+			TIMER4SetCLK(__source);
 		}
 		
 
@@ -593,23 +660,36 @@
 		#pragma message "TIMER5 found"
 		
 
-		void TIMER5Init(uint8_t __mode__)
+		void TIMER5Init(uint8_t __mode)
 		{
+			
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer5Mode(__mode))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
 			TCCR5B = 0;
 			TIMSK5 = 0;//set param regs to zero
 			
-			TCCR5B |= __mode__;//set mode
+			TCCR5B |= __mode;//set mode
 		}
 		
-		inline void TIMER5SetCLK(uint8_t __source__)
+		inline void TIMER5SetCLK(uint8_t __source)
 		{
-			TCCR5B = (TCCR5B & ~__source__) | __source__;
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(!validateTimer5CLK(__source))
+				{
+					return;
+				}
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
+			TCCR5B = (TCCR5B & ~__source) | __source;
 		}
 		
-		void TIMER5Init(uint8_t __mode__, uint8_t __source__)
+		void TIMER5Init(uint8_t __mode, uint8_t __source)
 		{
-			TIMER5Init(__mode__);
-			TIMER5SetCLK(__source__);
+			TIMER5Init(__mode);
+			TIMER5SetCLK(__source);
 		}
 		
 

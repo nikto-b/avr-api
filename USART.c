@@ -15,9 +15,10 @@
 
 		void USART0Print(char* __data__)	//send C-string to USART0
 		{
+			#if USE_FUNC_INPUT_PROTECTOR == 1
+				if(__data__ == 0) return;
+			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
 			uint8_t __temp__ = 0;
-			//USART0Send(*__data__ - 1);
-			//USART0Send(*__data__ - 2);
 			while(__data__[__temp__] != 0x00)
 			{
 				USART0Send(__data__[__temp__]);
@@ -162,11 +163,36 @@
 			}
 			return !_inputBufEmpty_;
 		}
+		
+		void USART0Flush()
+		{
+			uint8_t __temp__;
+			while(UCSR0A & (1 << RXC0))
+			{
+				__temp__ = UDR0;
+				_inputBufCounterInput_ = 0;
+				_inputBufCounterInput_  = 0;
+				_inputBufEmpty_ = true;
+			}
+		}
 
 	#endif //if USE_USART0_INPUT == 1
 
+	void USART0SetBitSettings(uint8_t __bitness)
+	{
+		#if USE_FUNC_INPUT_PROTECTOR == 1
+			if(__bitness == USART0_CHAR_5B
+			|| __bitness == USART0_CHAR_6B
+			|| __bitness == USART0_CHAR_7B
+			|| __bitness == USART0_CHAR_8B
+			|| __bitness == USART0_CHAR_9B)
+				UCSR0C = __bitness;
+		#else //if USE_FUNC_INPUT_PROTECTOR == 1
+		UCSR0C = __bitness;
+		#endif //if USE_FUNC_INPUT_PROTECTOR != 1
+	}
 
-	void USART0Begin(uint64_t _baud)
+	void USART0Begin(uint64_t __baud)
 	{
 		#if USE_USART0_INPUT == 1
 
@@ -177,19 +203,19 @@
 		#endif //if USE_USART0_INPUT == 1
 
 		UCSR0A = 1 <<  U2X0;									 //double speed mode
-		uint16_t _baudPrescaller =  ((F_CPU / (8 * _baud))) - 1;//((Clock rate / (16 * baudrate))) - 1
+		uint16_t __baudPrescaller =  ((F_CPU / (8 * __baud))) - 1;//((Clock rate / (16 * baudrate))) - 1
 															   //for U2X0 mode:
 															  //((Clock rate / (8 * baudrate))) - 1
 		#if USE_SERIAL_FASTBAUD == 1
-			if (((F_CPU == 16000000UL) && (_baud == 57600)) || (_baudPrescaller > 4095))	//disable double speed mode
+			if (((F_CPU == 16000000UL) && (__baud == 57600)) || (__baudPrescaller > 4095))	//disable double speed mode
 			{																				//if prescaller is too high
 				UCSR0A = 0;
-				_baudPrescaller = (F_CPU / (16 * _baud));
+				__baudPrescaller = (F_CPU / (16 * __baud));
 			}
 		#endif //if USE_SERIAL_FASTBAUD == 1
 
-		UBRR0L = (uint8_t)(_baudPrescaller);//set low bits of baud prescaller
-		UBRR0H = (uint8_t)(_baudPrescaller>>8);//set high bits of baud prescaller
+		UBRR0L = (uint8_t)(__baudPrescaller);//set low bits of baud prescaller
+		UBRR0H = (uint8_t)(__baudPrescaller>>8);//set high bits of baud prescaller
 
 		#if USE_USART0_INPUT == 1
 			UCSR0B |= (1 << RXEN0) | (1 << RXCIE0);//enable recieve and interrupt on recieve
@@ -201,7 +227,7 @@
 												 //TODO: changable bit size
 		UCSR0C = (1 << UCSZ00) | (1 << UCSZ01); //set USART0 Character Size to 8 bit
 		/*
-		 * ATMEGA328P Character Size table:
+		 * Character Size table:
 		 * 000 5-bit
 		 * 001 6-bit
 		 * 010 7-bit

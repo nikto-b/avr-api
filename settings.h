@@ -1,5 +1,11 @@
+#ifndef USE_FUNC_INPUT_PROTECTOR
+	#pragma message "Using func input protector [DEFAULT]"
+	#define USE_FUNC_INPUT_PROTECTOR 1
+#endif //ifndef USE_FUNC_INPUT_PROTECTOR
+
 #ifndef USE_TIMERS
-	#define USE_TIMERS 0
+	#pragma message "Using timers [DEFAULT]"
+	#define USE_TIMERS 1
 #endif //ifndef USE_TIMERS
 
 
@@ -40,12 +46,14 @@
 
 
 #ifndef USE_USART
-	#define USE_USART 0
+	#pragma message "Using USART [DEFAULT]"
+	#define USE_USART 1
 #endif //ifndef USE_USART
 
 
 #ifndef USE_USART0
-	#define USE_USART0 0
+	#pragma message "Using USART0 [DEFAULT]"
+	#define USE_USART0 1
 #endif //ifndef USE_USART0
 
 
