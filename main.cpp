@@ -38,19 +38,28 @@ int main()
 	PORTL = 1 << PL2;
 	PORTB &= ~(1 << PB7);
 	PORTD |= 1 << PD7;
-	
-	//PORTB = 0;
 	USART0Begin(115200);
-	//funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR] = USART_RX;
+	
+	ADCInit();
+	//setAnalogPins(0, 1);
+	//USART0Println(analogRead(0));
+	//USART0Send('\r');
+	//ADCSetAnalogRepeat(0, 1);
 	sei();
-	TIMER5Init(TIMER5_MODE_CTC_TOPOCR5A);
-	TIMER5SetCLK(TIMER5_CLOCK_EXTERNAL_FALLING);
-	TIMER5EnableCOMPAInterrupt();
-	TIMER5SetA(1);
-	USART0Println("s\r");
-	while(1)
-	{
-		_delay_ms(1);
-	}
+	//USART0Println(ADCGetAnalogRepeat(0));
+	//USART0Send('\r');
+	//ADCSetAnalogChanged(0, 1);
+	//USART0Println(ADCGetAnalogRepeat(0));
+	//USART0Send('\r');
+	
+	loop:
+	
+	USART0Println(analogRead(0));
+	USART0Send('\r');
+
+	_delay_ms(1);
+	
+	goto loop;//endless loop
+	
 	return 0;
 }

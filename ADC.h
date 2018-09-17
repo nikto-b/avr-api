@@ -5,8 +5,10 @@
 	#endif 
 
 	#include "ADC.c"
+	void ADCSetAnalogChanged(uint8_t __pin, uint8_t __state);
+	uint8_t ADCGetAnalogChanged(uint8_t __pin);
 
-	void ADC_init(void);
+	void ADCInit(void);
 
 	int analogRead(uint8_t _pin);
 #endif

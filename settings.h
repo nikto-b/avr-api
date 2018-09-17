@@ -66,3 +66,8 @@
 	#define USART0_TRANSMISSION_INTERRUPT_CUSTOMFUNC_ADDR 10
 
 #endif //if USE_USART0 == 1
+
+#ifndef USE_ADC
+	#pragma message "Using ADC [DEFAULT]"
+	#define USE_ADC 1
+#endif //ifndef USE_ADC

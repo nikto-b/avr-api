@@ -5,15 +5,15 @@ CFLAGS=-c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunct
 
 all: main
 	
-main: Usart.o Timers.o ADC.o FuncProtector.o
+main: lib
 	avr-g++ $(CFLAGS) "$(MAINFILENAME).cpp" -o "$(MAINFILENAME).o"
 	avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=$(MCU)  -o "$(MAINFILENAME).elf" "$(MAINFILENAME).o" -lm
 	avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0  "$(MAINFILENAME).elf" "$(MAINFILENAME).eep"
 	avr-objcopy -O ihex -R .eeprom  "$(MAINFILENAME).elf" "$(MAINFILENAME).hex"
 
-lib: Usart.o Timers.o ADC.o 
+lib: Usart.o Timers.o ADC.o FuncProtector.o 
 
-Usart.o:
+Usart.o: 
 	avr-g++ $(CFLAGS) "USART.c" -o "USART.o"
 
 Timers.o:

@@ -1,11 +1,14 @@
 void (*funcs[21])();
 #include "settings.h"
 
+
 #if USE_FUNC_INPUT_PROTECTOR == 1
 	#include "FuncsInputProtector.h"//because of dependences on TimerModes
 #endif //if USE_FUNC_INPUT_PROTECTOR == 1
 
+
 #include "digitalRegisters.h"
+
 
 #define byte uint8_t		//define for 8 bit var
 #define bool uint8_t		//define for bool var because C has not bool or boolean variable
@@ -13,20 +16,28 @@ void (*funcs[21])();
 #define cbi(_sfr, _bit) (_SFR_BYTE(_sfr) &= ~_BV(_bit))
 #define sbi(_sfr, _bit) (_SFR_BYTE(_sfr) |= _BV(_bit))
 
-#include "delayMicroseconds.c"
 
 void delayMicroseconds(uint64_t _us);
+#include "delayMicroseconds.c"
+
 
 #if USE_TIMERS == 1
 	#include "TimerModes_2560.h" //TODO: refactor
 	#include "Timers.h"
 #endif //if USE_TIMERS == 1
 
+
 #if USE_USART == 1
 	#pragma message "using USART"
 	#include "USART.h"
 #endif
 
+
 #if USE_FUNC_INPUT_PROTECTOR == 1
 	#include "FuncsInputProtector.c"
 #endif //if USE_FUNC_INPUT_PROTECTOR == 1
+
+
+#if USE_ADC == 1
+	#include "ADC.h"
+#endif //if USE_ADC == 1
