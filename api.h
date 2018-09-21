@@ -3,7 +3,7 @@ void (*funcs[21])();
 
 
 #if USE_FUNC_INPUT_PROTECTOR == 1
-	#include "FuncsInputProtector.h"//because of dependences on TimerModes
+	#include "FuncsInputProtector.h"//because of dependences on TimerModes and ADCModes
 #endif //if USE_FUNC_INPUT_PROTECTOR == 1
 
 
@@ -33,11 +33,12 @@ void delayMicroseconds(uint64_t _us);
 #endif
 
 
+#if USE_ADC == 1
+	#include "ADCModes.h"
+	#include "ADC.h"
+#endif //if USE_ADC == 1
+
+
 #if USE_FUNC_INPUT_PROTECTOR == 1
 	#include "FuncsInputProtector.c"
 #endif //if USE_FUNC_INPUT_PROTECTOR == 1
-
-
-#if USE_ADC == 1
-	#include "ADC.h"
-#endif //if USE_ADC == 1

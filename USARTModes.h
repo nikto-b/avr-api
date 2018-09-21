@@ -1,3 +1,5 @@
+#define _USART_MODES
+
 #if USE_USART0 == 1
 	#define USART0_CHAR_5B 0
 	#define USART0_CHAR_6B (1 << UCSZ00)

@@ -14,6 +14,7 @@
 #define TIMER5_USE_COMPA 1
 
 //---------USART----------
+#define EOL "\r\n"
 #define USE_USART 1
 #define USE_USART0 1
 #define USE_USART0_OUTPUT 1
@@ -31,9 +32,9 @@
 
 int main()
 {
-	DDRB = ((1 << PB0) | (1 << PB1) | (1 << PB7) | (1 << PB1));//8, 9, 13 output
-	DDRC = ((1 << PC5) | (1 << PC4) | (1 << PC3));//A0,1,2 output
-	DDRD = ((1 << PD2) | (1 << PD3) | (0 << PD4) | (1 << PD5) | (1 << PD6) | (0 << PD7));//2,3,4,5,6,7 output
+	DDRB = ((1 << PB0) | (1 << PB1) | (1 << PB7) | (1 << PB1));								//8, 9, 13 output
+	DDRC = ((1 << PC5) | (1 << PC4) | (1 << PC3));											//A0,1,2 output
+	DDRD = ((1 << PD2) | (1 << PD3) | (0 << PD4) | (1 << PD5) | (1 << PD6) | (0 << PD7));	//2,3,4,5,6,7 output
 	DDRL = 0;
 	PORTL = 1 << PL2;
 	PORTB &= ~(1 << PB7);
@@ -41,16 +42,8 @@ int main()
 	USART0Begin(115200);
 	
 	ADCInit();
-	//setAnalogPins(0, 1);
-	//USART0Println(analogRead(0));
-	//USART0Send('\r');
-	//ADCSetAnalogRepeat(0, 1);
 	sei();
-	//USART0Println(ADCGetAnalogRepeat(0));
-	//USART0Send('\r');
-	//ADCSetAnalogChanged(0, 1);
-	//USART0Println(ADCGetAnalogRepeat(0));
-	//USART0Send('\r');
+	
 	
 	loop:
 	

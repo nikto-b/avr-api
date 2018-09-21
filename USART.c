@@ -72,7 +72,8 @@
 		inline void USART0Println(char* __data__)
 		{
 			USART0Print(__data__);
-			USART0Send('\n');
+			//USART0Send('\n');
+			USART0Print(EOL);
 		}
 
 		inline void USART0Println()

@@ -8,6 +8,10 @@
 		#define BIN 1
 	#endif //ifndef DEC
 	
+	#ifndef EOL
+		#define EOL 0
+	#endif
+	
 	#include "stringFuncs.h"
 	#include "USARTModes.h"
 	#include "USART.c"

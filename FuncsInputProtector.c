@@ -1,6 +1,11 @@
 #pragma message "Using FuncInputProtector"
 
 #if USE_TIMERS == 1
+	
+	#ifndef _TIMER_MODES
+		#pragma message "Timer table not found!"
+	#endif //ifndef _TIMER_MODES
+
 	//TIMER0
 	
 	uint8_t validateTimer0Mode(uint8_t __mode)
@@ -272,7 +277,78 @@
 #endif //if USE_TIMERS == 1
 
 #if USE_ADC == 1
-
+	
+	uint8_t validateADCREF(uint8_t __aref)
+	{
+		if(__aref != ADC_REF_AREF
+		&& __aref != ADC_REF_AVCC
+		&& __aref != ADC_REF_INT_1_1V
+		&& __aref != ADC_REF_INT_2_56V)
+		{
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	
+	uint8_t validateADCControl(uint8_t __contr)
+	{
+		if(__contr != ADC_CONTROL_AUTOTRIGGER
+		&& __contr != ADC_CONTROL_ENABLE
+		&& __contr != ADC_CONTROL_INTERRUPT_EN
+		&& __contr != ADC_CONTROL_INTERRUPT_FLAG_EN
+		&& __contr != ADC_CONTROL_START_CONVERTION)
+		{
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	
+	uint8_t validateADCPrescaller(uint8_t __prescaller)
+	{
+		/*if(__prescaller != ADC_PRESCALLER_DEF
+		&& __prescaller != ADC_PRESCALLER_2
+		&& __prescaller != ADC_PRESCALLER_4
+		&& __prescaller != ADC_PRESCALLER_8
+		&& __prescaller != ADC_PRESCALLER_16
+		&& __prescaller != ADC_PRESCALLER_32
+		&& __prescaller != ADC_PRESCALLER_64
+		&& __prescaller != ADC_PRESCALLER_128)*/
+		if(__prescaller & ~ADC_PRESCALLER_MASK != 0)
+		{
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	
+	uint8_t validateADCAutotriggerSRC(uint8_t __src)
+	{
+		/*if(__src != ADC_ADTS_ANALOG_COMPARATOR
+		&& __src != ADC_ADTS_EXT_INTERRUPT_REQ_0
+		&& __src != ADC_ADTS_FREERUN
+		&& __src != ADC_ADTS_TC0_COMPA
+		&& __src != ADC_ADTS_TC0_OVF
+		&& __src != ADC_ADTS_TC1_CAPT_EV
+		&& __src != ADC_ADTS_TC1_COMPB
+		&& __src != ADC_ADTS_TC1_OVF)*/
+		if(__src & ~ADC_ADTS_MASK != 0)
+		{
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	
 #endif //if USE_ADC == 1
 
 #if USE_USART == 1

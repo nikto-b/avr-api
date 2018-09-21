@@ -31,3 +31,19 @@
 	
 	
 #endif //if USE_TIMERS == 1
+
+#if USE_ADC == 1
+	
+	#ifndef _ADC_MODES
+		#pragma error "No ADC modes table found!"
+	#endif //ifndef _ADC_MODES
+	
+	uint8_t validateADCREF(uint8_t __aref);
+	
+	uint8_t validateADCControl(uint8_t __contr);
+	
+	uint8_t validateADCPrescaller(uint8_t __prescaller);
+	
+	uint8_t validateADCAutotriggerSRC(uint8_t __src);
+	
+#endif //if USE_ADC == 1

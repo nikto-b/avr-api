@@ -48,6 +48,11 @@
 #ifndef USE_USART
 	#pragma message "Using USART [DEFAULT]"
 	#define USE_USART 1
+	
+	#ifndef EOL//if not defined end of line
+		#define EOL '\n'
+	#endif //ifndef EOL
+	
 #endif //ifndef USE_USART
 
 
