@@ -277,6 +277,10 @@
 #endif //if USE_TIMERS == 1
 
 #if USE_ADC == 1
+
+	#ifndef _ADC_MODES
+		#pragma error "ADC modes table not found!"
+	#endif //ifndef _ADC_MODES
 	
 	uint8_t validateADCREF(uint8_t __aref)
 	{
@@ -352,5 +356,25 @@
 #endif //if USE_ADC == 1
 
 #if USE_USART == 1
+	
+	#ifndef _USART_MODES
+		#pragma error "USART modes table not found!"
+	#endif //ifndef _USART_MODES
+	
+	uint8_t validateUSARTBitSettings(uint8_t __bitness)
+	{
+		if(__bitness != USART0_CHAR_5B
+		&& __bitness != USART0_CHAR_6B
+		&& __bitness != USART0_CHAR_7B
+		&& __bitness != USART0_CHAR_8B
+		&& __bitness != USART0_CHAR_9B)
+		{
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
 
 #endif //if USE_USART == 1

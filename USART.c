@@ -60,7 +60,8 @@
 		inline void USART0Println(int __data__)
 		{
 			USART0Print(__data__);
-			USART0Send('\n');
+			//USART0Send('\n');
+			USART0Print(EOL);
 		}
 
 		inline void USART0Println(int __data__, byte __mode__)
@@ -182,15 +183,13 @@
 	void USART0SetBitSettings(uint8_t __bitness)
 	{
 		#if USE_FUNC_INPUT_PROTECTOR == 1
-			if(__bitness == USART0_CHAR_5B
-			|| __bitness == USART0_CHAR_6B
-			|| __bitness == USART0_CHAR_7B
-			|| __bitness == USART0_CHAR_8B
-			|| __bitness == USART0_CHAR_9B)
-				UCSR0C = __bitness;
+			if(!validateUSARTBitSettings(__bitness))
+			{
+				return;
+			}
 		#else //if USE_FUNC_INPUT_PROTECTOR == 1
-		UCSR0C = __bitness;
-		#endif //if USE_FUNC_INPUT_PROTECTOR != 1
+			UCSR0C = __bitness;
+		#endif
 	}
 
 	void USART0Begin(uint64_t __baud)
