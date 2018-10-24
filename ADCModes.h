@@ -14,7 +14,7 @@
 
 //				ADC PRESCALLERS
 #define ADC_PRESCALLER_MASK ((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))//mask for funcInputProterctor
-#define ADC_PRESCALLER_DEF	0								//default prescaller(1)
+#define ADC_PRESCALLER_DEF	0								//default prescaller(*1)
 #define ADC_PRESCALLER_2	(1 << ADPS0)					//*2
 #define ADC_PRESCALLER_4	(1 << ADPS1)					//*4
 #define ADC_PRESCALLER_8	((1 << ADPS0) | (1 << ADPS1))	//*8
@@ -24,20 +24,20 @@
 #define ADC_PRESCALLER_128	((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0))//*128
 
 //				ADC AUTOTRIGGER SOURCES
-#define ADC_ADTS_MASK					((1 << ADTS2) | (1 << ADTS1) | (1 << ADTS0))//mask for funcInputProtector
-#define ADC_ADTS_FREERUN				0
-#define ADC_ADTS_ANALOG_COMPARATOR		(1 << ADTS0)
-#define ADC_ADTS_EXT_INTERRUPT_REQ_0	(1 << ADTS1)
-#define ADC_ADTS_TC0_COMPA				((1 << ADTS0) | (1 << ADTS1))
-#define ADC_ADTS_TC0_OVF				(1 << ADTS2)
-#define ADC_ADTS_TC1_COMPB				((1 << ADTS2) | (1 << ADTS0))
-#define ADC_ADTS_TC1_OVF				((1 << ADTS2) | (1 << ADTS1))
-#define ADC_ADTS_TC1_CAPT_EV			((1 << ADTS2) | (1 << ADTS1) | (1 << ADTS0))
+#define ADC_ADTS_MASK					((1 << ADTS2) | (1 << ADTS1) | (1 << ADTS0))	//mask for funcInputProtector
+#define ADC_ADTS_FREERUN				0												//
+#define ADC_ADTS_ANALOG_COMPARATOR		(1 << ADTS0)									//ADC TRIGGER
+#define ADC_ADTS_EXT_INTERRUPT_REQ_0	(1 << ADTS1)									//EXTERNAL INTERRUPT
+#define ADC_ADTS_TC0_COMPA				((1 << ADTS0) | (1 << ADTS1))					//TC0 COMPARE WITH A
+#define ADC_ADTS_TC0_OVF				(1 << ADTS2)									//TC0 OVERFLOW
+#define ADC_ADTS_TC1_COMPB				((1 << ADTS2) | (1 << ADTS0))					//TC1 COMPARE WITH B
+#define ADC_ADTS_TC1_OVF				((1 << ADTS2) | (1 << ADTS1))					//TC1 OVERFLOW
+#define ADC_ADTS_TC1_CAPT_EV			((1 << ADTS2) | (1 << ADTS1) | (1 << ADTS0))	//TC1 CAPTURE EVENT
 
 //				ADC MODES
-#define ADC_MODE_BACKGROUND	0//background work with interrupts
-#define ADC_MODE_DEADLINE	1//background + wait for update
-#define ADC_MODE_LOCK		2//reinit at analogRead()
-#define ADC_MODE_MANUAL		3//manual controlling of ADC
+#define ADC_MODE_BACKGROUND	0				//background work with interrupts
+#define ADC_MODE_DEADLINE	1				//background + wait for update
+#define ADC_MODE_LOCK		2				//reinit at analogRead()
+#define ADC_MODE_MANUAL		3				//manual controlling of ADC
 
 

@@ -155,6 +155,7 @@
 		{
 			ADCSetRef(ADC_REF_AVCC);
 			ADCSetPrescaller(ADC_DEF_PRESCALLER);
+			ADMUX = _analogRef | __pin;
 			ADCEnable();
 			ADCStartConvert();
 			while(!ADCSRA >> ADIF)
