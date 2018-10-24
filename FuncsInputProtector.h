@@ -1,3 +1,6 @@
+#if USE_USART0 == 1
+	uint8_t validateUSART0BitSettings(uint8_t __bitness);
+#endif //if USE_USART0 == 1
 
 #if USE_TIMERS == 1
 	//TIMER0

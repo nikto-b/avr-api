@@ -6,8 +6,13 @@
 
 #define NUM_OF_ANALOG_PINS 7
 #define ARDUINO_SUPPORT 0
-#define USE_ADC 1
 #define USE_FUNC_INPUT_PROTECTOR 0
+
+//-----------ADC-----------
+#define USE_ADC 1
+#define USE_ADC_8BIT 1
+#define ADC_MODE ADC_MODE_DEADLINE
+#define ADC_DEF_PRESCALLER ADC_PRESCALLER_128
 
 //---------TIMERS----------
 #define USE_TIMERS 1
@@ -15,7 +20,7 @@
 #define TIMER5_USE_COMPA 1
 
 //---------USART----------
-#define EOL "\r\n"
+#define EOL (char*)"\n\r"
 #define USE_USART 1
 #define USE_USART0 1
 #define USE_USART0_OUTPUT 1
@@ -243,6 +248,101 @@ void startTurnCC(void)
 }
 
 
+uint8_t fuck = 0;
+
+
+
+
+ISR(TWI_vect)
+{
+	//USART0Print("C");
+	//USART0Println((int)TWSR);
+	switch(TWSR)
+	{
+		case 0x00:
+		{
+			USART0Println("BUS FAIL");
+			break;
+		}
+		case 0x08:
+		{
+			TWDR = (0x29 << 1) | 1;
+			TWCR = (1 << TWIE) | (1 << TWEN) | (1 << TWINT);
+			//USART0Println("0x08");
+			break;
+		}
+		case 0x10:
+		{
+			USART0Println("0x10");
+			break;
+		}
+		case 0x18:
+		{
+			TWDR = 1;
+			USART0Println("0x18");
+			TWCR = (1 << TWIE) | (1 << TWEN) | (1 << TWINT);
+			break;
+		}
+		case 0x20:
+		{
+			USART0Println("0x20");
+			break;
+		}
+		case 0x28:
+		{
+			break;
+		}
+		case 0x30:
+		{
+			
+			break;
+		}
+		case 0x38:
+		{
+			
+			break;
+		}
+		case 0x40:
+		{
+			if(fuck == 1)
+			{
+				//TWDR = 0xC0;
+				fuck = 2;
+				//TWCR = (1 << TWIE) | (1 << TWEN) | (1 << TWINT) | (1 << TWSTO);
+				//USART0Println("0x40 STOP");
+			}
+			else if(fuck == 0)
+			{
+				fuck = 1;
+				TWDR = 0xC1;
+				TWCR = (1 << TWIE) | (1 << TWEN) | (1 << TWINT);	
+				//USART0Println("0x40");			
+			}
+			break;
+		}
+		case 0x48:
+		{
+			TWCR = (1 << TWIE) | (1 << TWEN) | (1 << TWINT) | (1 << TWSTO);
+			USART0Println("GO NACK!");
+			break;
+		}
+		case 0x50:
+		{
+			break;
+		}
+		case 0x58:
+		{
+				fuck = 2;
+				TWCR = (1 << TWIE) | (1 << TWEN) | (1 << TWINT) | (1 << TWSTO);
+				fuck = 2;
+				//USART0Println("0x58 STOP");
+			
+			
+			break;
+		}
+		
+	}
+}
 
 
 int main()
@@ -263,200 +363,162 @@ int main()
 	//PORTB &= ~(1 << PB7);
 	//PORTD |= 1 << PD7;
 	USART0Begin(115200);
-	//PORTE = 0;
-	//PORTG = 0;
-	//PORTH = 0;
-	//PORTL = 0;
-	
 	//ADCInit();
-	/*ADCFlush();
-	ADCSetRef(ADC_REF_AVCC);
-	ADMUX |= (_currPin & NUM_OF_ANALOG_PINS);
-	ADCSetPrescaller(ADC_PRESCALLER_32);
-	ADCSendControl(ADC_CONTROL_AUTOTRIGGER);
-	ADCSendControl(ADC_CONTROL_INTERRUPT_EN);
-	ADCEnable();
-	ADCStartConvert();*/
-	/*ADCSRA = 0;
-	ADCSRB = 0;
-	ADMUX |= (1 << REFS0); 	//set reference voltage
-	//ADMUX |= (1 << ADLAR); //configure ADC for 8-bit work (PT1)
-	//_analog_ref = ADMUX;			//save ref
-	ADMUX |= (0 & NUM_OF_ANALOG_PINS);		//set pin for converting
-	//  ADCSRA |= (1 << ADPS2) ;//  set divider - 16
-	//  ADCSRA &= ~ (1 << ADPS1) | (1 << ADPS0);
-	ADCSRA |= (1 << ADPS2) | (1 << ADPS0);//set divider 32
-	ADCSRA &= ~ (1 << ADPS1);
-	ADCSRA |= (1 << ADATE); 	//set autoconvert at trigger
-	ADCSRA |= (1 << ADIE); 	//ADC interrupt enable
-	ADCSRA |= (1 << ADEN);	//enable ADC*/
-	ADCInit();
 	sei();
-	ADCSRA |= (1 << ADSC);	//start conversion
-	
-	//enableWheelACC();
-	//while(1){}
-	
-	//PORTE = 1 << PE4;//wheel A CC
-	//PORTE = 1 << PE5;//wheel A C
-	//PORTE = 1 << PE3;//wheel D CC
-	//PORTG = 1 << PG5;//wheel D C
-	//PORTH = 1 << PH3;//wheel C CC
-	//PORTH = 1 << PH4;//wheel C C
-	//PORTH = 1 << PH5;//wheel B C
-	//PORTH = 1 << PH6;//wheel B CC
-	int del = 800;
-	
-	USART0Println(ADCSRA, BIN);
-	//while(1){}
-	
+	int del = 20;
+	int R, G, B;
 	loop:
-	USART0Println(analogRead(0));
-	/*USART0Println("4");
-	PORTB = 1 << PB4;
-	USART0Println(analogRead(0));
-	USART0Println();
+	//USART0Println("started");
+	//TWSR = 3;
+	fuck = 0;
+	TWAR = 0x29;
+	TWBR = 72;
+	TWCR = (1 << TWSTA) | (1 << TWINT) | (1 << TWEN) | (1 << TWIE);
+	while(fuck != 2)
+	{
+		asm("nop");
+	//USART0Println("FUCK");
+	}
+
+	USART0Println((int)TWDR);
+	fuck = 0;
+	goto loop;
+	PORTB = 1 << PB5;//11
 	_delay_ms(del);
-	USART0Println("5");
-	PORTB = 1 << PB5;
-	USART0Println(analogRead(0));
-	USART0Println();
+	//USART0Print("G ");
+	//USART0Println(analogRead(0));
+	//_delay_ms(50);
+	while(!ADCGetAnalogChanged(0)){asm("nop");}
+	R = analogRead(0);
+	/*PORTB = 1 << PB6;//12
 	_delay_ms(del);
-	USART0Println("6");
-	PORTB = 1 << PB6;
-	USART0Println(analogRead(0));
-	USART0Println();
+	//USART0Print("B ");
+	//USART0Println(analogRead(0));
+	//_delay_ms(50);
+	while(!ADCGetAnalogChanged(0)){asm("nop");}
+	B = analogRead(0);*/
+	PORTB = 1 << PB7;//13
 	_delay_ms(del);
-	USART0Println("0");
-	PORTB = 0;
-	USART0Println(analogRead(0));
-	USART0Println();
-	USART0Println();
-	_delay_ms(del);
+	
+	while(!ADCGetAnalogChanged(0)){asm("nop");}
+	G = analogRead(0);//*/
+	//_delay_ms(del);
+	uint8_t __mess = 0;
+	//R = 1023;
+	/*__mess = 0;
+	__mess <<= 5;
+	__mess |= ((1 << 5) - 1) & R;
+	USART0Send(__mess);
+	
+	_delay_ms(1);
+	
+	__mess = 1;
+	__mess <<= 5;
+	__mess |= (R >> 5) & ((1 << 5) - 1);
+	USART0Send(__mess);
+	
+	
+	//G = 1023;
+	__mess = 2;
+	__mess <<= 5;
+	__mess |= ((1 << 5) - 1) & G;
+	USART0Send(__mess);
+	
+	_delay_ms(1);
+	
+	__mess = 3;
+	__mess <<= 5;
+	__mess |= (G >> 5) & ((1 << 5) - 1);
+	USART0Send(__mess);
+	
+	
+	//B = 1023;
+	__mess = 4;
+	__mess <<= 5;
+	__mess |= ((1 << 5) - 1) & B;
+	USART0Send(__mess);
+	
+	_delay_ms(1);
+	
+	__mess = 5;
+	__mess <<= 5;
+	__mess |= (B >> 5) & ((1 << 5) - 1);
+	USART0Send(__mess);
+	
+	
+	
+	
+	
+	
 	*/
-	/*enableWheelAC();
-	USART0Println("AC");
-	_delay_ms(del);
-	disableWheelAC();
-	USART0Println("STOP");
-	_delay_ms(del);
-	enableWheelACC();
-	USART0Println("ACC");
-	_delay_ms(del);
-	disableWheelACC();
-	USART0Println("STOP");
-	_delay_ms(del);
-	
-	enableWheelBC();
-	USART0Println("BC");
-	_delay_ms(del);
-	disableWheelBC();
-	USART0Println("STOP");
-	_delay_ms(del);
-	enableWheelBCC();
-	USART0Println("BCC");
-	_delay_ms(del);
-	disableWheelBCC();
-	USART0Println("STOP");
-	_delay_ms(del);
-	
-	enableWheelCC();
-	USART0Println("CC");
-	_delay_ms(del);
-	disableWheelCC();
-	USART0Println("STOP");
-	_delay_ms(del);
-	enableWheelCCC();
-	USART0Println("CCC");
-	_delay_ms(del);
-	disableWheelCCC();
-	USART0Println("STOP");
-	_delay_ms(del);
-	
-	enableWheelDC();
-	USART0Println("DC");
-	_delay_ms(del);
-	disableWheelDC();
-	USART0Println("STOP");
-	_delay_ms(del);
-	enableWheelDCC();
-	USART0Println("DCC");
-	_delay_ms(del);
-	disableWheelDCC();
-	USART0Println("STOP");
-	_delay_ms(del);
-//*/
-
-	/*USART0Println("F");
-	startForward();
-	_delay_ms(del);
-	USART0Println("STOP");
-	stopForward();
-	_delay_ms(del);
-
-	USART0Println("R");
-	startRight();
-	_delay_ms(del);
-	USART0Println("STOP");
-	stopRight();
-	_delay_ms(del);
-
-	USART0Println("L");
-	startLeft();
-	_delay_ms(del);
-	USART0Println("STOP");
-	stopLeft();
-	_delay_ms(del);
-
-	USART0Println("B");
-	startBackward();
-	_delay_ms(del);
-	USART0Println("STOP");
-	stopBackward();
-	_delay_ms(del);//*/
-	
-	/*USART0Println("FR");
-	startFR();
-	_delay_ms(del);
-	USART0Println("STOP");
-	stopFR();
-	_delay_ms(del);
-	
-	USART0Println("FL");
-	startFL();
-	_delay_ms(del);
-	USART0Println("STOP");
-	stopFL();
-	_delay_ms(del);
-	
-	USART0Println("BR");
-	startBR();
-	_delay_ms(del);
-	USART0Println("STOP");
-	stopBR();
-	_delay_ms(del);
-	
-	USART0Println("BL");
-	startBL();
-	_delay_ms(del);
-	USART0Println("STOP");
-	stopBL();
-	_delay_ms(del);//*/
+	USART0Print("R:");
+	USART0Print(R);
+	USART0Print(" G:");
+	USART0Println(G);
+	/*USART0Print(" B:");
+	USART0Println(B);/*
+	USART0Print(" A:");
+	USART0Print(A);
+	USART0Print(" W:");
+	USART0Println(W);//*/
+	//while(!ADCGetAnalogChanged(0)){asm("nop");}
+	PORTB = 0;
 	
 	
-	/*startTurnC();
-	USART0Println("C");
-	_delay_ms(del);
-	stopTurnC();
-	USART0Println("STOP");
+	if(R >= 155 && R <= 160 && G >= 213 && G <= 215)
+	{
+		//USART0Send(1);
+		USART0Println("GREEN");
+	}
+	else if(R >= 154 && R <= 156 && G >= 225 && G <= 228)
+	{
+		//USART0Send(2);
+		USART0Println("RED");
+	}
+	else if(R >= 181 && R <= 182 && G >= 227 && G <= 229)
+	{
+		//USART0Send(3);
+		USART0Println("YELLOW");
+	}
+	else if(R >= 135 && R <= 165 && G >= 205 && G <= 210)
+	{
+		//USART0Send(4);
+		USART0Println("BLACK");
+	}
+	else if(R >= 180 && R <= 194 && G >= 220 && G <= 230)
+	{
+		//USART0Send(5);
+		USART0Println("WHITE");
+	}
+	else if(R >= 135 && R <= 150 && G >= 215 && G <= 220)
+	{
+		//USART0Send(6);
+		USART0Println("VIOLLETT");
+	}
 	_delay_ms(del);
 	
-	startTurnCC();
-	USART0Println("CC");
-	_delay_ms(del);
-	stopTurnCC();
-	USART0Println("STOP");
-	_delay_ms(del);//*/
+	/*USART0Print("A: ");
+	USART0Print(A);
+	USART0Print(" W: ");
+	USART0Println(W);*/
+	
+	//USART0Println("");
+	
+	/*if(R > 0 && R < 70)
+		USART0Println("YELLOW\n");
+	else if(R > 70 && R < 250)
+		USART0Println("RED\n");
+	else if(R > 300 && R < 800)
+		USART0Println("GREEN\n");
+	else if(R > 850 && R < 950)
+		USART0Println("BLACK\n");*/
+		
+	//USART0Println();
+	
+	//_delay_ms(100);
+	
+	
+	
 	
 	_delay_ms(1);
 	

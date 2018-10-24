@@ -361,7 +361,7 @@
 		#pragma error "USART modes table not found!"
 	#endif //ifndef _USART_MODES
 	
-	uint8_t validateUSARTBitSettings(uint8_t __bitness)
+	uint8_t validateUSART0BitSettings(uint8_t __bitness)
 	{
 		if(__bitness != USART0_CHAR_5B
 		&& __bitness != USART0_CHAR_6B

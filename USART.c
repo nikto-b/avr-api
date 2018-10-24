@@ -112,7 +112,7 @@
 
 			_inputBuf_[_inputBufCounterInput_] = UDR0;	//save data
 
-			if(_inputBuf_[_inputBufCounterInput_] != NULL)//check for garbage
+			if(_inputBuf_[_inputBufCounterInput_] != 0x00)//check for garbage
 			{
 				_inputBufEmpty_ = false;				//set empty flag down
 				_inputBufCounterInput_++;				//go next index for writing
@@ -172,7 +172,7 @@
 			while(UCSR0A & (1 << RXC0))
 			{
 				__temp__ = UDR0;
-				_inputBufCounterInput_ = 0;
+				_inputBufCounterOutput_ = 0;
 				_inputBufCounterInput_  = 0;
 				_inputBufEmpty_ = true;
 			}
@@ -183,7 +183,7 @@
 	void USART0SetBitSettings(uint8_t __bitness)
 	{
 		#if USE_FUNC_INPUT_PROTECTOR == 1
-			if(!validateUSARTBitSettings(__bitness))
+			if(!validateUSART0BitSettings(__bitness))
 			{
 				return;
 			}
@@ -198,7 +198,7 @@
 
 			for(int i = 0; i < _MAX_BUF_SIZE_; i++)
 			{
-				_inputBuf_[i] = NULL;
+				_inputBuf_[i] = 0x00;
 			}
 		#endif //if USE_USART0_INPUT == 1
 

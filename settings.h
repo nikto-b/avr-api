@@ -75,4 +75,12 @@
 #ifndef USE_ADC
 	#pragma message "Using ADC [DEFAULT]"
 	#define USE_ADC 1
-#endif //ifndef USE_ADC
+	#define ADC_DEF_PRESCALLER ADC_PRESCALLER_128
+	#define ADC_MODE ADC_MODE_BACKGROUND
+#elifndef ADC_MODE //ifndef USE_ADC
+	#define ADC_MODE ADC_MODE_BACKGROUND
+#endif //ifndef ADC_MODE
+
+#if USE_ADC == 1
+	#define ADC_ONCOMPARE_CUSTOMFUNC_ADDR 11
+#endif

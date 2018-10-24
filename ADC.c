@@ -40,7 +40,10 @@
 		#endif //if USE_FUNC_INPUT_PROTECTOR == 1
 		
 		ADMUX |= __ref;
-		_analogRef = __ref;
+		#if USE_ADC_8BIT == 1
+			ADMUX |= (1 << ADLAR);
+		#endif //if USE_ADC_8BIT == 1
+		_analogRef = ADMUX;
 	}
 	
 	void ADCSetPrescaller(uint8_t __prescaller)
@@ -103,56 +106,120 @@
 		DIDR0  = 0;
 	}
 	
+	#if ADC_MODE == ADC_MODE_BACKGROUND
 	
-	void ADCInit()
-	{
-		for(int i = 0; i < NUM_OF_ANALOG_PINS; i++)
+		void ADCInit()
 		{
-			_analogPins[i] = 0;
+			for(int i = 0; i < NUM_OF_ANALOG_PINS; i++)
+			{
+				_analogPins[i] = 0;
+			}
+			ADCFlush();
+			
+			ADCSetRef(ADC_REF_AVCC);
+			ADCSetPrescaller(ADC_DEF_PRESCALLER);
+			ADCSendControl(ADC_CONTROL_AUTOTRIGGER);
+			ADCSendControl(ADC_CONTROL_INTERRUPT_EN);
+			ADCEnable();
+			ADCStartConvert();
 		}
-		ADCFlush();
-		ADCSetRef(ADC_REF_AVCC);
-		ADMUX |= (_currPin & NUM_OF_ANALOG_PINS);
-		ADCSetPrescaller(ADC_PRESCALLER_32);
-		ADCSendControl(ADC_CONTROL_AUTOTRIGGER);
-		ADCSendControl(ADC_CONTROL_INTERRUPT_EN);//WTF?
-		ADCEnable();
-		ADCStartConvert();
-		//*/
-		
-		//ADCSRA = 0;
-		//ADCSRB = 0;
-		//ADMUX |= (1 << REFS0); 	//set reference voltage
-		//ADMUX |= (1 << ADLAR); //configure ADC for 8-bit work (PT1)
-		//_analogRef = ADMUX;			//save ref
-		//ADMUX |= (_currPin & NUM_OF_ANALOG_PINS);		//set pin for converting
-		//  ADCSRA |= (1 << ADPS2) ;//  set divider - 16
-		//  ADCSRA &= ~ (1 << ADPS1) | (1 << ADPS0);
-		//ADCSRA |= (1 << ADPS2) | (1 << ADPS0);//set divider 32
-		//ADCSRA &= ~ (1 << ADPS1);
-		//ADCSRA |= (1 << ADATE); 	//set autoconvert at trigger
-		//ADCSRA |= (1 << ADIE); 	//ADC interrupt enable
-		//ADCSRA |= (1 << ADEN);	//enable ADC
-		//ADCSRA |= (1 << ADSC);	//start conversion*/
-		//ADCStartConvert();
-	}
 
-	ISR(ADC_vect)
-	{
-		_analogPins[_currPin] = ADCL | (ADCH << 8);
-		ADCSetAnalogChanged(_currPin, 1);
-		_currPin++;
-		if(_currPin >= NUM_OF_ANALOG_PINS)
+		ISR(ADC_vect)
 		{
-			_currPin = 0;
-		}		
-		ADMUX = _analogRef | (_currPin & NUM_OF_ANALOG_PINS);
-	}
+			#if USE_ADC_8BIT == 1
+				_analogPins[_currPin] = ADCH;// = ADCL | (ADCH << 8);
+			#else
+				_analogPins[_currPin] = ADCL | (ADCH << 8);
+			#endif
+			
+			ADCSetAnalogChanged(_currPin, 1);
+			_currPin++;
+			if(_currPin >= NUM_OF_ANALOG_PINS)
+			{
+				_currPin = 0;
+			}		
+			ADMUX = _analogRef | (_currPin & NUM_OF_ANALOG_PINS);
+			if(funcs[ADC_ONCOMPARE_CUSTOMFUNC_ADDR] != NULL)
+				funcs[ADC_ONCOMPARE_CUSTOMFUNC_ADDR]();
+		}
+		
+		
+		int analogRead(uint8_t __pin)
+		{
+			ADCSetAnalogChanged(__pin, 0);
+			return _analogPins[__pin] & ADC_DATA_MASK;
+		}
+	//#endif //if ADC_MODE == ADC_MODE_BACKGROUND
+	#elif ADC_MODE == ADC_MODE_LOCK
+		int analogRead(uint8_t __pin)
+		{
+			ADCSetRef(ADC_REF_AVCC);
+			ADCSetPrescaller(ADC_DEF_PRESCALLER);
+			ADCEnable();
+			ADCStartConvert();
+			while(!ADCSRA >> ADIF)
+			{
+				asm("NOP");//todo: sleep instad busyloop
+			}			
+			#if USE_ADC_8BIT == 1
+				return ADCH;// = ADCL | (ADCH << 8);
+			#else
+				return ADCL | (ADCH << 8);
+			#endif
+		}
+		
+		ISR(ADC_vect)
+		{
+			if(funcs[ADC_ONCOMPARE_CUSTOMFUNC_ADDR] != NULL)
+				funcs[ADC_ONCOMPARE_CUSTOMFUNC_ADDR]();
+		}
+	//#endif //elif ADC_MODE == ADC_MODE_LOCK
+	#elif ADC_MODE == ADC_MODE_DEADLINE
 	
-	
-	int analogRead(uint8_t __pin)
-	{
-		ADCSetAnalogChanged(__pin, 0);
-		return _analogPins[__pin] & ADC_DATA_MASK;
-	}
+		void ADCInit()
+		{
+			for(int i = 0; i < NUM_OF_ANALOG_PINS; i++)
+			{
+				_analogPins[i] = 0;
+			}
+			ADCFlush();
+			
+			ADCSetRef(ADC_REF_AVCC);
+			ADCSetPrescaller(ADC_DEF_PRESCALLER);
+			ADCSendControl(ADC_CONTROL_AUTOTRIGGER);
+			ADCSendControl(ADC_CONTROL_INTERRUPT_EN);
+			ADCEnable();
+			ADCStartConvert();
+		}
+
+		ISR(ADC_vect)
+		{
+			#if USE_ADC_8BIT == 1
+				_analogPins[_currPin] = ADCH;// = ADCL | (ADCH << 8);
+			#else
+				_analogPins[_currPin] = ADCL | (ADCH << 8);
+			#endif
+			
+			ADCSetAnalogChanged(_currPin, 1);
+			_currPin++;
+			if(_currPin >= NUM_OF_ANALOG_PINS)
+			{
+				_currPin = 0;
+			}		
+			ADMUX = _analogRef | (_currPin & NUM_OF_ANALOG_PINS);
+			if(funcs[ADC_ONCOMPARE_CUSTOMFUNC_ADDR] != NULL)
+				funcs[ADC_ONCOMPARE_CUSTOMFUNC_ADDR]();
+		}
+		
+		
+		int analogRead(uint8_t __pin)
+		{
+			while(!ADCGetAnalogChanged(__pin))
+			{
+				asm("NOP");//todo: sleep instad busyloop
+			}
+			ADCSetAnalogChanged(__pin, 0);
+			return _analogPins[__pin] & ADC_DATA_MASK;
+		}
+	#endif //elif ADC_MODE == ADC_MODE_LOCK
 #endif //if defined(ADCL) && USE_ADC == 1
