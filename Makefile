@@ -1,5 +1,6 @@
 MAINFILENAME=main
-MCU=atmega2560
+MCU=atmega328p
+#MCU=atmega2560
 CFLAGS=-c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL)
 
 

@@ -68,15 +68,19 @@
 		ADCSRB = (ADCSRB & ~ADC_ADTS_MASK) | __src;
 	}
 
-	inline void ADCDisableDigitalInput0to7(uint8_t __mask)
-	{
-		DIDR0 = __mask;
-	}
+	#ifdef DIDR0
+		inline void ADCDisableDigitalInput0to7(uint8_t __mask)
+		{
+			DIDR0 = __mask;
+		}
+	#endif //ifdef DIDR0
 	
-	inline void ADCDisableDigitalInput8to15(uint8_t __mask)
-	{
-		DIDR2 = __mask;
-	}
+	#ifdef DIDR2
+		inline void ADCDisableDigitalInput8to15(uint8_t __mask)
+		{
+			DIDR2 = __mask;
+		}
+	#endif //ifdef DIDR2
 	
 	inline void ADCEnable()
 	{
@@ -102,8 +106,12 @@
 	{
 		ADCSRA = 0;
 		ADCSRB = 0;
-		DIDR2  = 0;
-		DIDR0  = 0;
+		#ifdef DIDR2
+			DIDR2  = 0;
+		#endif
+		#ifdef DIDR0
+			DIDR0  = 0;
+		#endif
 	}
 	
 	#if ADC_MODE == ADC_MODE_BACKGROUND

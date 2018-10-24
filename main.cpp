@@ -32,7 +32,7 @@
 
 #include "api.h"//custom lib for AVR
 
-
+/*
 void disableWheelAC(void)
 {
 	PORTE &= ~(1 << PE5);	
@@ -79,7 +79,7 @@ void enableWheelBCC(void)
 
 void disableWheelCC(void)
 {
-	PORTH &= ~(1 << PH4);	
+	PORTH &= ~(1 << PH4);
 }
 
 void enableWheelCC(void)
@@ -343,20 +343,20 @@ ISR(TWI_vect)
 		
 	}
 }
-
+*/
 
 int main()
 {
 	DDRB = ((1 << PB0) | (1 << PB1) | (1 << PB7) | (1 << PB1));								//8, 9, 13 output
 	DDRC = ((1 << PC5) | (1 << PC4) | (1 << PC3));											//A0,1,2 output
-	DDRD = ((1 << PD2) | (1 << PD3) | (0 << PD4) | (1 << PD5) | (1 << PD6) | (0 << PD7));	//2,3,4,5,6,7 output
+	//DDRD = ((1 << PD2) | (1 << PD3) | (0 << PD4) | (1 << PD5) | (1 << PD6) | (0 << PD7));	//2,3,4,5,6,7 output
 	//
-	DDRE = ((1 << PE4) | (1 << PE5) | (1 << PE3));
-	DDRG = (1 << PG5);
-	DDRH = ((1 << PH3) | (1 << PH4) | (1 << PH5) | (1 << PH6));
+	//DDRE = ((1 << PE4) | (1 << PE5) | (1 << PE3));
+	//DDRG = (1 << PG5);
+	//DDRH = ((1 << PH3) | (1 << PH4) | (1 << PH5) | (1 << PH6));
 	//DDRF = 1;
 	//DDRF = 1;
-	DDRL = 0;
+	//DDRL = 0;
 	//PORTF = 1;
 	DDRB |= ((1 << PB4) | (1 << PB5) | (1 << PB6));
 	//PORTL = 1 << PL2;
@@ -367,23 +367,27 @@ int main()
 	sei();
 	int del = 20;
 	int R, G, B;
+	USART0Println((int)DDRB);
+	pinMode(7, INPUT);
+	USART0Println((int)DDRB);
 	loop:
+	goto loop;
 	//USART0Println("started");
 	//TWSR = 3;
-	fuck = 0;
+	//fuck = 0;
 	TWAR = 0x29;
 	TWBR = 72;
 	TWCR = (1 << TWSTA) | (1 << TWINT) | (1 << TWEN) | (1 << TWIE);
-	while(fuck != 2)
-	{
+	//while(fuck != 2)
+	//{
 		asm("nop");
 	//USART0Println("FUCK");
-	}
+	//}
 
 	USART0Println((int)TWDR);
-	fuck = 0;
+	//fuck = 0;
 	goto loop;
-	PORTB = 1 << PB5;//11
+	/////PORTB = 1 << PB5;//11
 	_delay_ms(del);
 	//USART0Print("G ");
 	//USART0Println(analogRead(0));
@@ -397,7 +401,7 @@ int main()
 	//_delay_ms(50);
 	while(!ADCGetAnalogChanged(0)){asm("nop");}
 	B = analogRead(0);*/
-	PORTB = 1 << PB7;//13
+	////PORTB = 1 << PB7;//13
 	_delay_ms(del);
 	
 	while(!ADCGetAnalogChanged(0)){asm("nop");}
@@ -462,7 +466,7 @@ int main()
 	USART0Print(" W:");
 	USART0Println(W);//*/
 	//while(!ADCGetAnalogChanged(0)){asm("nop");}
-	PORTB = 0;
+	////PORTB = 0;
 	
 	
 	if(R >= 155 && R <= 160 && G >= 213 && G <= 215)

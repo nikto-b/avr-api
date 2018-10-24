@@ -1,12 +1,13 @@
 #!/bin/bash
 
-MCUNAME=atmega2560
-PROGRAMMER=wiring
-#PROGRAMMER=arduino
+#MCUNAME=atmega2560
+#PROGRAMMER=wiring
+MCUNAME=atmega328p
+PROGRAMMER=arduino
 FILENAME=main
 USBPORT=/dev/ttyUSB0
 
-BAUDRATE=115200
+BAUDRATE=9600
 
 #make all 
 
