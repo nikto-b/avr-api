@@ -1,4 +1,4 @@
-void (*funcs[21])();
+void (*funcs[57])();
 #include "settings.h"
 
 
@@ -37,6 +37,11 @@ void delayMicroseconds(uint64_t _us);
 	#include "ADCModes.h"
 	#include "ADC.h"
 #endif //if USE_ADC == 1
+
+#if USE_WATCHDOG == 1
+	#include "watchdogModes.h"
+	#include "watchdog.h"
+#endif //if USE_WATCHDOG == 1
 
 
 #if USE_FUNC_INPUT_PROTECTOR == 1

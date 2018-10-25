@@ -25,6 +25,8 @@
 //---------CUSTOM_INTERRUPTS----------
 #define USE_CUSTOM_INTERRUPTS 1
 
+#define USE_WATCHDOG 1
+
 #include "api.h"//custom lib for AVR
 
 
@@ -293,7 +295,6 @@ int main()
 	ADCInit();
 	sei();
 	ADCSRA |= (1 << ADSC);	//start conversion
-	
 	//enableWheelACC();
 	//while(1){}
 	
