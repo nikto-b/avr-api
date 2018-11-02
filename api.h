@@ -1,5 +1,6 @@
-void (*funcs[21])();
+#include "customFuncAddr.h"
 #include "settings.h"
+
 
 
 #if USE_FUNC_INPUT_PROTECTOR == 1

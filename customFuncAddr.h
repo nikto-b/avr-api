@@ -55,3 +55,9 @@
 #define INTERRUPT_CUSTOMFUNC_USART3_RX		54		//USART3 RX Complete
 #define INTERRUPT_CUSTOMFUNC_USART3_UDRE	55		//USART3 Data Register Empty
 #define INTERRUPT_CUSTOMFUNC_USART3_TX		56		//USART3 TX Complete
+
+#define INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS	57		//num of origin custom functions
+
+void (*customFuncs[INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS])();
+
+#include "customFuncAddr.c"

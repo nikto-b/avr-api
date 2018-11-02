@@ -147,6 +147,7 @@
 			_currPin = 0;
 		}		
 		ADMUX = _analogRef | (_currPin & NUM_OF_ANALOG_PINS);
+		callCustomFunc(INTERRUPT_CUSTOMFUNC_ADC);
 	}
 	
 	

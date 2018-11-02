@@ -2,7 +2,6 @@
 	#ifndef _TIMER_MODES
 		#pragma error "Timer modes table not found!"
 	#endif //ifndef _TIMER_MODES
-	#include "timerCustomfuncAddrs.h"
 	#include "Timers.c"
 	//#include "TimerModes.h"
 	

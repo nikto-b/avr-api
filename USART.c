@@ -84,8 +84,12 @@
 
 		ISR(USART0_TX_vect)//interrupt handler called aftar transmitting data
 		{
-			if(funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR] != NULL)
-				funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR]();		//call custom function
+			callCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_TX);
+			/*#ifdef INTERRUPT_CUSTOMFUNC_USART0_TX
+				if(funcs[INTERRUPT_CUSTOMFUNC_USART0_TX] != NULL)
+					funcs[INTERRUPT_CUSTOMFUNC_USART0_TX]();		//call custom function
+			#endif
+			*/
 		}
 
 	#endif //if USE_USART0_OUTPUT == 1
@@ -117,9 +121,13 @@
 				_inputBufEmpty_ = false;				//set empty flag down
 				_inputBufCounterInput_++;				//go next index for writing
 			}
-
-			if(funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR] != NULL)
-				funcs[USART0_RECIEVE_INTERRUPT_CUSTOMFUNC_ADDR]();//call custom function
+			
+			callCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_RX);
+			/*#ifdef INTERRUPT_CUSTOMFUNC_USART0_RX
+				if(funcs[INTERRUPT_CUSTOMFUNC_USART0_RX] != NULL)
+					funcs[INTERRUPT_CUSTOMFUNC_USART0_RX]();//call custom function
+			#endif
+			*/
 		}
 
 		char USART0Read()//get data from input USART0 buffer

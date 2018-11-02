@@ -40,8 +40,12 @@
 		#if TIMER0_USE_COMPA == 1//if using interrupt on compare with A num
 			ISR(TIMER0_COMPA_vect)//COMPA interrupt handler
 			{
-				if(funcs[TIMER0_COMPA_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER0_COMPA_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC0_COMPA);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC0_COMPA
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC0_COMPA] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC0_COMPA]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR0AL
@@ -76,8 +80,12 @@
 		#if TIMER0_USE_COMPB == 1//if using interrupt on compare with B num
 		 	ISR(TIMER0_COMPB_vect)//COMPB interrupt handler
 			{
-				if(funcs[TIMER0_COMPB_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER0_COMPB_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC0_COMPB);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC0_COMPA
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC0_COMPB] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC0_COMPB]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR0BL
@@ -112,8 +120,12 @@
 		#if TIMER0_USE_OVF == 1//if using interrupt on overflow
 			ISR(TIMER0_OVF_vect)//OVF interrupt handler
 			{
-				if(funcs[TIMER0_OVF_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER0_OVF_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC0_OVF);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC0_OVF
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC0_OVF] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC0_OVF]();//call custom function
+				#endif
+				*/
 			}
 			
 			inline void TIMER0EnableOVFISR()
@@ -171,8 +183,12 @@
 		#if TIMER1_USE_COMPA == 1//if using interrupt on compare with A num
 			ISR(TIMER1_COMPA_vect)//COMPA interrupt handler
 			{
-				if(funcs[TIMER1_COMPA_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER1_COMPA_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC1_COMPA);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC1_COMPA
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC1_COMPA] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC1_COMPA]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR1AL
@@ -207,8 +223,12 @@
 		#if TIMER1_USE_COMPB == 1//if using interrupt on compare with B num
 		 	ISR(TIMER1_COMPB_vect)//COMPB interrupt handler
 			{
-				if(funcs[TIMER1_COMPB_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER1_COMPB_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC1_COMPB);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC1_COMPB
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC1_COMPB] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC1_COMPB]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR1BL
@@ -243,8 +263,12 @@
 		#if TIMER1_USE_OVF == 1//if using interrupt on overflow
 			ISR(TIMER1_OVF_vect)//OVF interrupt handler
 			{
-				if(funcs[TIMER1_OVF_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER1_OVF_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC1_OVF);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC1_OVF
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC1_OVF] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC1_OVF]();//call custom function
+				#endif
+				*/
 			}
 			
 			inline void TIMER1EnableOVFISR()
@@ -303,8 +327,12 @@
 		#if TIMER2_USE_COMPA == 1//if using interrupt on compare with A num
 			ISR(TIMER2_COMPA_vect)//COMPA interrupt handler
 			{
-				if(funcs[TIMER2_COMPA_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER2_COMPA_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC2_COMPA);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC2_COMPA
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC2_COMPA] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC2_COMPA]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR2AL
@@ -339,8 +367,12 @@
 		#if TIMER2_USE_COMPB == 1//if using interrupt on compare with B num
 		 	ISR(TIMER2_COMPB_vect)//COMPB interrupt handler
 			{
-				if(funcs[TIMER2_COMPB_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER2_COMPB_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC2_COMPB);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC2_COMPB
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC2_COMPB] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC2_COMPB]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR2BL
@@ -375,8 +407,12 @@
 		#if TIMER2_USE_OVF == 1//if using interrupt on overflow
 			ISR(TIMER2_OVF_vect)//OVF interrupt handler
 			{
-				if(funcs[TIMER2_OVF_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER2_OVF_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC2_OVF);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC2_OVF
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC2_OVF] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC2_OVF]();//call custom function
+				#endif
+				*/
 			}
 			
 			inline void TIMER2EnableOVFISR()
@@ -435,8 +471,12 @@
 		#if TIMER3_USE_COMPA == 1//if using interrupt on compare with A num
 			ISR(TIMER3_COMPA_vect)//COMPA interrupt handler
 			{
-				if(funcs[TIMER3_COMPA_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER3_COMPA_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC3_COMPA);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC3_COMPA
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC3_COMPA] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC3_COMPA]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR3AL
@@ -471,8 +511,12 @@
 		#if TIMER3_USE_COMPB == 1//if using interrupt on compare with B num
 		 	ISR(TIMER3_COMPB_vect)//COMPB interrupt handler
 			{
-				if(funcs[TIMER3_COMPB_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER3_COMPB_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC3_COMPB);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC3_COMPB
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC3_COMPB] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC3_COMPB]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR3BL
@@ -507,8 +551,12 @@
 		#if TIMER3_USE_OVF == 1//if using interrupt on overflow
 			ISR(TIMER3_OVF_vect)//OVF interrupt handler
 			{
-				if(funcs[TIMER3_OVF_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER3_OVF_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC3_OVF);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC3_OVF
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC3_OVF] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC3_OVF]();//call custom function
+				#endif
+				*/
 			}
 			
 			inline void TIMER3EnableOVFISR()
@@ -565,8 +613,12 @@
 		#if TIMER4_USE_COMPA == 1//if using interrupt on compare with A num
 			ISR(TIMER4_COMPA_vect)//COMPA interrupt handler
 			{
-				if(funcs[TIMER4_COMPA_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER4_COMPA_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC4_COMPA);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC4_COMPA
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC4_COMPA] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC4_COMPA]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR4AL
@@ -601,8 +653,12 @@
 		#if TIMER4_USE_COMPB == 1//if using interrupt on compare with B num
 		 	ISR(TIMER4_COMPB_vect)//COMPB interrupt handler
 			{
-				if(funcs[TIMER4_COMPB_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER4_COMPB_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC4_COMPB);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC4_COMPB
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC4_COMPB] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC4_COMPB]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR4BL
@@ -637,8 +693,12 @@
 		#if TIMER4_USE_OVF == 1//if using interrupt on overflow
 			ISR(TIMER4_OVF_vect)//OVF interrupt handler
 			{
-				if(funcs[TIMER4_OVF_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER4_OVF_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC4_OVF);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC4_OVF
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC4_OVF] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC4_OVF]();//call custom function
+				#endif
+				*/
 			}
 			
 			inline void TIMER4EnableOVFISR()
@@ -696,8 +756,12 @@
 		#if TIMER5_USE_COMPA == 1//if using interrupt on compare with A num
 			ISR(TIMER5_COMPA_vect)//COMPA interrupt handler
 			{
-				if(funcs[TIMER5_COMPA_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER5_COMPA_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC5_COMPA);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC5_COMPA
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC5_COMPA] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC5_COMPA]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR5AL
@@ -732,8 +796,12 @@
 		#if TIMER5_USE_COMPB == 1//if using interrupt on compare with B num
 		 	ISR(TIMER5_COMPB_vect)//COMPB interrupt handler
 			{
-				if(funcs[TIMER5_COMPB_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER5_COMPB_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC5_COMPB);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC5_COMPB
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC5_COMPB] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC5_COMPB]();//call custom function
+				#endif
+				*/
 			}
 
 			#ifdef OCR5BL
@@ -768,8 +836,12 @@
 		#if TIMER5_USE_OVF == 1//if using interrupt on overflow
 			ISR(TIMER5_OVF_vect)//OVF interrupt handler
 			{
-				if(funcs[TIMER5_OVF_CUSTOMFUNC_ADDR] != NULL)
-					funcs[TIMER5_OVF_CUSTOMFUNC_ADDR]();//call custom function
+				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC5_OVF);
+				/*#ifdef INTERRUPT_CUSTOMFUNC_TC5_OVF
+					if(funcs[INTERRUPT_CUSTOMFUNC_TC5_OVF] != NULL)
+						funcs[INTERRUPT_CUSTOMFUNC_TC5_OVF]();//call custom function
+				#endif
+				*/
 			}
 			
 			inline void TIMER5EnableOVFISR()
