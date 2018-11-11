@@ -35,4 +35,4 @@ clean:
 	rm -rf ./*.o ./*.d ./*.eep ./*.elf ./*.hex
 
 size:
-	avr-size -B $(MAINFILENAME).hex
+	avr-size $(MAINFILENAME).elf -A --mcu=$(MCU) -d

@@ -6,19 +6,38 @@
 	volatile uint16_t _analogPins[NUM_OF_ANALOG_PINS];
 	volatile uint8_t _currPin = 0;
 	
-	void ADCSetAnalogChanged(uint8_t __pin, uint8_t __state)
+	/*
+	 * Function _ADCSetAnalogChanged
+	 * Desc     Set state of "isNewMeasure"
+	 * Input    __pin: state of what pin?
+	 * 			__state: state to set
+	 * Output   none
+	*/
+	void _ADCSetAnalogChanged(uint8_t __pin, uint8_t __state)
 	{
 		_analogPins[__pin] = (_analogPins[__pin] & ~ADC_CHANGED_MASK) | (__state * ADC_CHANGED_MASK);
 	}
 	
-	uint8_t ADCGetAnalogChanged(uint8_t __pin)
+	/*
+	 * Function ADCGetAnalogChanged
+	 * Desc     Return state of "isNewMeasure"
+	 * Input    __pin: what pin get state
+	 * Output   state
+	*/
+	bool ADCGetAnalogChanged(uint8_t __pin)
 	{
 		return (_analogPins[__pin] & ADC_CHANGED_MASK) != 0;
 	}
 	
 	
 	
-	void ADCSendControl(uint8_t __contr)
+	/*
+	 * Function ADCSendControl
+	 * Desc     Set control signal to ADC
+	 * Input    _contr: control signal
+	 * Output   none
+	*/
+	inline void ADCSendControl(uint8_t __contr)
 	{
 		#if USE_FUNC_INPUT_PROTECTOR == 1
 			if(!validateADCControl(__contr))
@@ -30,7 +49,13 @@
 		ADCSRA |= __contr;
 	}
 	
-	void ADCSetRef(uint8_t __ref)
+	/*
+	 * Function ADCSetRef
+	 * Desc     Set analog reference source
+	 * Input    __ref: analog reference source
+	 * Output   none
+	*/
+	inline void ADCSetRef(uint8_t __ref)
 	{
 		#if USE_FUNC_INPUT_PROTECTOR == 1
 			if(!validateADCREF(__ref))
@@ -43,7 +68,13 @@
 		_analogRef = __ref;
 	}
 	
-	void ADCSetPrescaller(uint8_t __prescaller)
+	/*
+	 * Function ADCSetPrescaller
+	 * Desc     Set ADC prescaller
+	 * Input    __prescaller: prescaller to set
+	 * Output   none
+	*/
+	inline void ADCSetPrescaller(uint8_t __prescaller)
 	{
 		#if USE_FUNC_INPUT_PROTECTOR == 1
 			if(!validateADCPrescaller(__prescaller))
@@ -54,6 +85,12 @@
 		ADCSRA = (ADCSRA & ~ADC_PRESCALLER_MASK) | __prescaller;
 	}
 	
+	/*
+	 * Function ADCSetAnalogAutotriggerSCR
+	 * Desc     Set source for autotrigger
+	 * Input    __src: source
+	 * Output   none
+	*/
 	void ADCSetAutotriggerSRC(uint8_t __src)
 	{
 		#if USE_FUNC_INPUT_PROTECTOR == 1
@@ -65,37 +102,79 @@
 		ADCSRB = (ADCSRB & ~ADC_ADTS_MASK) | __src;
 	}
 
+	/*
+	 * Function ADCDisableDigitalInput0to7
+	 * Desc     Disable digital input for pins 0 to 7
+	 * Input    __mask: mask for disabling
+	 * Output   none
+	*/
 	inline void ADCDisableDigitalInput0to7(uint8_t __mask)
 	{
 		DIDR0 = __mask;
 	}
 	
+	/*
+	 * Function ADCDisableDigitalInput8to15
+	 * Desc     Disable digital input for pins 8 to 15
+	 * Input    __mask: mask for disabling
+	 * Output   none
+	*/
 	inline void ADCDisableDigitalInput8to15(uint8_t __mask)
 	{
 		DIDR2 = __mask;
 	}
 	
-	inline void ADCEnable()
+	/*
+	 * Function ADCEnable
+	 * Desc     Start ADC
+	 * Input    none
+	 * Output   none
+	*/
+	inline void ADCEnable(void)
 	{
 		ADCSendControl(ADC_CONTROL_ENABLE);
 	}
 	
-	inline void ADCDisable()
+	/*
+	 * Function ADCDisable
+	 * Desc     Stop ADC
+	 * Input    none
+	 * Output   none
+	*/
+	inline void ADCDisable(void)
 	{
 		ADCSRA = (ADCSRA & ~ADC_CONTROL_ENABLE);
 	}
 	
-	inline void ADCStartConvert()
+	/*
+	 * Function ADCStartConvert
+	 * Desc     Start converting
+	 * Input    none
+	 * Output   none
+	*/
+	inline void ADCStartConvert(void)
 	{
 		ADCSendControl(ADC_CONTROL_START_CONVERTION);
 	}
 	
-	inline void ADCStopConvert()
+	/*
+	 * Function ADCStopConvert
+	 * Desc     Stop converting
+	 * Input    none
+	 * Output   none
+	*/
+	inline void ADCStopConvert(void)
 	{
 		ADCSRA = (ADCSRA & ~ADC_CONTROL_START_CONVERTION);
 	}
 	
-	inline void ADCFlush()
+	/*
+	 * Function ADCFlush
+	 * Desc     Clear registers
+	 * Input    none
+	 * Output   none
+	*/
+	inline void ADCFlush(void)
 	{
 		ADCSRA = 0;
 		ADCSRB = 0;
@@ -104,7 +183,13 @@
 	}
 	
 	
-	void ADCInit()
+	/*
+	 * Function ADCInit
+	 * Desc     Initialize ADC
+	 * Input    none
+	 * Output   none
+	*/
+	void ADCInit(void)
 	{
 		for(int i = 0; i < NUM_OF_ANALOG_PINS; i++)
 		{
@@ -115,11 +200,11 @@
 		ADMUX |= (_currPin & NUM_OF_ANALOG_PINS);
 		ADCSetPrescaller(ADC_PRESCALLER_32);
 		ADCSendControl(ADC_CONTROL_AUTOTRIGGER);
-		ADCSendControl(ADC_CONTROL_INTERRUPT_EN);//WTF?
+		ADCSendControl(ADC_CONTROL_INTERRUPT_EN);
 		ADCEnable();
 		ADCStartConvert();
 		//*/
-		
+						//legacy
 		//ADCSRA = 0;
 		//ADCSRB = 0;
 		//ADMUX |= (1 << REFS0); 	//set reference voltage
@@ -137,22 +222,35 @@
 		//ADCStartConvert();
 	}
 
+	/*
+	 * Function ISR(ADC_vect)
+	 * Desc     Interrupt handler for vector ADC_vect
+	 * Input    Interrupt vector
+	 * Output   none
+	*/
 	ISR(ADC_vect)
 	{
 		_analogPins[_currPin] = ADCL | (ADCH << 8);
-		ADCSetAnalogChanged(_currPin, 1);
+		_ADCSetAnalogChanged(_currPin, 1);
 		_currPin++;
 		if(_currPin >= NUM_OF_ANALOG_PINS)
 		{
 			_currPin = 0;
 		}		
 		ADMUX = _analogRef | (_currPin & NUM_OF_ANALOG_PINS);
+		callCustomFunc(INTERRUPT_CUSTOMFUNC_ADC);
 	}
 	
 	
+	/*
+	 * Function analogRead
+	 * Desc     Return measurment of pin
+	 * Input    __pin: pin for returning measurment
+	 * Output   measurment
+	*/
 	int analogRead(uint8_t __pin)
 	{
-		ADCSetAnalogChanged(__pin, 0);
+		_ADCSetAnalogChanged(__pin, 0);
 		return _analogPins[__pin] & ADC_DATA_MASK;
 	}
 #endif //if defined(ADCL) && USE_ADC == 1

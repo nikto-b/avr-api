@@ -1,4 +1,4 @@
-#ifndef _USART_MODES
+	#ifndef _USART_MODES
 	#define _USART_MODES
 
 	#if USE_USART0 == 1

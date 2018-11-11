@@ -1,5 +1,7 @@
-void (*funcs[57])();
+#include "customFuncAddr.h"
+
 #include "settings.h"
+
 
 
 #if USE_FUNC_INPUT_PROTECTOR == 1
@@ -15,6 +17,9 @@ void (*funcs[57])();
 
 #define cbi(_sfr, _bit) (_SFR_BYTE(_sfr) &= ~_BV(_bit))
 #define sbi(_sfr, _bit) (_SFR_BYTE(_sfr) |= _BV(_bit))
+
+
+#define delay(x) _delay_ms(x)
 
 
 void delayMicroseconds(uint64_t _us);

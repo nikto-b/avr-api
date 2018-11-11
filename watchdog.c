@@ -66,7 +66,6 @@ void WDTStart(uint8_t __time)
 */
 ISR(WDT_vect)
 {
-	if(funcs[WD_TIMEOUT_CUSTOMFUNC_ADDR] != NULL)
-		funcs[WD_TIMEOUT_CUSTOMFUNC_ADDR]();
+	callCustomFunc(INTERRUPT_CUSTOMFUNC_WDT);
 }
 

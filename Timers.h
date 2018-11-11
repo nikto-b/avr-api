@@ -2,7 +2,6 @@
 	#ifndef _TIMER_MODES
 		#pragma error "Timer modes table not found!"
 	#endif //ifndef _TIMER_MODES
-	#include "timerCustomfuncAddrs.h"
 	#include "Timers.c"
 	//#include "TimerModes.h"
 	
@@ -45,7 +44,7 @@
 	
 	
 	#ifdef TCCR1A 	//TIMER1
-		void TIMER1Init(uint8_t);
+		void TIMER1SetMode(uint8_t);
 		void TIMER1SetCLK(uint8_t);
 		void TIMER1Init(uint8_t, uint8_t);
 		
@@ -83,7 +82,7 @@
 	
 	
 	#ifdef TCCR2A //TIMER2
-		void TIMER2Init(uint8_t);
+		void TIMER2SetMode(uint8_t);
 		void TIMER2SetCLK(uint8_t);
 		void TIMER2Init(uint8_t, uint8_t);
 		
@@ -121,7 +120,7 @@
 	
 	
 	#ifdef TCCR3A //TIMER3
-		void TIMER3Init(uint8_t);
+		void TIMER3SetMode(uint8_t);
 		void TIMER3SetCLK(uint8_t);
 		void TIMER3Init(uint8_t, uint8_t);
 		
@@ -159,7 +158,7 @@
 	
 	
 	#ifdef TCCR4A //TIMER4
-		void TIMER4Init(uint8_t);
+		void TIMER4SetMode(uint8_t);
 		void TIMER4SetCLK(uint8_t);
 		void TIMER4Init(uint8_t, uint8_t);
 		
@@ -197,7 +196,7 @@
 	
 	
 	#ifdef TCCR5A //TIMER5
-		void TIMER5Init(uint8_t);
+		void TIMER5SetMode(uint8_t);
 		void TIMER5SetCLK(uint8_t);
 		void TIMER5Init(uint8_t, uint8_t);
 		

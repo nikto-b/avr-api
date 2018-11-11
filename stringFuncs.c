@@ -1,163 +1,246 @@
-
-
-byte getCountsOfDigits(int __number__) //get count of digits for int
+/*
+ * Function getCountsOfDigits
+ * Desc     Return num of digits
+ * Input    __number: num for counting digits
+ * Output   num of digits
+*/
+byte getCountsOfDigits(int __number) //get count of digits for int
 {
-	int __count__ = __number__ == 0;
-	while (__number__ != 0) 
+	int __count = __number == 0;
+	while (__number != 0) 
 	{
-		__count__++;
-		__number__ /= 10;
+		__count++;
+		__number /= 10;
 	}
-	return __count__;
-}
-byte getCountsOfDigits(long __number__) //get count of digits for long
-{
-	int __count__ = __number__ == 0;
-	while (__number__ != 0) 
-	{
-		__count__++;
-		__number__ /= 10;
-	}
-	return __count__;
-}
-byte getCountsOfDigits(byte __number__) //get count of digits for byte
-{
-	int __count__ = __number__ == 0;
-	while (__number__ != 0) 
-	{
-		__count__++;
-		__number__ /= 10;
-	}
-	return __count__;
+	return __count;
 }
 
-int getCountsOfBits(int __in__)//get count if digits for int
+/*
+ * Function getCountsOfDigits
+ * Desc     Return num of digits
+ * Input    __number: num for counting digits
+ * Output   num of digits
+*/
+byte getCountsOfDigits(long __number) //get count of digits for long
 {
-	int __counter__ = 0;
-	while(__in__)
+	int __count = __number == 0;
+	while (__number != 0) 
 	{
-		__counter__++;
-		__in__ >>= 1;
+		__count++;
+		__number /= 10;
 	}
-	return __counter__;
+	return __count;
 }
-    
-char* dec2bin(int __in__)//convert dec num to bin C-string
+
+/*
+ * Function getCountsOfDigits
+ * Desc     Return num of digits
+ * Input    __number: num for counting digits
+ * Output   num of digits
+*/
+byte getCountsOfDigits(byte __number) //get count of digits for byte
 {
-	if(__in__ == 0)
-		return (char*)"0";//don't wanna to save warnings
+	int __count = __number == 0;
+	while (__number != 0) 
+	{
+		__count++;
+		__number /= 10;
+	}
+	return __count;
+}
+
+/*
+ * Function getCountsOfBits
+ * Desc     Return num of bits in num
+ * Input    __in: num for counting
+ * Output   num of bits
+*/
+int getCountsOfBits(int __in)//get count if digits for int
+{
+	int __counter = 0;
+	while(__in)
+	{
+		__counter++;
+		__in >>= 1;
+	}
+	return __counter;
+}
+
+/*
+ * Function dec2bin
+ * Desc     convert dec num to byte char array
+ * 			WARNING! Function is allocating memory!
+ * Input    __in: dec num for converting
+ * Output   ptr to char array with bin num
+*/
+char* dec2bin(int __in)//convert dec num to bin C-string
+{
 	
-	byte __len__ = (int)getCountsOfBits(__in__);
-	char *__res__ = (char*)malloc(__len__);
-	while(__len__)	
+	byte __len = (int)getCountsOfBits(__in);
+	if(__in == 0)
 	{
-		__len__--;
-		__res__[__len__] = (__in__ & 1) + '0';
-		__in__ >>= 1;
+		__len = 1;
 	}
-	return __res__;
+	char *__res = (char*)malloc(__len);//WARNING! memory leak!
+	while(__len)	
+	{
+		__len--;
+		__res[__len] = (__in & 1 == 1)? '1' : '0';// + '0';
+		__in >>= 1;
+	}
+	return __res;
 }
 
-int bin2dec(char* __in__)//convert bin num to dec int
+/*
+ * Function bin2dec
+ * Desc     convert binary char array to dec num
+ * Input    __in: ptr to char array with binary num
+ * Output   dec num
+*/
+int bin2dec(const char* __in)//convert bin num to dec int
 {
-	int __ret__ = 0;			//unsafe func! check for "none-numeric input
-	while(*__in__ >= '0' 
-	&& *__in__ <= '9'
-	&& *__in__ != 0x00)//WARNING! test this part
+	int __ret = 0;			//unsafe func! check for "none-numeric input
+	while(*__in >= '0' 
+	&& *__in <= '9'
+	&& *__in != 0x00)//WARNING! test this part
 	{
-		__ret__ <<= 1;
-		__ret__ |= ((*__in__)) - '0';
-		__in__++;
+		__ret <<= 1;
+		__ret |= ((*__in)) - '0';
+		__in++;
 	}
-	return __ret__;
+	return __ret;
 }
 
-int str2int(char* __in__)//convert C-string to int
+/*
+ * Function str2int
+ * Desc     convert C-string to integer num
+ * Input    __in: ptr to char array with dec num
+ * Output   dec num
+*/
+int str2int(const char* __in)//convert C-string to int
 {
-	int __ret__ = 0;			//unsafe func! check for "none-numeric input
-	while(*__in__ >= '0' 
-	&& *__in__ <= '9'
-	&& *__in__ != 0x00)//WARNING! test this part
+	int __ret = 0;			//unsafe func! check for "none-numeric input
+	while(*__in >= '0' 
+	&& *__in <= '9'
+	&& *__in != 0x00)//WARNING! test this part
 	{
-		__ret__ *= 10;
-		__ret__ += (*__in__) - '0';
-		__in__++;
+		__ret *= 10;
+		__ret += (*__in) - '0';
+		__in++;
 	}
-	return __ret__;
+	return __ret;
 }
-long str2long(char* __in__)//convert C-string to long
+/*
+ * Function str2long
+ * Desc     convert C-string to integer num
+ * Input    __in: ptr to char array with dec num
+ * Output   dec num
+*/
+long str2long(char* __in)//convert C-string to long
 {
-	long __ret__ = 0;			//unsafe func! check for "none-numeric input
-	while(*__in__ >= '0' 
-	&& *__in__ <= '9'
-	&& *__in__ != 0x00)//WARNING! test this part
+	long __ret = 0;			//unsafe func! check for "none-numeric input
+	while(*__in >= '0' 
+	&& *__in <= '9'
+	&& *__in != 0x00)//WARNING! test this part
 	{
-		__ret__ *= 10;
-		__ret__ += (*__in__) - '0';
-		__in__++;
+		__ret *= 10;
+		__ret += (*__in) - '0';
+		__in++;
 	}
-	return __ret__;
+	return __ret;
 }
-byte str2byte(char* __in__)//convert C-string to byte
+/*
+ * Function str2byte
+ * Desc     convert C-string to integer num
+ * Input    __in: ptr to char array with dec num
+ * Output   dec num
+*/
+byte str2byte(char* __in)//convert C-string to byte
 {
-	byte __ret__ = 0;			//unsafe func! check for "none-numeric input
-	while(*__in__ >= '0' 
-	&& *__in__ <= '9'
-	&& *__in__ != 0x00)//WARNING! test this part
+	byte __ret = 0;			//unsafe func! check for "none-numeric input"
+	while(*__in >= '0' 
+	&& *__in <= '9'
+	&& *__in != 0x00)//WARNING! test this part
 	{
-		__ret__ *= 10;
-		__ret__ += (*__in__) - '0';
-		__in__++;
+		__ret *= 10;
+		__ret += (*__in) - '0';
+		__in++;
 	}
-	return __ret__;
+	return __ret;
 }
 
-char* int2str(int __in__)//convert int var to char array
+/*
+ * Function int2str
+ * Desc     convert int var to C-string
+ * Input    __in: num for converting
+ * Output   ptr to char array with num
+*/
+char* int2str(int __in)//convert int var to char array
 {
-	uint8_t __len__ = getCountsOfDigits(__in__);
-	char* __ret__ = (char*)malloc(__len__ + 1);
-	__ret__[__len__] = 0x00;
-	while(__len__)
+	uint8_t __len = getCountsOfDigits(__in);
+	char* __ret = (char*)malloc(__len + 1);//WARNING! memory leak!
+	__ret[__len] = 0x00;
+	while(__len)
 	{
-		__len__--;
-		__ret__[__len__] = (__in__ % 10) + '0';
-		__in__ /= 10;
+		__len--;
+		__ret[__len] = (__in % 10) + '0';
+		__in /= 10;
 	}
-	return __ret__;
+	return __ret;
 }
-char* long2str(long __in__)//convert long var to char array
+/*
+ * Function long2str
+ * Desc     convert int var to C-string
+ * 			WARNING! Function is allocating memory!
+ * Input    __in: num for converting
+ * Output   ptr to char array with num
+*/
+char* long2str(long __in)//convert long var to char array
 {
-	uint8_t __len__ = getCountsOfDigits(__in__);
-	char* __ret__ = (char*)malloc(__len__ + 1);
-	__ret__[__len__] = 0x00;
-	while(__len__)
+	uint8_t __len = getCountsOfDigits(__in);
+	char* __ret = (char*)malloc(__len + 1);//WARNING! memory leak!
+	__ret[__len] = 0x00;
+	while(__len)
 	{
-		__len__--;
-		__ret__[__len__] = (__in__ % 10) + '0';
-		__in__ /= 10;
+		__len--;
+		__ret[__len] = (__in % 10) + '0';
+		__in /= 10;
 	}
-	return __ret__;
+	return __ret;
 }
-char* byte2str(byte __in__)//convert byte var to char array
+/*
+ * Function byte2str
+ * Desc     convert int var to C-string
+ * 			WARNING! Function is allocating memory!
+ * Input    __in: num for converting
+ * Output   ptr to char array with num
+*/
+char* byte2str(byte __in)//convert byte var to char array
 {
-	uint8_t __len__ = getCountsOfDigits(__in__);
-	char* __ret__ = (char*)malloc(__len__);
-	while(__len__)
+	uint8_t __len = getCountsOfDigits(__in);
+	char* __ret = (char*)malloc(__len);//WARNING! memory leak!
+	while(__len)
 	{
-		__len__--;
-		__ret__[__len__] = (__in__ % 10) + '0';
-		__in__ /= 10;
+		__len--;
+		__ret[__len] = (__in % 10) + '0';
+		__in /= 10;
 	}
-	return __ret__;
+	return __ret;
 }
-char* bool2str(bool __in__)//convert bool var to char array
+/*
+ * Function bool2str
+ * Desc     convert int var to C-string
+ * Input    __in: num for converting
+ * Output   ptr to char array with num
+*/
+char* bool2str(bool __in)//convert bool var to char array
 {
-	if(__in__)
+	if(__in)
 	{
-		return (char*)"true";
+		return "true";
 	}
 	else
 	{
-		return (char*)"false";
+		return "false";
 	}
 }

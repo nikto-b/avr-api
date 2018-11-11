@@ -5,11 +5,11 @@ void delayMicroseconds(uint64_t _us)												//thx arduino lib for this func
 			_us *= 6;
 			_us -= 5;
 	#elif F_CPU >= 20000000L
-			__asm__ __volatile__ (
-					"nop" "\n\t"
-					"nop" "\n\t"
-					"nop" "\n\t"
-					"nop");
+			asm volatile (
+				"nop" "\n\t"
+				"nop" "\n\t"
+				"nop" "\n\t"
+				"nop");
 			if (_us <= 1) return;
 			_us = (_us << 2) + _us;
 			_us -= 7;
@@ -30,8 +30,8 @@ void delayMicroseconds(uint64_t _us)												//thx arduino lib for this func
 			_us >>= 2;
 	#endif
         // busy wait
-        __asm__ __volatile__ (
-                "1: sbiw %0,1" "\n\t"
-                "brne 1b" : "=w" (_us) : "0" (_us)
+        asm volatile (
+			"1: sbiw %0,1" "\n\t"
+			"brne 1b" : "=w" (_us) : "0" (_us)
         );
 }
