@@ -20,6 +20,9 @@ void (*funcs[57])();
 void delayMicroseconds(uint64_t _us);
 #include "delayMicroseconds.c"
 
+#if USE_CUSTOM_INTERRUPTS == 1
+	#include "customFuncAddr.h"
+#endif //if USE_CUSTOM_INTERRUPTS == 1
 
 #if USE_TIMERS == 1
 	#include "TimerModes_2560.h" //TODO: refactor
