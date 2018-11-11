@@ -1,4 +1,5 @@
-void (*funcs[57])();
+#include "customFuncAddr.h"
+
 #include "settings.h"
 
 
