@@ -28,8 +28,11 @@ FuncProtector.o:
 stringFuncs.o:
 	avr-g++ $(CFLAGS) "stringFuncs.c" -o "stringFuncs.o"
 
+watchdogTimer.o:
+	avr-g++ $(CFLAGS) "watchdog.c" -o "watchdog.o"
+
 clean: 
 	rm -rf ./*.o ./*.d ./*.eep ./*.elf ./*.hex
 
 size:
-	avr-size -B $(MAINFILENAME).hex
+	avr-size $(MAINFILENAME).elf -A --mcu=$(MCU) -d

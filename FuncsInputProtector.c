@@ -8,7 +8,13 @@
 
 	//TIMER0
 	
-	uint8_t validateTimer0Mode(uint8_t __mode)
+	/*
+	 * Function validateTimer0Mode
+	 * Desc     validate mode of T/C0
+	 * Input    __mode: what mode valiadte to
+	 * Output   is valid
+	*/
+	bool validateTimer0Mode(uint8_t __mode)
 	{
 		if(__mode != TIMER0_MODE_CTC
 		&& __mode != TIMER0_MODE_FASTPWM
@@ -25,7 +31,13 @@
 		}
 	}
 	
-	uint8_t validateTimer0CLK(uint8_t __source)
+	/*
+	 * Function validateTimer0CLK
+	 * Desc     Validate T/C0 clock source
+	 * Input    __source: source validate to
+	 * Output   is valid
+	*/
+	bool validateTimer0CLK(uint8_t __source)
 	{		
 		if(__source != TIMER0_CLOCK_1
 		&& __source != TIMER0_CLOCK_1024
@@ -47,23 +59,29 @@
 	
 	//TIMER1
 	
-	uint8_t validateTimer1Mode(uint8_t __mode)
+	/*
+	 * Function validateTimer1Mode
+	 * Desc     validate mode of T/C1
+	 * Input    __mode: what mode validate to
+	 * Output   is valid
+	*/
+	bool validateTimer1Mode(uint8_t _mode)
 	{
-		if(__mode != TIMER1_MODE_CTC_TOPICR1
-		&& __mode != TIMER1_MODE_CTC_TOPOCR1A
-		&& __mode != TIMER1_MODE_FASTPWM_10B
-		&& __mode != TIMER1_MODE_FASTPWM_8B
-		&& __mode != TIMER1_MODE_FASTPWM_9B
-		&& __mode != TIMER1_MODE_FASTPWM_TOPICR1
-		&& __mode != TIMER1_MODE_FASTPWM_TOPOCR1A
-		&& __mode != TIMER1_MODE_NORMAL
-		&& __mode != TIMER1_MODE_PWM_PHC_10B
-		&& __mode != TIMER1_MODE_PWM_PHC_8B
-		&& __mode != TIMER1_MODE_PWM_PHC_9B
-		&& __mode != TIMER1_MODE_PWM_PHC_TOPICR1
-		&& __mode != TIMER1_MODE_PWM_PHC_TOPOCR1A
-		&& __mode != TIMER1_MODE_PWM_PHFRC_TOPICR1
-		&& __mode != TIMER1_MODE_PWM_PHFRC_TOPOCR1A)
+		if(_mode != TIMER1_MODE_CTC_TOPICR1
+		&& _mode != TIMER1_MODE_CTC_TOPOCR1A
+		&& _mode != TIMER1_MODE_FASTPWM_10B
+		&& _mode != TIMER1_MODE_FASTPWM_8B
+		&& _mode != TIMER1_MODE_FASTPWM_9B
+		&& _mode != TIMER1_MODE_FASTPWM_TOPICR1
+		&& _mode != TIMER1_MODE_FASTPWM_TOPOCR1A
+		&& _mode != TIMER1_MODE_NORMAL
+		&& _mode != TIMER1_MODE_PWM_PHC_10B
+		&& _mode != TIMER1_MODE_PWM_PHC_8B
+		&& _mode != TIMER1_MODE_PWM_PHC_9B
+		&& _mode != TIMER1_MODE_PWM_PHC_TOPICR1
+		&& _mode != TIMER1_MODE_PWM_PHC_TOPOCR1A
+		&& _mode != TIMER1_MODE_PWM_PHFRC_TOPICR1
+		&& _mode != TIMER1_MODE_PWM_PHFRC_TOPOCR1A)
 		{
 			return 0;
 		}
@@ -73,16 +91,22 @@
 		}
 	}
 	
-	uint8_t validateTimer1CLK(uint8_t __source)
+	/*
+	 * Function validateTimer1CLK
+	 * Desc     validate clock source of T/C1
+	 * Input    _source: what source validate to
+	 * Output   is valid
+	*/
+	bool validateTimer1CLK(uint8_t _source)
 	{
-		if(__source != TIMER1_CLOCK_1
-		&& __source != TIMER1_CLOCK_8
-		&& __source != TIMER1_CLOCK_64
-		&& __source != TIMER1_CLOCK_256
-		&& __source != TIMER1_CLOCK_1024
-		&& __source != TIMER1_CLOCK_EXTERNAL_FALLING
-		&& __source != TIMER1_CLOCK_EXTERNAL_RISING
-		&& __source != TIMER1_CLOCK_NONE)
+		if(_source != TIMER1_CLOCK_1
+		&& _source != TIMER1_CLOCK_8
+		&& _source != TIMER1_CLOCK_64
+		&& _source != TIMER1_CLOCK_256
+		&& _source != TIMER1_CLOCK_1024
+		&& _source != TIMER1_CLOCK_EXTERNAL_FALLING
+		&& _source != TIMER1_CLOCK_EXTERNAL_RISING
+		&& _source != TIMER1_CLOCK_NONE)
 		{
 			return 0;
 		}
@@ -95,14 +119,20 @@
 	
 	//TIMER2
 	
-	uint8_t validateTimer2Mode(uint8_t __mode)
+	/*
+	 * Function validateTimer2Mode
+	 * Desc     validate mode of T/C2
+	 * Input    _mode: what mode validate to
+	 * Output   is valid
+	*/
+	bool validateTimer2Mode(uint8_t _mode)
 	{
-		if(__mode != TIMER2_MODE_CTC
-		&& __mode != TIMER2_MODE_FASTPWM
-		&& __mode != TIMER2_MODE_FASTPWM_TOPOCRA
-		&& __mode != TIMER2_MODE_NORMAL
-		&& __mode != TIMER2_MODE_PWM_PHC
-		&& __mode != TIMER2_MODE_PWM_PHC_TOPOCRA)
+		if(_mode != TIMER2_MODE_CTC
+		&& _mode != TIMER2_MODE_FASTPWM
+		&& _mode != TIMER2_MODE_FASTPWM_TOPOCRA
+		&& _mode != TIMER2_MODE_NORMAL
+		&& _mode != TIMER2_MODE_PWM_PHC
+		&& _mode != TIMER2_MODE_PWM_PHC_TOPOCRA)
 		{
 			return 0;
 		}
@@ -112,16 +142,22 @@
 		}
 	}
 	
-	uint8_t validateTimer2CLK(uint8_t __source)
+	/*
+	 * Function validateTimer2CLK
+	 * Desc     validate clock source of T/C2
+	 * Input    _source: what source validate to
+	 * Output   is valid
+	*/
+	bool validateTimer2CLK(uint8_t _source)
 	{
-		if(__source != TIMER2_CLOCK_NONE
-		&& __source != TIMER2_CLOCK_1
-		&& __source != TIMER2_CLOCK_8
-		&& __source != TIMER2_CLOCK_32
-		&& __source != TIMER2_CLOCK_64
-		&& __source != TIMER2_CLOCK_128
-		&& __source != TIMER2_CLOCK_256
-		&& __source != TIMER2_CLOCK_1024)
+		if(_source != TIMER2_CLOCK_NONE
+		&& _source != TIMER2_CLOCK_1
+		&& _source != TIMER2_CLOCK_8
+		&& _source != TIMER2_CLOCK_32
+		&& _source != TIMER2_CLOCK_64
+		&& _source != TIMER2_CLOCK_128
+		&& _source != TIMER2_CLOCK_256
+		&& _source != TIMER2_CLOCK_1024)
 		{
 			return 0;
 		}
@@ -133,24 +169,30 @@
 	
 	
 	//TIMER3
-	
-	uint8_t validateTimer3Mode(uint8_t __mode)
+		
+	/*
+	 * Function validateTimer3Mode
+	 * Desc     validate mode of T/C3
+	 * Input    _mode: what mode validate to
+	 * Output   is valid
+	*/
+	bool validateTimer3Mode(uint8_t _mode)
 	{
-		if(__mode != TIMER3_MODE_CTC_TOPICR3
-		&& __mode != TIMER3_MODE_CTC_TOPOCR3A
-		&& __mode != TIMER3_MODE_FASTPWM_10B
-		&& __mode != TIMER3_MODE_FASTPWM_8B
-		&& __mode != TIMER3_MODE_FASTPWM_9B
-		&& __mode != TIMER3_MODE_FASTPWM_TOPICR3
-		&& __mode != TIMER3_MODE_NORMAL
-		&& __mode != TIMER3_MODE_PWM_PHC_10B
-		&& __mode != TIMER3_MODE_PWM_PHC_8B
-		&& __mode != TIMER3_MODE_PWM_PHC_9B
-		&& __mode != TIMER3_MODE_PWM_PHC_TOPICR3
-		&& __mode != TIMER3_MODE_PWM_PHC_TOPOCR3A
-		&& __mode != TIMER3_MODE_PWM_PHFRC_TOPICR3
-		&& __mode != TIMER3_MODE_PWM_PHFRC_TOPOCR3A
-		&& __mode != TIMER3_MODE_FASTPWM_TOPOCR3A)
+		if(_mode != TIMER3_MODE_CTC_TOPICR3
+		&& _mode != TIMER3_MODE_CTC_TOPOCR3A
+		&& _mode != TIMER3_MODE_FASTPWM_10B
+		&& _mode != TIMER3_MODE_FASTPWM_8B
+		&& _mode != TIMER3_MODE_FASTPWM_9B
+		&& _mode != TIMER3_MODE_FASTPWM_TOPICR3
+		&& _mode != TIMER3_MODE_NORMAL
+		&& _mode != TIMER3_MODE_PWM_PHC_10B
+		&& _mode != TIMER3_MODE_PWM_PHC_8B
+		&& _mode != TIMER3_MODE_PWM_PHC_9B
+		&& _mode != TIMER3_MODE_PWM_PHC_TOPICR3
+		&& _mode != TIMER3_MODE_PWM_PHC_TOPOCR3A
+		&& _mode != TIMER3_MODE_PWM_PHFRC_TOPICR3
+		&& _mode != TIMER3_MODE_PWM_PHFRC_TOPOCR3A
+		&& _mode != TIMER3_MODE_FASTPWM_TOPOCR3A)
 		{
 			return 0;
 		}
@@ -160,16 +202,22 @@
 		}
 	}
 	
-	uint8_t validateTimer3CLK(uint8_t __source)
+	/*
+	 * Function validateTimer3CLK
+	 * Desc     validate clock source of T/C3
+	 * Input    _source: what source validate to
+	 * Output   is valid
+	*/
+	bool validateTimer3CLK(uint8_t _source)
 	{
-		if(__source != TIMER3_CLOCK_NONE
-		&& __source != TIMER3_CLOCK_1
-		&& __source != TIMER3_CLOCK_8
-		&& __source != TIMER3_CLOCK_64
-		&& __source != TIMER3_CLOCK_256
-		&& __source != TIMER3_CLOCK_1024
-		&& __source != TIMER3_CLOCK_EXTERNAL_FALLING
-		&& __source != TIMER3_CLOCK_EXTERNAL_RISING)
+		if(_source != TIMER3_CLOCK_NONE
+		&& _source != TIMER3_CLOCK_1
+		&& _source != TIMER3_CLOCK_8
+		&& _source != TIMER3_CLOCK_64
+		&& _source != TIMER3_CLOCK_256
+		&& _source != TIMER3_CLOCK_1024
+		&& _source != TIMER3_CLOCK_EXTERNAL_FALLING
+		&& _source != TIMER3_CLOCK_EXTERNAL_RISING)
 		{
 			return 0;
 		}
@@ -182,7 +230,13 @@
 	
 	//TIMER4
 	
-	uint8_t validateTimer4Mode(uint8_t __mode)
+	/*
+	 * Function validateTimer4Mode
+	 * Desc     validate mode of T/C4
+	 * Input    __mode: what mode validate to
+	 * Output   is valid
+	*/
+	bool validateTimer4Mode(uint8_t __mode)
 	{
 		if(__mode != TIMER4_MODE_CTC_TOPICR4
 		&& __mode != TIMER4_MODE_CTC_TOPOCR4A
@@ -208,7 +262,13 @@
 		}
 	}
 	
-	uint8_t validateTimer4CLK(uint8_t __source)
+	/*
+	 * Function validateTimer4CLK
+	 * Desc     validate clock source of T/C4
+	 * Input    __source: what source validate to
+	 * Output   is valid
+	*/
+	bool validateTimer4CLK(uint8_t __source)
 	{
 		if(__source != TIMER4_CLOCK_1
 		&& __source != TIMER4_CLOCK_1024
@@ -230,7 +290,13 @@
 	
 	//TIMER5
 	
-	uint8_t validateTimer5Mode(uint8_t __mode)
+	/*
+	 * Function validateTimer5Mode
+	 * Desc     validate mode of T/C5
+	 * Input    __mode: what mode validate to
+	 * Output   is valid
+	*/
+	bool validateTimer5Mode(uint8_t __mode)
 	{
 		if(__mode != TIMER5_MODE_CTC_TOPICR5
 		&& __mode != TIMER5_MODE_CTC_TOPOCR5A
@@ -256,7 +322,13 @@
 		}
 	}
 	
-	uint8_t validateTimer5CLK(uint8_t __source)
+	/*
+	 * Function validateTimer5CLK
+	 * Desc     validate clock source of T/C5
+	 * Input    __source: what source validate to
+	 * Output   is valid
+	*/
+	bool validateTimer5CLK(uint8_t __source)
 	{
 		if(__source != TIMER5_CLOCK_1
 		&& __source != TIMER5_CLOCK_1024
@@ -282,7 +354,13 @@
 		#pragma error "ADC modes table not found!"
 	#endif //ifndef _ADC_MODES
 	
-	uint8_t validateADCREF(uint8_t __aref)
+	/*
+	 * Function validateADCREF
+	 * Desc     validate analog reference
+	 * Input    __aref: what aref validate to
+	 * Output   is valid
+	*/
+	bool validateADCREF(uint8_t __aref)
 	{
 		if(__aref != ADC_REF_AREF
 		&& __aref != ADC_REF_AVCC
@@ -297,7 +375,13 @@
 		}
 	}
 	
-	uint8_t validateADCControl(uint8_t __contr)
+	/*
+	 * Function validateADCControl
+	 * Desc     validate control signals for ADC
+	 * Input    __contr: what signal validate to
+	 * Output   is valid
+	*/
+	bool validateADCControl(uint8_t __contr)
 	{
 		if(__contr != ADC_CONTROL_AUTOTRIGGER
 		&& __contr != ADC_CONTROL_ENABLE
@@ -313,7 +397,13 @@
 		}
 	}
 	
-	uint8_t validateADCPrescaller(uint8_t __prescaller)
+	/*
+	 * Function validateADCPrescaller
+	 * Desc     validate prescaller for ADC
+	 * Input    __prescaller: what prescaller validate to
+	 * Output   is valid
+	*/
+	bool validateADCPrescaller(uint8_t __prescaller)
 	{
 		/*if(__prescaller != ADC_PRESCALLER_DEF
 		&& __prescaller != ADC_PRESCALLER_2
@@ -333,7 +423,13 @@
 		}
 	}
 	
-	uint8_t validateADCAutotriggerSRC(uint8_t __src)
+	/*
+	 * Function validateADCAutotriggerSRC
+	 * Desc     validate source of autotrigger
+	 * Input    __src: what source validate to
+	 * Output   is valid
+	*/
+	bool validateADCAutotriggerSRC(uint8_t __src)
 	{
 		/*if(__src != ADC_ADTS_ANALOG_COMPARATOR
 		&& __src != ADC_ADTS_EXT_INTERRUPT_REQ_0
@@ -361,7 +457,13 @@
 		#pragma error "USART modes table not found!"
 	#endif //ifndef _USART_MODES
 	
-	uint8_t validateUSARTBitSettings(uint8_t __bitness)
+	/*
+	 * Function validateUSART0BitSettings
+	 * Desc     validate bit settings of USART0
+	 * Input    __bitness: what needed validate to
+	 * Output   is valid
+	*/
+	bool validateUSART0BitSettings(uint8_t __bitness)
 	{
 		if(__bitness != USART0_CHAR_5B
 		&& __bitness != USART0_CHAR_6B

@@ -18,6 +18,9 @@
 #define sbi(_sfr, _bit) (_SFR_BYTE(_sfr) |= _BV(_bit))
 
 
+#define delay(x) _delay_ms(x)
+
+
 void delayMicroseconds(uint64_t _us);
 #include "delayMicroseconds.c"
 
