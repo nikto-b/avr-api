@@ -16,36 +16,53 @@
 #define HIGH 1
 #define LOW 0
 
-void digitalWrite(uint8_t _pin, bool _state)		//set pin at _pin to state at _state
+/*
+ * Function digitalWrite
+ * Desc     write state to pin
+ * Input    __pin: what pin write to
+ * 			__state: what state write
+ * Output   none
+*/
+void digitalWrite(uint8_t __pin, bool __state)		//because
 {
-	uint8_t _port = _pin / 8;	//get register index
-	_pin %= 8;					//get pin index in register
-				
-	*(&START_PORT + _port * 3) 							//address offset from zero reg; 	
-	= ((*(&START_PORT + _port * 3)) & (~(1 << _pin))) 	//save old data, disable _pin;
-	| (_state << _pin);									//set _pin to _state
+	uint8_t __port = __pin / 8;
+	__pin %= 8;	//get local shift
+	*(&START_PORT + __port * 3) = ((*(&START_PORT + __port * 3)) & (~(1 << __pin))) | (__state << __pin);	
 }
 
-int digitalRead(uint8_t _pin)						//read state of pin _pin
+/*
+ * Function digitalRead
+ * Desc     Return state of pin
+ * Input    __pin: what pin state return to
+ * Output   state
+*/
+int digitalRead(uint8_t __pin)
 {
-	uint8_t _port = _pin / 8;	//get register index
-	_pin %= 8;					//get pin index in reg
-	return (*(&START_PORT - 2 + _port * 3) >> _pin) & 1;	//offset addr and get target bit
+	uint8_t __port = __pin / 8;
+	__pin %= 8;
+	return (*(&START_PORT - 2 + __port * 3) >> __pin) & 1;
 }
 
 
-void pinMode(uint8_t _pin, uint8_t _state)//set pin _pin to mode _state
+
+/*
+ * Function pinMode
+ * Desc     set mode of pin(I/O)
+ * 			WARNING! Recurcy(depth 1)!
+ * Input    __pin: what pin state set to
+ * 			__state: what state set to
+ * Output   none
+*/
+void pinMode(uint8_t __pin, uint8_t __state)
 {
-	uint8_t _port = _pin / 8;			//get reg index
-	if(_state != INPUT_PULLUP)			//if needeed only changing mode
+	uint8_t __port = __pin / 8;
+	if(__state != INPUT_PULLUP)
 	{
-		*(&START_PORT - 1 + _port * 3) 		//offset addr of reg
-		= (*(&START_PORT - 1 + _port * 3) & (~(_state << _pin)))//flush old mode 
-		| (_state << _pin);				//set mode of _pin to state _state
+		*(&START_PORT - 1 + __port) = (*(&START_PORT - 1 + __port) & (~(__state << __pin))) | (__state << __pin);
 	}
 	else 								//if need PULLUP
 	{
-		digitalWrite(_pin, HIGH);		//enable internal resistors
-		pinMode(_pin, INPUT);			//set port to input
+		digitalWrite(__pin, HIGH);		//enable internal resistors
+		pinMode(__pin, INPUT);			//set port to input
 	}
 }
