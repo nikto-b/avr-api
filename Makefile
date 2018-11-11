@@ -29,6 +29,9 @@ FuncProtector.o:
 stringFuncs.o:
 	avr-g++ $(CFLAGS) "stringFuncs.c" -o "stringFuncs.o"
 
+watchdogTimer.o:
+	avr-g++ $(CFLAGS) "watchdog.c" -o "watchdog.o"
+
 clean: 
 	rm -rf ./*.o ./*.d ./*.eep ./*.elf ./*.hex
 
