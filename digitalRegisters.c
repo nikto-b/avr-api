@@ -58,13 +58,10 @@ int digitalRead(uint8_t __pin)
 void pinMode(uint8_t __pin, uint8_t __state)
 {
 	uint8_t __port = __pin / 8;
-	if(__state != INPUT_PULLUP)
-	{
-		*(&START_PORT - 1 + __port) = (*(&START_PORT - 1 + __port) & (~(__state << __pin))) | (__state << __pin);
-	}
-	else 
+	if(__state == INPUT_PULLUP)
 	{
 		digitalWrite(__pin, HIGH);
-		pinMode(__pin, INPUT);
+		__state = HIGH;
 	}
+	*(&START_PORT - 1 + __port) = (*(&START_PORT - 1 + __port) & (~(__state << __pin))) | (__state << __pin);
 }
