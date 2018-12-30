@@ -1,4 +1,129 @@
 #define _TIMER_MODES
+
+
+/*				T/C0 Compare Output Mode, non-PWM Mode
+ *	COM0A1		COM0A0		Desc
+ *	0			0			Normal port operation, OC0A disconnected.
+ *	0			1			Toggle OC0A on Compare Match
+ *	1			0			Clear OC0A on Compare Match
+ *	1			1			Set OC0A on Compare Match
+ */
+
+#define TIMER0_COMA_NPWM_NORMAL		((0 << COM0A1) | (0 << COM0A0))
+#define TIMER0_COMA_NPWM_TOGGLE		((0 << COM0A1) | (1 << COM0A0))
+#define TIMER0_COMA_NPWM_CLEAR		((1 << COM0A1) | (0 << COM0A0))
+#define TIMER0_COMA_NPWM_SET		((1 << COM0A1) | (1 << COM0A0))
+
+/*				T/C0 Compare Output Mode, Fast PWM Mode
+ *	COM0A1		COM0A0		Desc
+ *	0			0			Normal port operation, OC0A disconnected.
+ *	0			1			WGM02 = 0: Normal Port Operation, OC0A Disconnected.
+ *							WGM02 = 1: Toggle OC0A on Compare Match.
+ *	1			0			Clear OC0A on Compare Match, set OC0A at TOP
+ *	1			1			Set OC0A on Compare Match, clear OC0A at TOP
+ */
+
+#define TIMER0_FPWM_NORMAL			((0 << COM0A1) | (0 << COM0A0))
+#define TIMER0_FPWM_WGM_SET			((0 << COM0A1) | (1 << COM0A0))
+#define TIMER0_FPWM_CM_ST			((1 << COM0A1) | (0 << COM0A0))
+#define TIMER0_FPWM_SM_CT			((1 << COM0A1) | (1 << COM0A0))
+
+/*				T/C0 Compare Output Mode, Phase Correct PWM Mode
+ *	COM0A1		COM0A0		Desc
+ *	0			0			Normal port operation, OC0A disconnected
+ *	0			1			WGM02 = 0: Normal Port Operation, OC0A Disconnected.
+ *							WGM02 = 1: Toggle OC0A on Compare Match
+ *	1			0			Clear OC0A on Compare Match when up-counting. Set OC0A on
+ * 							Compare Match when down-counting.
+ *	1			1			Set OC0A on Compare Match when up-counting. Clear OC0A on
+ * 							Compare Match when down-counting.
+ */
+
+#define TIMER0_PWM_PHC_NORMAL		((0 << COM0A1) | (0 << COM0A0))
+#define TIMER0_PWM_PHC_WGM_SET		((0 << COM0A1) | (1 << COM0A0))
+#define TIMER0_PWM_PHC_CMUC_SMDC	((1 << COM0A1) | (0 << COM0A0))
+#define TIMER0_PWM_PHC_SMUC_SMDC	((1 << COM0A1) | (1 << COM0A0))
+
+/*				T/C0 Compare Output Mode, non-PWM Mode
+ *	COM0B1 		COM0B0		Desc
+ *	0			0			Normal port operation, OC0B disconnected.
+ *	0			1			Toggle OC0B on Compare Match
+ *	1			0			Clear OC0B on Compare Match
+ *	1			1			Set OC0B on Compare Match
+ */
+
+#define TIMER0_COMB_NPWM_NORMAL		((0 << COM0B1) | (0 << COM0B0))
+#define TIMER0_COMB_NPWM_TOGGLE		((0 << COM0B1) | (1 << COM0B0))
+#define TIMER0_COMB_NPWM_CLEAR		((1 << COM0B1) | (0 << COM0B0))
+#define TIMER0_COMB_NPWM_SET		((1 << COM0B1) | (1 << COM0B0))
+
+
+/*				T/C0 Compare Output Mode, Fast PWM Mode
+ *	COM0B1		COM0B0		Desc
+ *	0			0			Normal port operation, OC0B disconnected.
+ *	0			1			Reserved
+ *	1			0			Clear OC0B on Compare Match, set OC0B at TOP
+ *	1			1			Set OC0B on Compare Match, clear OC0B at TOP
+ */
+
+#define TIMER0_COMB_FPWM_NORMAL		((0 << COM0B1) | (0 << COM0B0))
+#define TIMER0_COMB_FPWM_CM_ST		((1 << COM0B1) | (0 << COM0B0))
+#define TIMER0_COMB_FPWM_SM_CT		((1 << COM0B1) | (1 << COM0B0))
+
+/*				T/C0 Compare Output Mode, Phase Correct PWM Mode
+ *	COM0B1		COM0B0		Desc
+ *	0			0			Normal port operation, OC0B disconnected.
+ *	0			1			Reserved
+ *	1			0			Clear OC0B on Compare Match when up-counting. Set OC0B on
+ *							Compare Match when down-counting.
+ *	1			1			Set OC0B on Compare Match when up-counting. Clear OC0B on
+ *							Compare Match when down-counting.
+ */
+
+#define TIMER0_COMB_PWM_PHC_NORMAL		((0 << COM0B1) | (0 << COM0B0))
+#define TIMER0_COMB_PWM_PHC_CMUC_SMDC	((1 << COM0B1) | (0 << COM0B0))
+#define TIMER0_COMB_PWM_PHC_SMUC_CMDC	((1 << COM0B1) | (1 << COM0B0))
+
+/*				T/C0 Waveform Generation Mode Bit Description
+ *	Mode 	WGM02 	WGM01 	WGM00		T/C mode of operation 	TOP  		Update of OCRx at	TOV flag set on
+ *	0		0		0		0			Normal 					0xFF 		Immediate 			MAX
+ *	1		0		0		1			PWM PHC 				0XFF 		TOP 				BOTTOM
+ *	2		0		1		0			CTC 					OCR0A 		Immediate 			MAX
+ *	3		0		1		1			FPWM 					0XFF 		TOP 				MAX
+ *	4		1		0		0			Reserved 				-- 			-- 					--
+ *	5		1		0		1			PWM PHC 				OCR0A 		TOP 				BOTTOM
+ *	6		1		1		0			Reserved 				-- 			-- 					--
+ *	7		1		1		1			FPWM 					OCR0A 		TOP 				TOP
+ */
+
+#define TIMER0_WF_NORMAL 				((0 << WGM02) | (0 << WGM01) | (0 << WGM00))
+#define TIMER0_WF_PWM_PHC 				((0 << WGM02) | (0 << WGM01) | (1 << WGM00))
+#define TIMER0_WF_CTC	 				((0 << WGM02) | (1 << WGM01) | (0 << WGM00))
+#define TIMER0_WF_FPWM	 				((0 << WGM02) | (1 << WGM01) | (1 << WGM00))
+#define TIMER0_WF_PWM_PHC_TOPOCR0A		((1 << WGM02) | (0 << WGM01) | (1 << WGM00))
+#define TIMER0_WF_FPWM_TOPOCR0A			((1 << WGM02) | (1 << WGM01) | (1 << WGM00))
+
+/*				T/C0 Clock Select Bit Description 
+ *	CS02 	CS01 	CS00 	Desc
+ *	0		0		0		No CLK
+ *	0		0		1		clk/1
+ *	0		1		0		clk/8
+ *	0		1		1		clk/64
+ *	1		0		0		clk/256
+ *	1		0		1		clk/1024
+ *	1		1		0		EXT T0 falling
+ *	1		1		1		EXT T0 rising
+ */
+
+#define TIMER0_CLK_SRC_NO				((0 << CS02) | (0 << CS01) | (0 << CS00))
+#define TIMER0_CLK_SRC_1				((0 << CS02) | (0 << CS01) | (1 << CS00))
+#define TIMER0_CLK_SRC_8				((0 << CS02) | (1 << CS01) | (0 << CS00))
+#define TIMER0_CLK_SRC_64				((0 << CS02) | (1 << CS01) | (1 << CS00))
+#define TIMER0_CLK_SRC_256				((1 << CS02) | (0 << CS01) | (0 << CS00))
+#define TIMER0_CLK_SRC_1024				((1 << CS02) | (0 << CS01) | (1 << CS00))
+#define TIMER0_CLK_SRC_EXT_FALLING		((1 << CS02) | (1 << CS01) | (0 << CS00))
+#define TIMER0_CLK_SRC_EXT_RISING		((1 << CS02) | (1 << CS01) | (1 << CS00))
+
 /*
  * 													TIMER/COUNTER 2 waveform Description
  * Mode 	WGM2	WGM1 	WGM0 	Timer/Counter Mode of Operation		TOP 	Update of OCRx at 	TOV Flag Set on

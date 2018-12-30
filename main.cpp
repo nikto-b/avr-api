@@ -866,10 +866,12 @@ int main()
 	sei();
 	USART0Begin(115200);
 
-	TCCR3A  = TIMER3_COMA_FPWM_CM_ST;
+	/*TCCR3A  = TIMER3_COMA_FPWM_CM_ST;
 	TCCR3A |= TIMER3_WF_FPWM_TOPOCR3A;
-	TCCR3B  = TIMER3_CLK_SRC_1;
-	OCR3A = 1023; 
+	TCCR3B  = TIMER3_CLK_SRC_1;*/
+	TIMER0Init(TIMER0_COMB_FPWM_CM_ST, TIMER0_WF_FPWM_TOPOCR0A, TIMER0_CLK_SRC_1);
+	//TIMER3Init(TIMER3_COMA_FPWM_CM_ST)
+	//OCR0B = 255; 
 
 	//I2C_SetFreq(0x40);
 	
@@ -887,11 +889,22 @@ int main()
 	OCR3C = 1023;*/
 				//RB
 	/*TCCR4A=(1<<COM4A1)|(1<<WGM40);
-	TCCR4B=(1<<CS40);	
+	TCCR4B=(1<<CS40);
 	OCR4A = 1023;*/
 	int var;
 	
 	loop:
+	//goto loop;
+	for(int i = 0; i < 256; i++)
+	{
+		OCR0B = i;
+		delay(10);
+	}
+	for(int i = 255; i>= 0; i--)
+	{
+		OCR0B = i;
+		delay(10);
+	}
 	/*
 	writeReg(0x29, SYSRANGE_START, 0x01);
 	delay(300);
