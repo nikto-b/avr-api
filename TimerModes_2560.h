@@ -18,6 +18,7 @@
 #define TIMER2_WF_FPWM 				((0 << WGM22) | (1 << WGM21) | (1 << WGM20))
 #define TIMER2_WF_PWM_PHC_TOPOCRA	((1 << WGM22) | (1 << WGM21) | (0 << WGM20))
 #define TIMER2_WF_FPWM_TOPOCRA		((1 << WGM22) | (1 << WGM21) | (1 << WGM20))
+#define TIMER2_WF_MASK				((1 << WGM22) | (1 << WGM21) | (1 << WGM20))
 
 /*
  * 												T/C2	Compate Output Mode, non-PWM
@@ -35,6 +36,7 @@
 #define TMER2_COMA_NPWM_TOGGLE		((0 << COM2A1) | (1 << COM2A0))
 #define TMER2_COMA_NPWM_CLEAR		((1 << COM2A1) | (0 << COM2A0))
 #define TMER2_COMA_NPWM_SET			((1 << COM2A1) | (1 << COM2A0))
+#define TIMER2_COMA_MASK			((1 << COM2A1) | (1 << COM2A0))
 
 /*
  * 											T/C2	Compare Output Mode, Fast PWM Mode
@@ -90,6 +92,7 @@
 #define TIMER2_COMB_NPWM_TOGGLE			((0 << COM2B1) | (1 << COM2B0))
 #define TIMER2_COMB_NPWM_CLEAR			((1 << COM2B1) | (0 << COM2B0))
 #define TIMER2_COMB_NPWM_SET			((1 << COM2B1) | (1 << COM2B0))
+#define TIMER2_COMB_MASK				((1 << COM2B1) | (1 << COM2B0))
 
 /*
  * 											T/C2	Compare Output Mode, Fast PWM Mode
@@ -137,14 +140,15 @@
  * 1		1		1		1024
  */
 
-#define TIMER2_CLOCK_SRC_OFF		((0 << CS22) | (0 << CS21) | (0 << CS20))
-#define TIMER2_CLOCK_SRC_1			((0 << CS22) | (0 << CS21) | (1 << CS20))
-#define TIMER2_CLOCK_SRC_8			((0 << CS22) | (1 << CS21) | (0 << CS20))
-#define TIMER2_CLOCK_SRC_32			((0 << CS22) | (1 << CS21) | (1 << CS20))
-#define TIMER2_CLOCK_SRC_64			((1 << CS22) | (0 << CS21) | (0 << CS20))
-#define TIMER2_CLOCK_SRC_128		((1 << CS22) | (0 << CS21) | (1 << CS20))
-#define TIMER2_CLOCK_SRC_256		((1 << CS22) | (1 << CS21) | (0 << CS20))
-#define TIMER2_CLOCK_SRC_1024		((1 << CS22) | (1 << CS21) | (1 << CS20))
+#define TIMER2_CLK_SRC_OFF		((0 << CS22) | (0 << CS21) | (0 << CS20))
+#define TIMER2_CLK_SRC_1		((0 << CS22) | (0 << CS21) | (1 << CS20))
+#define TIMER2_CLK_SRC_8		((0 << CS22) | (1 << CS21) | (0 << CS20))
+#define TIMER2_CLK_SRC_32		((0 << CS22) | (1 << CS21) | (1 << CS20))
+#define TIMER2_CLK_SRC_64		((1 << CS22) | (0 << CS21) | (0 << CS20))
+#define TIMER2_CLK_SRC_128		((1 << CS22) | (0 << CS21) | (1 << CS20))
+#define TIMER2_CLK_SRC_256		((1 << CS22) | (1 << CS21) | (0 << CS20))
+#define TIMER2_CLK_SRC_1024		((1 << CS22) | (1 << CS21) | (1 << CS20))
+#define TIMER2_CLK_MASK			((1 << CS22) | (1 << CS21) | (1 << CS20))
 
 /*
  * 								TIMER/COUNTER[1345] Compare Output Mode, non-PWM
@@ -163,64 +167,76 @@
 #define TIMER1_COMA_NPWM_TOGGLE		((0 << COM1A1) | (0 << COM1A0))
 #define TIMER1_COMA_NPWM_CLEAR		((1 << COM1A1) | (0 << COM1A0))
 #define TIMER1_COMA_NPWM_SET		((1 << COM1A1) | (1 << COM1A0))
+#define TIMER1_COMA_MASK			((1 << COM1A1) | (1 << COM1A0))
 
 #define TIMER1_COMB_NPWM_NORMAL		((0 << COM1B1) | (0 << COM1B0))
 #define TIMER1_COMB_NPWM_TOGGLE		((0 << COM1B1) | (0 << COM1B0))
 #define TIMER1_COMB_NPWM_CLEAR		((1 << COM1B1) | (0 << COM1B0))
 #define TIMER1_COMB_NPWM_SET		((1 << COM1B1) | (1 << COM1B0))
+#define TIMER1_COMB_MASK			((1 << COM1B1) | (1 << COM1B0))
 
-#define TIMER1_COMAC_NPWM_NORMAL	((0 << COM1C1) | (0 << COM1C0))
-#define TIMER1_COMAC_NPWM_TOGGLE	((0 << COM1C1) | (0 << COM1C0))
-#define TIMER1_COMAC_NPWM_CLEAR		((1 << COM1C1) | (0 << COM1C0))
-#define TIMER1_COMAC_NPWM_SET		((1 << COM1C1) | (1 << COM1C0))
+#define TIMER1_COMC_NPWM_NORMAL		((0 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMC_NPWM_TOGGLE		((0 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMC_NPWM_CLEAR		((1 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMC_NPWM_SET		((1 << COM1C1) | (1 << COM1C0))
+#define TIMER1_COMC_MASK			((1 << COM1C1) | (1 << COM1C0))
 
 			//TIMER3
 #define TIMER3_COMA_NPWM_NORMAL		((0 << COM3A1) | (0 << COM3A0))
 #define TIMER3_COMA_NPWM_TOGGLE		((0 << COM3A1) | (0 << COM3A0))
 #define TIMER3_COMA_NPWM_CLEAR		((1 << COM3A1) | (0 << COM3A0))
 #define TIMER3_COMA_NPWM_SET		((1 << COM3A1) | (1 << COM3A0))
+#define TIMER3_COMA_MASK			((1 << COM3A1) | (1 << COM3A0))
 
 #define TIMER3_COMB_NPWM_NORMAL		((0 << COM3B1) | (0 << COM3B0))
 #define TIMER3_COMB_NPWM_TOGGLE		((0 << COM3B1) | (0 << COM3B0))
 #define TIMER3_COMB_NPWM_CLEAR		((1 << COM3B1) | (0 << COM3B0))
 #define TIMER3_COMB_NPWM_SET		((1 << COM3B1) | (1 << COM3B0))
+#define TIMER3_COMB_MASK			((1 << COM3B1) | (1 << COM3B0))
 
 #define TIMER3_COMC_NPWM_NORMAL		((0 << COM3C1) | (0 << COM3C0))
 #define TIMER3_COMC_NPWM_TOGGLE		((0 << COM3C1) | (0 << COM3C0))
 #define TIMER3_COMC_NPWM_CLEAR		((1 << COM3C1) | (0 << COM3C0))
 #define TIMER3_COMC_NPWM_SET		((1 << COM3C1) | (1 << COM3C0))
+#define TIMER3_COMC_MASK			((1 << COM3C1) | (1 << COM3C0))
 
 			//TIMER4
 #define TIMER4_COMA_NPWM_NORMAL		((0 << COM4A1) | (0 << COM4A0))
 #define TIMER4_COMA_NPWM_TOGGLE		((0 << COM4A1) | (0 << COM4A0))
 #define TIMER4_COMA_NPWM_CLEAR		((1 << COM4A1) | (0 << COM4A0))
 #define TIMER4_COMA_NPWM_SET		((1 << COM4A1) | (1 << COM4A0))
+#define TIMER4_COMA_MASK			((1 << COM4A1) | (1 << COM4A0))
 
 #define TIMER4_COMB_NPWM_NORMAL		((0 << COM4B1) | (0 << COM4B0))
 #define TIMER4_COMB_NPWM_TOGGLE		((0 << COM4B1) | (0 << COM4B0))
 #define TIMER4_COMB_NPWM_CLEAR		((1 << COM4B1) | (0 << COM4B0))
 #define TIMER4_COMB_NPWM_SET		((1 << COM4B1) | (1 << COM4B0))
+#define TIMER4_COMB_MASK			((1 << COM4B1) | (1 << COM4B0))
 
 #define TIMER4_COMC_NPWM_NORMAL		((0 << COM4C1) | (0 << COM4C0))
 #define TIMER4_COMC_NPWM_TOGGLE		((0 << COM4C1) | (0 << COM4C0))
 #define TIMER4_COMC_NPWM_CLEAR		((1 << COM4C1) | (0 << COM4C0))
 #define TIMER4_COMC_NPWM_SET		((1 << COM4C1) | (1 << COM4C0))
+#define TIMER4_COMC_MASK			((1 << COM4C1) | (1 << COM4C0))
 
 			//TIMER5
 #define TIMER5_COMA_NPWM_NORMAL		((0 << COM5A1) | (0 << COM5A0))
 #define TIMER5_COMA_NPWM_TOGGLE		((0 << COM5A1) | (0 << COM5A0))
 #define TIMER5_COMA_NPWM_CLEAR		((1 << COM5A1) | (0 << COM5A0))
 #define TIMER5_COMA_NPWM_SET		((1 << COM5A1) | (1 << COM5A0))
+#define TIMER5_COMA_MASK			((1 << COM5A1) | (1 << COM5A0))
 
 #define TIMER5_COMB_NPWM_NORMAL		((0 << COM5B1) | (0 << COM5B0))
 #define TIMER5_COMB_NPWM_TOGGLE		((0 << COM5B1) | (0 << COM5B0))
 #define TIMER5_COMB_NPWM_CLEAR		((1 << COM5B1) | (0 << COM5B0))
 #define TIMER5_COMB_NPWM_SET		((1 << COM5B1) | (1 << COM5B0))
+#define TIMER5_COMB_MASK			((1 << COM5B1) | (1 << COM5B0))
 
 #define TIMER5_COMC_NPWM_NORMAL		((0 << COM5C1) | (0 << COM5C0))
 #define TIMER5_COMC_NPWM_TOGGLE		((0 << COM5C1) | (0 << COM5C0))
 #define TIMER5_COMC_NPWM_CLEAR		((1 << COM5C1) | (0 << COM5C0))
 #define TIMER5_COMC_NPWM_SET		((1 << COM5C1) | (1 << COM5C0))
+#define TIMER5_COMC_MASK			((1 << COM5C1) | (1 << COM5C0))
 
 /*
  * 								TIMER/COUNTER[1345] Compare Output Mode, Fast PWM
@@ -243,22 +259,27 @@
 #define TIMER1_COMA_FPWM_WGM_SET	((0 << COM1A1) | (1 << COM1A0))
 #define TIMER1_COMA_FPWM_CM_ST		((1 << COM1A1) | (0 << COM1A0))
 #define TIMER1_COMA_FPWM_SM_CT		((1 << COM1A1) | (1 << COM1A0))
+#define TIMER1_COMA_MASK			((1 << COM1A1) | (1 << COM1A0))
 
 #define TIMER1_COMB_FPWM_NORMAL		((0 << COM1B1) | (0 << COM1B0))
 #define TIMER1_COMB_FPWM_WGM_SET	((0 << COM1B1) | (1 << COM1B0))
 #define TIMER1_COMB_FPWM_CM_ST		((1 << COM1B1) | (0 << COM1B0))
 #define TIMER1_COMB_FPWM_SM_CT		((1 << COM1B1) | (1 << COM1B0))
+#define TIMER1_COMB_MASK			((1 << COM1B1) | (1 << COM1B0))
 
 #define TIMER1_COMC_FPWM_NORMAL		((0 << COM1C1) | (0 << COM1C0))
 #define TIMER1_COMC_FPWM_WGM_SET	((0 << COM1C1) | (1 << COM1C0))
 #define TIMER1_COMC_FPWM_CM_ST		((1 << COM1C1) | (0 << COM1C0))
 #define TIMER1_COMC_FPWM_SM_CT		((1 << COM1C1) | (1 << COM1C0))
+#define TIMER1_COMC_MASK			((1 << COM1C1) | (1 << COM1C1))
 
 				//TIMER3
 #define TIMER3_COMA_FPWM_NORMAL		((0 << COM3A1) | (0 << COM3A0))
 #define TIMER3_COMA_FPWM_WGM_SET	((0 << COM3A1) | (1 << COM3A0))
 #define TIMER3_COMA_FPWM_CM_ST		((1 << COM3A1) | (0 << COM3A0))
 #define TIMER3_COMA_FPWM_SM_CT		((1 << COM3A1) | (1 << COM3A0))
+#define TIMER3_COMA_MASK			((1 << COM3A1) | (1 << COM3A0))
+#define TIMER3_COMB_MASK			((1 << COM3B1) | (1 << COM3B0))
 
 #define TIMER3_COMB_FPWM_NORMAL		((0 << COM3B1) | (0 << COM3B0))
 #define TIMER3_COMB_FPWM_WGM_SET	((0 << COM3B1) | (1 << COM3B0))
@@ -269,38 +290,45 @@
 #define TIMER3_COMC_FPWM_WGM_SET	((0 << COM3C1) | (1 << COM3C0))
 #define TIMER3_COMC_FPWM_CM_ST		((1 << COM3C1) | (0 << COM3C0))
 #define TIMER3_COMC_FPWM_SM_CT		((1 << COM3C1) | (1 << COM3C0))
+#define TIMER3_COMC_MASK			((1 << COM3C1) | (1 << COM3C1))
 
 				//TIMER4
 #define TIMER4_COMA_FPWM_NORMAL		((0 << COM4A1) | (0 << COM4A0))
 #define TIMER4_COMA_FPWM_WGM_SET	((0 << COM4A1) | (1 << COM4A0))
 #define TIMER4_COMA_FPWM_CM_ST		((1 << COM4A1) | (0 << COM4A0))
 #define TIMER4_COMA_FPWM_SM_CT		((1 << COM4A1) | (1 << COM4A0))
+#define TIMER4_COMA_MASK			((1 << COM4A1) | (1 << COM4A0))
 
 #define TIMER4_COMB_FPWM_NORMAL		((0 << COM4B1) | (0 << COM4B0))
 #define TIMER4_COMB_FPWM_WGM_SET	((0 << COM4B1) | (1 << COM4B0))
 #define TIMER4_COMB_FPWM_CM_ST		((1 << COM4B1) | (0 << COM4B0))
 #define TIMER4_COMB_FPWM_SM_CT		((1 << COM4B1) | (1 << COM4B0))
+#define TIMER4_COMB_MASK			((1 << COM4B1) | (1 << COM4B0))
 
 #define TIMER4_COMC_FPWM_NORMAL		((0 << COM4C1) | (0 << COM4C0))
 #define TIMER4_COMC_FPWM_WGM_SET	((0 << COM4C1) | (1 << COM4C0))
 #define TIMER4_COMC_FPWM_CM_ST		((1 << COM4C1) | (0 << COM4C0))
 #define TIMER4_COMC_FPWM_SM_CT		((1 << COM4C1) | (1 << COM4C0))
+#define TIMER4_COMC_MASK			((1 << COM4C1) | (1 << COM4C1))
 
 				//TIMER5
 #define TIMER5_COMA_FPWM_NORMAL		((0 << COM5A1) | (0 << COM5A0))
 #define TIMER5_COMA_FPWM_WGM_SET	((0 << COM5A1) | (1 << COM5A0))
 #define TIMER5_COMA_FPWM_CM_ST		((1 << COM5A1) | (0 << COM5A0))
 #define TIMER5_COMA_FPWM_SM_CT		((1 << COM5A1) | (1 << COM5A0))
+#define TIMER5_COMA_MASK			((1 << COM5A1) | (1 << COM5A0))
 
 #define TIMER5_COMB_FPWM_NORMAL		((0 << COM5B1) | (0 << COM5B0))
 #define TIMER5_COMB_FPWM_WGM_SET	((0 << COM5B1) | (1 << COM5B0))
 #define TIMER5_COMB_FPWM_CM_ST		((1 << COM5B1) | (0 << COM5B0))
 #define TIMER5_COMB_FPWM_SM_CT		((1 << COM5B1) | (1 << COM5B0))
+#define TIMER5_COMB_MASK			((1 << COM5B1) | (1 << COM5B0))
 
 #define TIMER5_COMC_FPWM_NORMAL		((0 << COM5C1) | (0 << COM5C0))
 #define TIMER5_COMC_FPWM_WGM_SET	((0 << COM5C1) | (1 << COM5C0))
 #define TIMER5_COMC_FPWM_CM_ST		((1 << COM5C1) | (0 << COM5C0))
 #define TIMER5_COMC_FPWM_SM_CT		((1 << COM5C1) | (1 << COM5C0))
+#define TIMER5_COMC_MASK			((1 << COM5C1) | (1 << COM5C1))
 
 
 
@@ -429,6 +457,7 @@
 #define TIMER1_WF_CTC_TOPICR1			((1 << WGM13) | (1 << WGM12) | (0 << WGM11) | (0 << WGM10))
 #define TIMER1_WF_FPWM_TOPICR1			((1 << WGM13) | (1 << WGM12) | (1 << WGM11) | (0 << WGM10))
 #define TIMER1_WF_FPWM_TOPOCR1A			((1 << WGM13) | (1 << WGM12) | (1 << WGM11) | (1 << WGM10))
+#define TIMER1_WF_MASK					((1 << WGM13) | (1 << WGM12) | (1 << WGM11) | (1 << WGM10))
 
 						//TIMER3
 #define TIMER3_WF_NORMAL 				((0 << WGM33) | (0 << WGM32) | (0 << WGM31) | (0 << WGM30))
@@ -446,6 +475,7 @@
 #define TIMER3_WF_CTC_TOPICR3			((1 << WGM33) | (1 << WGM32) | (0 << WGM31) | (0 << WGM30))
 #define TIMER3_WF_FPWM_TOPICR3			((1 << WGM33) | (1 << WGM32) | (1 << WGM31) | (0 << WGM30))
 #define TIMER3_WF_FPWM_TOPOCR3A			((1 << WGM33) | (1 << WGM32) | (1 << WGM31) | (1 << WGM30))
+#define TIMER3_WF_MASK					((1 << WGM33) | (1 << WGM32) | (1 << WGM31) | (1 << WGM30))
 
 						//TIMER4
 #define TIMER4_WF_NORMAL 				((0 << WGM43) | (0 << WGM42) | (0 << WGM41) | (0 << WGM40))
@@ -463,6 +493,7 @@
 #define TIMER4_WF_CTC_TOPICR4			((1 << WGM43) | (1 << WGM42) | (0 << WGM41) | (0 << WGM40))
 #define TIMER4_WF_FPWM_TOPICR4			((1 << WGM43) | (1 << WGM42) | (1 << WGM41) | (0 << WGM40))
 #define TIMER4_WF_FPWM_TOPOCR4A			((1 << WGM43) | (1 << WGM42) | (1 << WGM41) | (1 << WGM40))
+#define TIMER4_WF_MASK					((1 << WGM43) | (1 << WGM42) | (1 << WGM41) | (1 << WGM40))
 
 						//TIMER5
 #define TIMER5_WF_NORMAL 				((0 << WGM53) | (0 << WGM52) | (0 << WGM51) | (0 << WGM35))
@@ -480,6 +511,7 @@
 #define TIMER5_WF_CTC_TOPICR5			((1 << WGM53) | (1 << WGM52) | (0 << WGM51) | (0 << WGM35))
 #define TIMER5_WF_FPWM_TOPICR5			((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (0 << WGM35))
 #define TIMER5_WF_FPWM_TOPOCR5A			((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (1 << WGM35))
+#define TIMER5_WF_MASK					((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (1 << WGM35))
 
 
 
@@ -504,6 +536,7 @@
 #define TIMER1_CLK_SRC_1024				((0 << CS12) | (0 << CS11) | (1 << CS10))
 #define TIMER1_CLK_SRC_EXT_FALLING		((0 << CS12) | (1 << CS11) | (0 << CS10))
 #define TIMER1_CLK_SRC_EXT_RISING		((0 << CS12) | (1 << CS11) | (1 << CS10))
+#define TIMER1_CLK_MASK					((1 << CS12) | (1 << CS11) | (1 << CS10))
 
 									//TIMER3
 #define TIMER3_CLK_SRC_NO				((1 << CS32) | (0 << CS31) | (0 << CS30))
@@ -514,6 +547,7 @@
 #define TIMER3_CLK_SRC_1024				((0 << CS32) | (0 << CS31) | (1 << CS30))
 #define TIMER3_CLK_SRC_EXT_FALLING		((0 << CS32) | (1 << CS31) | (0 << CS30))
 #define TIMER3_CLK_SRC_EXT_RISING		((0 << CS32) | (1 << CS31) | (1 << CS30))
+#define TIMER3_CLK_MASK					((1 << CS32) | (1 << CS31) | (1 << CS30))
 
 									//TIMER4
 #define TIMER4_CLK_SRC_NO				((1 << CS42) | (0 << CS41) | (0 << CS40))
@@ -524,14 +558,16 @@
 #define TIMER4_CLK_SRC_1024				((0 << CS42) | (0 << CS41) | (1 << CS40))
 #define TIMER4_CLK_SRC_EXT_FALLING		((0 << CS42) | (1 << CS41) | (0 << CS40))
 #define TIMER4_CLK_SRC_EXT_RISING		((0 << CS42) | (1 << CS41) | (1 << CS40))
+#define TIMER4_CLK_MASK					((1 << CS42) | (1 << CS41) | (1 << CS40))
 
 									//TIMER5
-#define TIMER4_CLK_SRC_NO				((1 << CS52) | (0 << CS51) | (0 << CS50))
-#define TIMER4_CLK_SRC_1				((1 << CS52) | (0 << CS51) | (1 << CS50))
-#define TIMER4_CLK_SRC_8				((1 << CS52) | (1 << CS51) | (0 << CS50))
-#define TIMER4_CLK_SRC_64				((1 << CS52) | (1 << CS51) | (1 << CS50))
-#define TIMER4_CLK_SRC_256				((0 << CS52) | (0 << CS51) | (0 << CS50))
-#define TIMER4_CLK_SRC_1024				((0 << CS52) | (0 << CS51) | (1 << CS50))
-#define TIMER4_CLK_SRC_EXT_FALLING		((0 << CS52) | (1 << CS51) | (0 << CS50))
-#define TIMER4_CLK_SRC_EXT_RISING		((0 << CS52) | (1 << CS51) | (1 << CS50))
+#define TIMER5_CLK_SRC_NO				((1 << CS52) | (0 << CS51) | (0 << CS50))
+#define TIMER5_CLK_SRC_1				((1 << CS52) | (0 << CS51) | (1 << CS50))
+#define TIMER5_CLK_SRC_8				((1 << CS52) | (1 << CS51) | (0 << CS50))
+#define TIMER5_CLK_SRC_64				((1 << CS52) | (1 << CS51) | (1 << CS50))
+#define TIMER5_CLK_SRC_256				((0 << CS52) | (0 << CS51) | (0 << CS50))
+#define TIMER5_CLK_SRC_1024				((0 << CS52) | (0 << CS51) | (1 << CS50))
+#define TIMER5_CLK_SRC_EXT_FALLING		((0 << CS52) | (1 << CS51) | (0 << CS50))
+#define TIMER5_CLK_SRC_EXT_RISING		((0 << CS52) | (1 << CS51) | (1 << CS50))
+#define TIMER5_CLK_MASK					((1 << CS52) | (1 << CS51) | (1 << CS50))
 
