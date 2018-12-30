@@ -123,6 +123,7 @@
 #define TIMER0_CLK_SRC_1024				((1 << CS02) | (0 << CS01) | (1 << CS00))
 #define TIMER0_CLK_SRC_EXT_FALLING		((1 << CS02) | (1 << CS01) | (0 << CS00))
 #define TIMER0_CLK_SRC_EXT_RISING		((1 << CS02) | (1 << CS01) | (1 << CS00))
+#define TIMER0_CLK_SRC_MASK				((1 << CS02) | (1 << CS01) | (1 << CS00))
 
 /*
  * 													TIMER/COUNTER 2 waveform Description
