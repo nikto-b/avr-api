@@ -9,7 +9,7 @@
 		*/
 		void USART0Send(char __data)			//send 1 byte to USART0
 		{
-			while(!(UCSR0A & (1 << UDRE0))){}
+			while(!(UCSR0A & (1 << UDRE0))){}//TODO: send to buf and get with interrupt
 			UDR0 = __data;
 			/*
 			 * The transmit buffer can only be written
@@ -31,7 +31,8 @@
 			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
 			while(*__data != 0x00)
 			{
-				USART0Send(*(__data++));
+				USART0Send(*(__data));
+				__data++;
 			}
 		}
 		
@@ -77,7 +78,8 @@
 				}
 				case BIN:
 				{
-					char* ___arr = dec2bin(__data);
+					char * ___arr;
+					___arr = (char*)dec2bin(__data);
 					USART0Print(___arr);
 					free(___arr);
 					break;

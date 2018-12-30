@@ -1,3 +1,5 @@
+#define INT_ALOWED ((SREG >> 7) & 1)
+
 #include "customFuncAddr.h"
 
 #include "settings.h"

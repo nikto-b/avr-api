@@ -1,156 +1,537 @@
 #define _TIMER_MODES
+/*
+ * 													TIMER/COUNTER 2 waveform Description
+ * Mode 	WGM2	WGM1 	WGM0 	Timer/Counter Mode of Operation		TOP 	Update of OCRx at 	TOV Flag Set on
+ * 0		0		0		0		Normal							0xFF 		Immediate 			MAX
+ * 1		0		0		1		PWM, Phase correct				0xFF 		TOP					BOTTOM
+ * 2		0		1		0		CTC								OCRA		Immediate			MAX
+ * 3		0		1		1		Fast PWM						0xFF 		TOP					MAX
+ * 4		1		0		0		Reserved						----		----				----
+ * 5		1		0		1		PWM, Phase correct 				OCRA		TOP					BOTTOM
+ * 6		1		1		0		Reserved						----		----				----
+ * 7		1		1		1		Fast PWM						OCRA		TOP					TOP
+ */
 
-//-------------------------------------------------------------------------TIMER-MODES---------------------------------------------------------------------------------------
-#pragma message "using timer mode table for atmega2560"
+#define TIMER2_WF_NORMAL 			((0 << WGM22) | (0 << WGM21) | (0 << WGM20))
+#define TIMER2_WF_PWM_PHC 			((0 << WGM22) | (0 << WGM21) | (1 << WGM20))
+#define TIMER2_WF_CTC 				((0 << WGM22) | (1 << WGM21) | (0 << WGM20))
+#define TIMER2_WF_FPWM 				((0 << WGM22) | (1 << WGM21) | (1 << WGM20))
+#define TIMER2_WF_PWM_PHC_TOPOCRA	((1 << WGM22) | (1 << WGM21) | (0 << WGM20))
+#define TIMER2_WF_FPWM_TOPOCRA		((1 << WGM22) | (1 << WGM21) | (1 << WGM20))
 
-//																			TIMER0
-#define TIMER0_MODE_NORMAL (0)
-#define TIMER0_MODE_PWM_PHC (1 << WGM00)														//PWM PHASE CORRECT
-#define TIMER0_MODE_CTC (1 << WGM01)															//CLEAR-ON-COMPARE; TOP - OCR1A
-#define TIMER0_MODE_FASTPWM ((1 << WGM00) | (1 << WGM01))										//FAST-PWM
-#define TIMER0_MODE_PWM_PHC_TOPOCRA ((1 << WGM02) | (1 << WGM00))								//PWM PHASE CORRECT TOP - OCRA
-			//((1 << WGM2) | (1 << WGM1)) reserved
-#define TIMER0_MODE_FASTPWM_TOPOCRA ((1 << WGM02) | (1 << WGM01) | (1 << WGM00))				//FASTPWM TOP - OCRA
+/*
+ * 												T/C2	Compate Output Mode, non-PWM
+ * COM2A1		COM2A0		Description
+ * 0			0 			Normal port orientation, OC0A disconnected
+ *
+ * 0 			1			Toggle OC2A on Compare Match
+ *
+ * 1 			0			Clear OC2A on Compare Match
+ *
+ * 1 			1			Set OC2A on Compare Match
+ */
 
-//																			TIMER1
-#define TIMER1_MODE_NORMAL 0
-#define TIMER1_MODE_PWM_PHC_8B (1 << WGM10)														//PWM PHASE CORRECT, 8  BIT
-#define TIMER1_MODE_PWM_PHC_9B (1 << WGM11)														//PWM PHASE CORRECT, 9  BIT
-#define TIMER1_MODE_PWM_PHC_10B ((1 << WGM10) | (1 << WGM11))									//PWM PHASE CORRECT, 10 BIT
-#define TIMER1_MODE_CTC_TOPOCR1A (1 << WGM12)													//CLEAR-ON-COMPARE; TOP - OCR1A
-#define TIMER1_MODE_FASTPWM_8B ((1 << WGM10) | (1 << WGM12))									//FASTPWM, 8  BIT
-#define TIMER1_MODE_FASTPWM_9B ((1 << WGM11) | (1 << WGM12))									//FASTPWM, 9  BIT
-#define TIMER1_MODE_FASTPWM_10B ((1 << WGM10) | (1 << WGM11) | (1 << WGM12))					//FASTPWM, 10 BIT 
-#define TIMER1_MODE_PWM_PHFRC_TOPICR1 (1 << WGM13)												//PWM PHASE AND FREQUENCY CORRECT, TOP - ICR1
-#define TIMER1_MODE_PWM_PHFRC_TOPOCR1A ((1 << WGM13) | (1 << WGM10))							//PWM PHASE AND FREQUENCY CORRECT, TOP - OCR1A
-#define TIMER1_MODE_PWM_PHC_TOPICR1 ((1 << WGM11) | (1 << WGM13))								//PWM PHASE CORRECT, TOP - ICR1
-#define TIMER1_MODE_PWM_PHC_TOPOCR1A ((1 << WGM10) | (1 << WGM11) | (1 << WGM13))				//PWM PHASE CORRECT, TOP - OCR1A
-#define TIMER1_MODE_CTC_TOPICR1 ((1 << WGM12) | (1 << WGM13))									//CLEAR-ON-COMPARE; TOP - ICR1
-#define TIMER1_MODE_FASTPWM_TOPICR1 ((1 << WGM13) | (1 << WGM12) | (1 << WGM11))				//FASTPWM, TOP - ICR1
-#define TIMER1_MODE_FASTPWM_TOPOCR1A ((1 << WGM13) | (1 << WGM12) | (1 << WGM11) | (1 << WGM10))//FASTPWM, TOP - OCR1A
+#define TMER2_COMA_NPWM_NORMAL		((0 << COM2A1) | (0 << COM2A0))
+#define TMER2_COMA_NPWM_TOGGLE		((0 << COM2A1) | (1 << COM2A0))
+#define TMER2_COMA_NPWM_CLEAR		((1 << COM2A1) | (0 << COM2A0))
+#define TMER2_COMA_NPWM_SET			((1 << COM2A1) | (1 << COM2A0))
 
-//																			TIMER2
-#define TIMER2_MODE_NORMAL 0
-#define TIMER2_MODE_PWM_PHC (1 << WGM20)														//PWM PHASE CORRECT
-#define TIMER2_MODE_CTC (1 << WGM21)															//CLEAR-ON-COMPARE
-#define TIMER2_MODE_FASTPWM ((1 << WGM20) | (1 << WGM21))										//FASTPWM
-					//(1 << WGM22) 						RESERVED
-#define TIMER2_MODE_PWM_PHC_TOPOCRA ((1 << WGM22) | (1 << WGM20))								//PWM PHASE CORRECT, TOP - OCRA
-					//((1 << WGM22) | (1 << WGM21))		RESERVED
-#define TIMER2_MODE_FASTPWM_TOPOCRA ((1 << WGM22) | (1 << WGM21) | (1 << WGM20))				//FASTPWM, TOP - OCRA
+/*
+ * 											T/C2	Compare Output Mode, Fast PWM Mode
+ * COM2A1		COM2A0		Description
+ * 0			0			Normal port operation, OC2A disconnected
+ *
+ * 0			1			WGM22 = 0: Normal Port Operation, OC0A Disconnected.
+ * 							WGM22 = 1: Toggle OC2A on Compare Match.
+ *
+ * 1			0			Clear OC2A on Compare Match, set OC2A at TOP
+ *
+ * 1			1			Set OC2A on Compare Match, clear OC2A at TOP
+ */
 
-//																			TIMER3
-#define TIMER3_MODE_NORMAL 0
-#define TIMER3_MODE_PWM_PHC_8B (1 << WGM30)														//PWM PHASE CORRECT, 8  BIT
-#define TIMER3_MODE_PWM_PHC_9B (1 << WGM31)														//PWM PHASE CORRECT, 9  BIT
-#define TIMER3_MODE_PWM_PHC_10B ((1 << WGM30) | (1 << WGM31))									//PWM PHASE CORRECT, 10 BIT
-#define TIMER3_MODE_CTC_TOPOCR3A (1 << WGM32)													//CLEAR-ON-COMPARE; TOP - OCR3A
-#define TIMER3_MODE_FASTPWM_8B ((1 << WGM30) | (1 << WGM32))									//FASTPWM, 8  BIT
-#define TIMER3_MODE_FASTPWM_9B ((1 << WGM31) | (1 << WGM32))									//FASTPWM, 9  BIT
-#define TIMER3_MODE_FASTPWM_10B ((1 << WGM30) | (1 << WGM31) | (1 << WGM32))					//FASTPWM, 10 BIT 
-#define TIMER3_MODE_PWM_PHFRC_TOPICR3 (1 << WGM33)												//PWM PHASE AND FREQUENCY CORRECT, TOP - ICR3
-#define TIMER3_MODE_PWM_PHFRC_TOPOCR3A ((1 << WGM33) | (1 << WGM30))							//PWM PHASE AND FREQUENCY CORRECT, TOP - OCR3A
-#define TIMER3_MODE_PWM_PHC_TOPICR3 ((1 << WGM31) | (1 << WGM33))								//PWM PHASE CORRECT, TOP - ICR3
-#define TIMER3_MODE_PWM_PHC_TOPOCR3A ((1 << WGM30) | (1 << WGM31) | (1 << WGM33))				//PWM PHASE CORRECT, TOP - OCR3A
-#define TIMER3_MODE_CTC_TOPICR3 ((1 << WGM32) | (1 << WGM33))									//CLEAR-ON-COMPARE; TOP - ICR3
-#define TIMER3_MODE_FASTPWM_TOPICR3 ((1 << WGM33) | (1 << WGM32) | (1 << WGM31))				//FASTPWM, TOP - ICR3
-#define TIMER3_MODE_FASTPWM_TOPOCR3A ((1 << WGM33) | (1 << WGM32) | (1 << WGM31) | (1 << WGM30))//FASTPWM, TOP - OCR3A
-
-//																			TIMER4
-#define TIMER4_MODE_NORMAL 0
-#define TIMER4_MODE_PWM_PHC_8B (1 << WGM40)														//PWM PHASE CORRECT, 8  BIT
-#define TIMER4_MODE_PWM_PHC_9B (1 << WGM41)														//PWM PHASE CORRECT, 9  BIT
-#define TIMER4_MODE_PWM_PHC_10B ((1 << WGM40) | (1 << WGM41))									//PWM PHASE CORRECT, 10 BIT
-#define TIMER4_MODE_CTC_TOPOCR4A (1 << WGM42)													//CLEAR-ON-COMPARE; TOP - OCR4A
-#define TIMER4_MODE_FASTPWM_8B ((1 << WGM40) | (1 << WGM42))									//FASTPWM, 8  BIT
-#define TIMER4_MODE_FASTPWM_9B ((1 << WGM41) | (1 << WGM42))									//FASTPWM, 9  BIT
-#define TIMER4_MODE_FASTPWM_10B ((1 << WGM40) | (1 << WGM41) | (1 << WGM42))					//FASTPWM, 10 BIT 
-#define TIMER4_MODE_PWM_PHFRC_TOPICR4 (1 << WGM43)												//PWM PHASE AND FREQUENCY CORRECT, TOP - ICR4
-#define TIMER4_MODE_PWM_PHFRC_TOPOCR4A ((1 << WGM43) | (1 << WGM40))							//PWM PHASE AND FREQUENCY CORRECT, TOP - OCR4A
-#define TIMER4_MODE_PWM_PHC_TOPICR4 ((1 << WGM41) | (1 << WGM43))								//PWM PHASE CORRECT, TOP - ICR4
-#define TIMER4_MODE_PWM_PHC_TOPOCR4A ((1 << WGM40) | (1 << WGM41) | (1 << WGM43))				//PWM PHASE CORRECT, TOP - OCR4A
-#define TIMER4_MODE_CTC_TOPICR4 ((1 << WGM42) | (1 << WGM43))									//CLEAR-ON-COMPARE; TOP - ICR4
-#define TIMER4_MODE_FASTPWM_TOPICR4 ((1 << WGM43) | (1 << WGM42) | (1 << WGM41))				//FASTPWM, TOP - ICR4
-#define TIMER4_MODE_FASTPWM_TOPOCR4A ((1 << WGM43) | (1 << WGM42) | (1 << WGM41) | (1 << WGM40))//FASTPWM, TOP - OCR4A
-
-//																			TIMER5
-#define TIMER5_MODE_NORMAL 0
-#define TIMER5_MODE_PWM_PHC_8B (1 << WGM50)														//PWM PHASE CORRECT, 8  BIT
-#define TIMER5_MODE_PWM_PHC_9B (1 << WGM51)														//PWM PHASE CORRECT, 9  BIT
-#define TIMER5_MODE_PWM_PHC_10B ((1 << WGM50) | (1 << WGM51))									//PWM PHASE CORRECT, 10 BIT
-#define TIMER5_MODE_CTC_TOPOCR5A (1 << WGM52)													//CLEAR-ON-COMPARE; TOP - OCR5A
-#define TIMER5_MODE_FASTPWM_8B ((1 << WGM50) | (1 << WGM52))									//FASTPWM, 8  BIT
-#define TIMER5_MODE_FASTPWM_9B ((1 << WGM51) | (1 << WGM52))									//FASTPWM, 9  BIT
-#define TIMER5_MODE_FASTPWM_10B ((1 << WGM50) | (1 << WGM51) | (1 << WGM52))					//FASTPWM, 10 BIT 
-#define TIMER5_MODE_PWM_PHFRC_TOPICR5 (1 << WGM53)												//PWM PHASE AND FREQUENCY CORRECT, TOP - ICR5
-#define TIMER5_MODE_PWM_PHFRC_TOPOCR5A ((1 << WGM53) | (1 << WGM50))							//PWM PHASE AND FREQUENCY CORRECT, TOP - OCR5A
-#define TIMER5_MODE_PWM_PHC_TOPICR5 ((1 << WGM51) | (1 << WGM53))								//PWM PHASE CORRECT, TOP - ICR5
-#define TIMER5_MODE_PWM_PHC_TOPOCR5A ((1 << WGM50) | (1 << WGM51) | (1 << WGM53))				//PWM PHASE CORRECT, TOP - OCR5A
-#define TIMER5_MODE_CTC_TOPICR5 ((1 << WGM52) | (1 << WGM53))									//CLEAR-ON-COMPARE; TOP - ICR5
-#define TIMER5_MODE_FASTPWM_TOPICR5 ((1 << WGM53) | (1 << WGM52) | (1 << WGM51))				//FASTPWM, TOP - ICR5
-#define TIMER5_MODE_FASTPWM_TOPOCR5A ((1 << WGM43) | (1 << WGM52) | (1 << WGM51) | (1 << WGM50))//FASTPWM, TOP - OCR5A
+#define TIMER2_COMA_FPWM_NORMAL				((0 << COM2A1) | (0 << COM2A1))
+#define TIMER2_COMA_FPWM_WGM_SET			((0 << COM2A1) | (1 << COM2A1))
+#define TIMER2_COMA_FPWM_CMST				((1 << COM2A1) | (0 << COM2A1))
+#define TIMER2_COMA_FPWM_SM_CT				((0 << COM2A1) | (0 << COM2A1))
 
 
-//-------------------------------------------------------------------------TIMER DIVIDERS---------------------------------------------------------------------------------------
+/*
+ * 											T/C2	Compare Output Mode, Phase Correct PWM Mode
+ * COM2A1		COM2A0		Description
+ * 0			0			Normal port operation, OC2A disconnected.
+ *
+ * 0			1			WGM22 = 0: Normal Port Operation, OC2A Disconnected.
+ *
+ * 							WGM22 = 1: Toggle OC2A on Compare Match
+ *
+ * 1			0			Clear OC2A on Compare Match when up-counting. Set OC2A on Compare Match when down-counting.
+ *
+ * 1			1			Set OC2A on Compare Match when up-counting. Clear OC2A on Compare Match when down-counting.
+ */
 
-//																			TIMER0	
-#define TIMER0_CLOCK_NONE (0)													//T/C STOPPED
-#define TIMER0_CLOCK_1 (1 << CS00)												//NO PRESCALING
-#define TIMER0_CLOCK_8 (1 << CS01)												//FROM PRESCALER, CLK/8
-#define TIMER0_CLOCK_64 ((1 << CS00) | (1 << CS01))								//FROM PRESCALER, CLK/64
-#define TIMER0_CLOCK_256 (1 << CS02)											//FROM PRESCALER, CLK/256
-#define TIMER0_CLOCK_1024 ((1 << CS02) | (1 << CS00))							//FROM PRESCALER, CLK/1024
-#define TIMER0_CLOCK_EXTERNAL_FALLING ((1 << CS02) | (1 << CS01))				//EXTERNAL SOURCE ON T0
-#define TIMER0_CLOCK_EXTERNAL_RISING ((1 << CS02) | (1 << CS01) | (CS00))		//EXTERNAL SOURCE ON T0
+#define TIMER2_COMA_PWM_PHC_NORMAL		((0 << COM2A1) | (0 << COM2A0))
+#define TIMER2_COMA_PWM_PHC_WGM_SET		((0 << COM2A1) | (1 << COM2A0))
+#define TIMER2_COMA_PWM_PHC_CMUC_SMDC	((1 << COM2A1) | (0 << COM2A0))
+#define TIMER2_COMA_PWM_PHC_SMUC_CMDC	((1 << COM2A1) | (1 << COM2A0))
 
-//																			TIMER1
-#define TIMER1_CLOCK_NONE 0														//T/C STOPPED
-#define TIMER1_CLOCK_1	(1 << CS10)												//NO PRESCALING
-#define TIMER1_CLOCK_8 (1 << CS11)												//FROM PRESCALER, CLK/8
-#define TIMER1_CLOCK_64 ((1 << CS10) | (1 << CS11))								//FROM PRESCALER, CLK/64
-#define TIMER1_CLOCK_256 (1 << CS12)											//FROM PRESCALER, CLK/256
-#define TIMER1_CLOCK_1024 ((1 << CS12) | (1 << CS10))							//FROM PRESCALER, CLK/1024
-#define TIMER1_CLOCK_EXTERNAL_FALLING ((1 << CS11) | (1 << CS12))				//EXTERNAL SOURCE ON T1
-#define TIMER1_CLOCK_EXTERNAL_RISING ((1 << CS10) | (1 << CS11) | (1 << CS12))	//EXTERNAL SOURCE ON T1
+/*
+ * 												T/C2	Compate Output Mode, non-PWM
+ * COM2B1		COM2B0		Description
+ * 0			0 			Normal port orientation, OC0B disconnected
+ *
+ * 0 			1			Toggle OC2B on Compare Match
+ *
+ * 1 			0			Clear OC2B on Compare Match
+ *
+ * 1 			1			Set OC2B on Compare Match
+ */
 
-//																			TIMER2
-#define TIMER2_CLOCK_NONE 0														//T/C STOPPED
-#define TIMER2_CLOCK_1	(1 << CS20)												//NO PRESCALING
-#define TIMER2_CLOCK_8 	(1 << CS21)												//FROM PRESCALER, CLK/8
-#define TIMER2_CLOCK_32 ((1 << CS20) | (1 << CS21))								//FROM PRESCALER, CLK/32
-#define TIMER2_CLOCK_64 (1 << CS22)												//FROM PRESCALER, CLK/64
-#define TIMER2_CLOCK_128 ((1 << CS20) | (1 << CS22))							//FROM PRESCALER, CLK/128
-#define TIMER2_CLOCK_256 ((1 << CS21) | (1 << CS22))								//FROM PRESCALER, CLK/256
-#define TIMER2_CLOCK_1024 ((1 << CS22) | (1 << CS21) | (1 << CS20))				//FROM PRESCALER, CLK/1024
+#define TIMER2_COMB_NPWM_NORMAL			((0 << COM2B1) | (0 << COM2B0))
+#define TIMER2_COMB_NPWM_TOGGLE			((0 << COM2B1) | (1 << COM2B0))
+#define TIMER2_COMB_NPWM_CLEAR			((1 << COM2B1) | (0 << COM2B0))
+#define TIMER2_COMB_NPWM_SET			((1 << COM2B1) | (1 << COM2B0))
 
-//																			TIMER3
-#define TIMER3_CLOCK_NONE 0														//T/C STOPPED
-#define TIMER3_CLOCK_1	(1 << CS30)												//NO PRESCALING
-#define TIMER3_CLOCK_8 (1 << CS31)												//FROM PRESCALER, CLK/8
-#define TIMER3_CLOCK_64 ((1 << CS30) | (1 << CS31))								//FROM PRESCALER, CLK/64
-#define TIMER3_CLOCK_256 (1 << CS32)											//FROM PRESCALER, CLK/256
-#define TIMER3_CLOCK_1024 ((1 << CS32) | (1 << CS30))							//FROM PRESCALER, CLK/1024
-#define TIMER3_CLOCK_EXTERNAL_FALLING ((1 << CS31) | (1 << CS32))				//EXTERNAL SOURCE ON T3
-#define TIMER3_CLOCK_EXTERNAL_RISING ((1 << CS30) | (1 << CS31) | (1 << CS32))	//EXTERNAL SOURCE ON T3
+/*
+ * 											T/C2	Compare Output Mode, Fast PWM Mode
+ * COM2B1		COM2B0		Description
+ * 0			0			Normal port operation, OC2B disconnected
+ * 
+ * 0			1			Reserved
+ * 
+ * 1			0			Clear OC2B on Compare Match, set OC2B at TOP
+ * 
+ * 1			1			Set OC2B on Compare Match, clear OC2B at TOP
+ */
 
-//																			TIMER4
-#define TIMER4_CLOCK_NONE 0														//T/C STOPPED
-#define TIMER4_CLOCK_1	(1 << CS40)												//NO PRESCALING
-#define TIMER4_CLOCK_8 (1 << CS41)												//FROM PRESCALER, CLK/8
-#define TIMER4_CLOCK_64 ((1 << CS40) | (1 << CS41))								//FROM PRESCALER, CLK/64
-#define TIMER4_CLOCK_256 (1 << CS42)											//FROM PRESCALER, CLK/256
-#define TIMER4_CLOCK_1024 ((1 << CS42) | (1 << CS40))							//FROM PRESCALER, CLK/1024
-#define TIMER4_CLOCK_EXTERNAL_FALLING ((1 << CS41) | (1 << CS42))				//EXTERNAL SOURCE ON T4
-#define TIMER4_CLOCK_EXTERNAL_RISING ((1 << CS40) | (1 << CS41) | (1 << CS42))	//EXTERNAL SOURCE ON T4
+#define TIMER2_COMB_FPWM_NORMAL		((0 << COM2B1) | (0 << COM2B1))
+#define TIMER2_COMB_FPWM_CM_ST		((1 << COM2B1) | (0 << COM2B1))
+#define TIMER2_COMB_FPWM_CT_SM		((1 << COM2B1) | (1 << COM2B1))
 
-//																			TIMER5
-#define TIMER5_CLOCK_NONE 0														//T/C STOPPED
-#define TIMER5_CLOCK_1	(1 << CS50)												//NO PRESCALING
-#define TIMER5_CLOCK_8 (1 << CS51)												//FROM PRESCALER, CLK/8
-#define TIMER5_CLOCK_64 ((1 << CS50) | (1 << CS51))								//FROM PRESCALER, CLK/64
-#define TIMER5_CLOCK_256 (1 << CS52)											//FROM PRESCALER, CLK/256
-#define TIMER5_CLOCK_1024 ((1 << CS52) | (1 << CS50))							//FROM PRESCALER, CLK/1024
-#define TIMER5_CLOCK_EXTERNAL_FALLING ((1 << CS51) | (1 << CS52))				//EXTERNAL SOURCE ON T5
-#define TIMER5_CLOCK_EXTERNAL_RISING ((1 << CS50) | (1 << CS51) | (1 << CS52))	//EXTERNAL SOURCE ON T5
-//If external pin modes are used for the Timer/Counter0, transitions on the T0 pin 
-//will clock the counter even if the pin is configured as an output. This feature allows software control of the counting
+/*
+ * 										T/C2		Compare Output Mode, Phase Correct PWM Mode
+ * COM2B1		COM2B0		Description
+ * 0			0			Normal port operation, OC2B disconnected.
+ * 
+ * 0			1			Reserved
+ * 
+ * 1			0			Clear OC2B on Compare Match when up-counting. Set OC2B on Compare Match when down-counting.
+ * 
+ * 1			1			Set OC2B on Compare Match when up-counting. Clear OC2B on Compare Match when down-counting.
+ */
+
+#define TIMER2_COMB_PWM_PHC_NORMAL			((0 << COM2B1) | (0 << COM2B0))
+#define TIMER2_COMB_PWM_PHC_CMUC_SMDC		((1 << COM2B1) | (0 << COM2B0))
+#define TIMER2_COMB_PWM_PHC_SMUC_CMDC		((1 << COM2B1) | (1 << COM2B0))
+
+
+/*
+ *							T/C2	Clock source selection
+ * CS22		CS21	CS20	Description
+ * 0		0		0		OFF
+ * 0		0		1		No prescaller
+ * 0		1		0		8
+ * 0		1		1		32
+ * 1		0		0		64
+ * 1		0		1		128
+ * 1		1		0		256
+ * 1		1		1		1024
+ */
+
+#define TIMER2_CLOCK_SRC_OFF		((0 << CS22) | (0 << CS21) | (0 << CS20))
+#define TIMER2_CLOCK_SRC_1			((0 << CS22) | (0 << CS21) | (1 << CS20))
+#define TIMER2_CLOCK_SRC_8			((0 << CS22) | (1 << CS21) | (0 << CS20))
+#define TIMER2_CLOCK_SRC_32			((0 << CS22) | (1 << CS21) | (1 << CS20))
+#define TIMER2_CLOCK_SRC_64			((1 << CS22) | (0 << CS21) | (0 << CS20))
+#define TIMER2_CLOCK_SRC_128		((1 << CS22) | (0 << CS21) | (1 << CS20))
+#define TIMER2_CLOCK_SRC_256		((1 << CS22) | (1 << CS21) | (0 << CS20))
+#define TIMER2_CLOCK_SRC_1024		((1 << CS22) | (1 << CS21) | (1 << CS20))
+
+/*
+ * 								TIMER/COUNTER[1345] Compare Output Mode, non-PWM
+ *COMnx1	COMnx0		Description
+ * 0		0			Normal port operation, OCnx disconnected
+ * 
+ * 0		1			Toggle OCnx on compare match
+ * 
+ * 1		0			Clear OCnx on compare match (set output to low level)
+ * 
+ * 1		1			Set OCnx on compare match (set output to high level)
+ */
+
+			//TIMER1
+#define TIMER1_COMA_NPWM_NORMAL		((0 << COM1A1) | (0 << COM1A0))
+#define TIMER1_COMA_NPWM_TOGGLE		((0 << COM1A1) | (0 << COM1A0))
+#define TIMER1_COMA_NPWM_CLEAR		((1 << COM1A1) | (0 << COM1A0))
+#define TIMER1_COMA_NPWM_SET		((1 << COM1A1) | (1 << COM1A0))
+
+#define TIMER1_COMB_NPWM_NORMAL		((0 << COM1B1) | (0 << COM1B0))
+#define TIMER1_COMB_NPWM_TOGGLE		((0 << COM1B1) | (0 << COM1B0))
+#define TIMER1_COMB_NPWM_CLEAR		((1 << COM1B1) | (0 << COM1B0))
+#define TIMER1_COMB_NPWM_SET		((1 << COM1B1) | (1 << COM1B0))
+
+#define TIMER1_COMAC_NPWM_NORMAL	((0 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMAC_NPWM_TOGGLE	((0 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMAC_NPWM_CLEAR		((1 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMAC_NPWM_SET		((1 << COM1C1) | (1 << COM1C0))
+
+			//TIMER3
+#define TIMER3_COMA_NPWM_NORMAL		((0 << COM3A1) | (0 << COM3A0))
+#define TIMER3_COMA_NPWM_TOGGLE		((0 << COM3A1) | (0 << COM3A0))
+#define TIMER3_COMA_NPWM_CLEAR		((1 << COM3A1) | (0 << COM3A0))
+#define TIMER3_COMA_NPWM_SET		((1 << COM3A1) | (1 << COM3A0))
+
+#define TIMER3_COMB_NPWM_NORMAL		((0 << COM3B1) | (0 << COM3B0))
+#define TIMER3_COMB_NPWM_TOGGLE		((0 << COM3B1) | (0 << COM3B0))
+#define TIMER3_COMB_NPWM_CLEAR		((1 << COM3B1) | (0 << COM3B0))
+#define TIMER3_COMB_NPWM_SET		((1 << COM3B1) | (1 << COM3B0))
+
+#define TIMER3_COMC_NPWM_NORMAL		((0 << COM3C1) | (0 << COM3C0))
+#define TIMER3_COMC_NPWM_TOGGLE		((0 << COM3C1) | (0 << COM3C0))
+#define TIMER3_COMC_NPWM_CLEAR		((1 << COM3C1) | (0 << COM3C0))
+#define TIMER3_COMC_NPWM_SET		((1 << COM3C1) | (1 << COM3C0))
+
+			//TIMER4
+#define TIMER4_COMA_NPWM_NORMAL		((0 << COM4A1) | (0 << COM4A0))
+#define TIMER4_COMA_NPWM_TOGGLE		((0 << COM4A1) | (0 << COM4A0))
+#define TIMER4_COMA_NPWM_CLEAR		((1 << COM4A1) | (0 << COM4A0))
+#define TIMER4_COMA_NPWM_SET		((1 << COM4A1) | (1 << COM4A0))
+
+#define TIMER4_COMB_NPWM_NORMAL		((0 << COM4B1) | (0 << COM4B0))
+#define TIMER4_COMB_NPWM_TOGGLE		((0 << COM4B1) | (0 << COM4B0))
+#define TIMER4_COMB_NPWM_CLEAR		((1 << COM4B1) | (0 << COM4B0))
+#define TIMER4_COMB_NPWM_SET		((1 << COM4B1) | (1 << COM4B0))
+
+#define TIMER4_COMC_NPWM_NORMAL		((0 << COM4C1) | (0 << COM4C0))
+#define TIMER4_COMC_NPWM_TOGGLE		((0 << COM4C1) | (0 << COM4C0))
+#define TIMER4_COMC_NPWM_CLEAR		((1 << COM4C1) | (0 << COM4C0))
+#define TIMER4_COMC_NPWM_SET		((1 << COM4C1) | (1 << COM4C0))
+
+			//TIMER5
+#define TIMER5_COMA_NPWM_NORMAL		((0 << COM5A1) | (0 << COM5A0))
+#define TIMER5_COMA_NPWM_TOGGLE		((0 << COM5A1) | (0 << COM5A0))
+#define TIMER5_COMA_NPWM_CLEAR		((1 << COM5A1) | (0 << COM5A0))
+#define TIMER5_COMA_NPWM_SET		((1 << COM5A1) | (1 << COM5A0))
+
+#define TIMER5_COMB_NPWM_NORMAL		((0 << COM5B1) | (0 << COM5B0))
+#define TIMER5_COMB_NPWM_TOGGLE		((0 << COM5B1) | (0 << COM5B0))
+#define TIMER5_COMB_NPWM_CLEAR		((1 << COM5B1) | (0 << COM5B0))
+#define TIMER5_COMB_NPWM_SET		((1 << COM5B1) | (1 << COM5B0))
+
+#define TIMER5_COMC_NPWM_NORMAL		((0 << COM5C1) | (0 << COM5C0))
+#define TIMER5_COMC_NPWM_TOGGLE		((0 << COM5C1) | (0 << COM5C0))
+#define TIMER5_COMC_NPWM_CLEAR		((1 << COM5C1) | (0 << COM5C0))
+#define TIMER5_COMC_NPWM_SET		((1 << COM5C1) | (1 << COM5C0))
+
+/*
+ * 								TIMER/COUNTER[1345] Compare Output Mode, Fast PWM
+ *COMnx1	COMnx0		Description
+ * 0		0			Normal port operation, OCnx disconnected
+ *
+ * 0		1			WGM13:0 = 14 or 15: Toggle OC1A on 
+ * 						Compare Match, OC1B and OC1C 
+ * 						disconnected (normal port operation). For all 
+ * 						other WGM1 settings, normal port operation, 
+ * 						OC1A/OC1B/OC1C disconnected.
+ *
+ * 1		0			Clear OCnA/OCnB/OCnC on compare match, set OCnA/OCnB/OCnC at TOP
+ *
+ * 1		1			Set OCnA/OCnB/OCnC on compare match, clear OCnA/OCnB/OCnC at TOP
+ */
+
+				//TIMER1
+#define TIMER1_COMA_FPWM_NORMAL		((0 << COM1A1) | (0 << COM1A0))
+#define TIMER1_COMA_FPWM_WGM_SET	((0 << COM1A1) | (1 << COM1A0))
+#define TIMER1_COMA_FPWM_CM_ST		((1 << COM1A1) | (0 << COM1A0))
+#define TIMER1_COMA_FPWM_SM_CT		((1 << COM1A1) | (1 << COM1A0))
+
+#define TIMER1_COMB_FPWM_NORMAL		((0 << COM1B1) | (0 << COM1B0))
+#define TIMER1_COMB_FPWM_WGM_SET	((0 << COM1B1) | (1 << COM1B0))
+#define TIMER1_COMB_FPWM_CM_ST		((1 << COM1B1) | (0 << COM1B0))
+#define TIMER1_COMB_FPWM_SM_CT		((1 << COM1B1) | (1 << COM1B0))
+
+#define TIMER1_COMC_FPWM_NORMAL		((0 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMC_FPWM_WGM_SET	((0 << COM1C1) | (1 << COM1C0))
+#define TIMER1_COMC_FPWM_CM_ST		((1 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMC_FPWM_SM_CT		((1 << COM1C1) | (1 << COM1C0))
+
+				//TIMER3
+#define TIMER3_COMA_FPWM_NORMAL		((0 << COM3A1) | (0 << COM3A0))
+#define TIMER3_COMA_FPWM_WGM_SET	((0 << COM3A1) | (1 << COM3A0))
+#define TIMER3_COMA_FPWM_CM_ST		((1 << COM3A1) | (0 << COM3A0))
+#define TIMER3_COMA_FPWM_SM_CT		((1 << COM3A1) | (1 << COM3A0))
+
+#define TIMER3_COMB_FPWM_NORMAL		((0 << COM3B1) | (0 << COM3B0))
+#define TIMER3_COMB_FPWM_WGM_SET	((0 << COM3B1) | (1 << COM3B0))
+#define TIMER3_COMB_FPWM_CM_ST		((1 << COM3B1) | (0 << COM3B0))
+#define TIMER3_COMB_FPWM_SM_CT		((1 << COM3B1) | (1 << COM3B0))
+
+#define TIMER3_COMC_FPWM_NORMAL		((0 << COM3C1) | (0 << COM3C0))
+#define TIMER3_COMC_FPWM_WGM_SET	((0 << COM3C1) | (1 << COM3C0))
+#define TIMER3_COMC_FPWM_CM_ST		((1 << COM3C1) | (0 << COM3C0))
+#define TIMER3_COMC_FPWM_SM_CT		((1 << COM3C1) | (1 << COM3C0))
+
+				//TIMER4
+#define TIMER4_COMA_FPWM_NORMAL		((0 << COM4A1) | (0 << COM4A0))
+#define TIMER4_COMA_FPWM_WGM_SET	((0 << COM4A1) | (1 << COM4A0))
+#define TIMER4_COMA_FPWM_CM_ST		((1 << COM4A1) | (0 << COM4A0))
+#define TIMER4_COMA_FPWM_SM_CT		((1 << COM4A1) | (1 << COM4A0))
+
+#define TIMER4_COMB_FPWM_NORMAL		((0 << COM4B1) | (0 << COM4B0))
+#define TIMER4_COMB_FPWM_WGM_SET	((0 << COM4B1) | (1 << COM4B0))
+#define TIMER4_COMB_FPWM_CM_ST		((1 << COM4B1) | (0 << COM4B0))
+#define TIMER4_COMB_FPWM_SM_CT		((1 << COM4B1) | (1 << COM4B0))
+
+#define TIMER4_COMC_FPWM_NORMAL		((0 << COM4C1) | (0 << COM4C0))
+#define TIMER4_COMC_FPWM_WGM_SET	((0 << COM4C1) | (1 << COM4C0))
+#define TIMER4_COMC_FPWM_CM_ST		((1 << COM4C1) | (0 << COM4C0))
+#define TIMER4_COMC_FPWM_SM_CT		((1 << COM4C1) | (1 << COM4C0))
+
+				//TIMER5
+#define TIMER5_COMA_FPWM_NORMAL		((0 << COM5A1) | (0 << COM5A0))
+#define TIMER5_COMA_FPWM_WGM_SET	((0 << COM5A1) | (1 << COM5A0))
+#define TIMER5_COMA_FPWM_CM_ST		((1 << COM5A1) | (0 << COM5A0))
+#define TIMER5_COMA_FPWM_SM_CT		((1 << COM5A1) | (1 << COM5A0))
+
+#define TIMER5_COMB_FPWM_NORMAL		((0 << COM5B1) | (0 << COM5B0))
+#define TIMER5_COMB_FPWM_WGM_SET	((0 << COM5B1) | (1 << COM5B0))
+#define TIMER5_COMB_FPWM_CM_ST		((1 << COM5B1) | (0 << COM5B0))
+#define TIMER5_COMB_FPWM_SM_CT		((1 << COM5B1) | (1 << COM5B0))
+
+#define TIMER5_COMC_FPWM_NORMAL		((0 << COM5C1) | (0 << COM5C0))
+#define TIMER5_COMC_FPWM_WGM_SET	((0 << COM5C1) | (1 << COM5C0))
+#define TIMER5_COMC_FPWM_CM_ST		((1 << COM5C1) | (0 << COM5C0))
+#define TIMER5_COMC_FPWM_SM_CT		((1 << COM5C1) | (1 << COM5C0))
+
+
+
+
+/*
+ * 								TIMER/COUNTER[1345] Compare Output Mode, Phase Correct and Phase and Frequency Correct PWM
+ *COMnx1	COMnx0		Description
+ * 0		0			Normal port operation, OCnx disconnected
+ *
+ * 0		1			WGM13:0 = 8, 9 10 or 11: Toggle OC1A on 
+ * 						Compare Match, OC1B and OC1C 
+ * 						disconnected (normal port operation). For all 
+ * 						other WGM1 settings, normal port operation, 
+ * 						OC1A/OC1B/OC1C disconnected.
+ * 						OC1A/OC1B/OC1C disconnected.
+ *
+ * 1		0			Clear OCnA/OCnB/OCnC on compare 
+ * 						match when up-counting. Set 
+ * 						OCnA/OCnB/OCnC on compare match 
+ * 						when downcounting.
+ *
+ * 1		1			Set OCnA/OCnB/OCnC on compare match 
+ * 						when up-counting. Clear 
+ * 						OCnA/OCnB/OCnC on compare match 
+ * 						when downcounting.
+ */
+						//TIMER1
+#define TIMER1_COMA_PWM_PHFC_NORMAL			((0 << COM1A1) | (0 << COM1A0))
+#define TIMER1_COMA_PWM_PHFC_WGM_SET		((0 << COM1A1) | (1 << COM1A0))
+#define TIMER1_COMA_PWM_PHFC_CMUC_SMDC		((1 << COM1A1) | (0 << COM1A0))
+#define TIMER1_COMA_PWM_PHFC_SMUC_CMDC		((1 << COM1A1) | (1 << COM1A0))
+
+#define TIMER1_COMB_PWM_PHFC_NORMAL			((0 << COM1B1) | (0 << COM1B0))
+#define TIMER1_COMB_PWM_PHFC_WGM_SET		((0 << COM1B1) | (1 << COM1B0))
+#define TIMER1_COMB_PWM_PHFC_CMUC_SMDC		((1 << COM1B1) | (0 << COM1B0))
+#define TIMER1_COMB_PWM_PHFC_SMUC_CMDC		((1 << COM1B1) | (1 << COM1B0))
+
+#define TIMER1_COMC_PWM_PHFC_NORMAL			((0 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMC_PWM_PHFC_WGM_SET		((0 << COM1C1) | (1 << COM1C0))
+#define TIMER1_COMC_PWM_PHFC_CMUC_SMDC		((1 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMC_PWM_PHFC_SMUC_CMDC		((1 << COM1C1) | (1 << COM1C0))
+
+						//TIMER3
+#define TIMER3_COMA_PWM_PHFC_NORMAL			((0 << COM3A1) | (0 << COM3A0))
+#define TIMER3_COMA_PWM_PHFC_WGM_SET		((0 << COM3A1) | (1 << COM3A0))
+#define TIMER3_COMA_PWM_PHFC_CMUC_SMDC		((1 << COM3A1) | (0 << COM3A0))
+#define TIMER3_COMA_PWM_PHFC_SMUC_CMDC		((1 << COM3A1) | (1 << COM3A0))
+
+#define TIMER3_COMB_PWM_PHFC_NORMAL			((0 << COM3B1) | (0 << COM3B0))
+#define TIMER3_COMB_PWM_PHFC_WGM_SET		((0 << COM3B1) | (1 << COM3B0))
+#define TIMER3_COMB_PWM_PHFC_CMUC_SMDC		((1 << COM3B1) | (0 << COM3B0))
+#define TIMER3_COMB_PWM_PHFC_SMUC_CMDC		((1 << COM3B1) | (1 << COM3B0))
+
+#define TIMER3_COMC_PWM_PHFC_NORMAL			((0 << COM3C1) | (0 << COM3C0))
+#define TIMER3_COMC_PWM_PHFC_WGM_SET		((0 << COM3C1) | (1 << COM3C0))
+#define TIMER3_COMC_PWM_PHFC_CMUC_SMDC		((1 << COM3C1) | (0 << COM3C0))
+#define TIMER3_COMC_PWM_PHFC_SMUC_CMDC		((1 << COM3C1) | (1 << COM3C0))
+
+						//TIMER4
+#define TIMER4_COMA_PWM_PHFC_NORMAL			((0 << COM4A1) | (0 << COM4A0))
+#define TIMER4_COMA_PWM_PHFC_WGM_SET		((0 << COM4A1) | (1 << COM4A0))
+#define TIMER4_COMA_PWM_PHFC_CMUC_SMDC		((1 << COM4A1) | (0 << COM4A0))
+#define TIMER4_COMA_PWM_PHFC_SMUC_CMDC		((1 << COM4A1) | (1 << COM4A0))
+
+#define TIMER4_COMB_PWM_PHFC_NORMAL			((0 << COM4B1) | (0 << COM4B0))
+#define TIMER4_COMB_PWM_PHFC_WGM_SET		((0 << COM4B1) | (1 << COM4B0))
+#define TIMER4_COMB_PWM_PHFC_CMUC_SMDC		((1 << COM4B1) | (0 << COM4B0))
+#define TIMER4_COMB_PWM_PHFC_SMUC_CMDC		((1 << COM4B1) | (1 << COM4B0))
+
+#define TIMER4_COMC_PWM_PHFC_NORMAL			((0 << COM4C1) | (0 << COM4C0))
+#define TIMER4_COMC_PWM_PHFC_WGM_SET		((0 << COM4C1) | (1 << COM4C0))
+#define TIMER4_COMC_PWM_PHFC_CMUC_SMDC		((1 << COM4C1) | (0 << COM4C0))
+#define TIMER4_COMC_PWM_PHFC_SMUC_CMDC		((1 << COM4C1) | (1 << COM4C0))
+
+						//TIMER5
+#define TIMER5_COMA_PWM_PHFC_NORMAL			((0 << COM5A1) | (0 << COM5A0))
+#define TIMER5_COMA_PWM_PHFC_WGM_SET		((0 << COM5A1) | (1 << COM5A0))
+#define TIMER5_COMA_PWM_PHFC_CMUC_SMDC		((1 << COM5A1) | (0 << COM5A0))
+#define TIMER5_COMA_PWM_PHFC_SMUC_CMDC		((1 << COM5A1) | (1 << COM5A0))
+
+#define TIMER5_COMB_PWM_PHFC_NORMAL			((0 << COM5B1) | (0 << COM5B0))
+#define TIMER5_COMB_PWM_PHFC_WGM_SET		((0 << COM5B1) | (1 << COM5B0))
+#define TIMER5_COMB_PWM_PHFC_CMUC_SMDC		((1 << COM5B1) | (0 << COM5B0))
+#define TIMER5_COMB_PWM_PHFC_SMUC_CMDC		((1 << COM5B1) | (1 << COM5B0))
+
+#define TIMER5_COMC_PWM_PHFC_NORMAL			((0 << COM5C1) | (0 << COM5C0))
+#define TIMER5_COMC_PWM_PHFC_WGM_SET		((0 << COM5C1) | (1 << COM5C0))
+#define TIMER5_COMC_PWM_PHFC_CMUC_SMDC		((1 << COM5C1) | (0 << COM5C0))
+#define TIMER5_COMC_PWM_PHFC_SMUC_CMDC		((1 << COM5C1) | (1 << COM5C0))
+
+
+/*
+ *								TIMER/COUNTER[1345] Waveform Generation Mode Bit Description
+ * Mode 	WGMn3 	WGMn2	WGMn1	WGMn0	T/C Mode of operation 	TOP			Update of OCRnx at 		TOVn flag set on
+ * 0		0		0		0		0		Normal 					0xFFFF 		Immediate 				MAX
+ * 1		0		0		0		1		PWM PHC 8bit			0x00FF 		TOP						BOTTOM
+ * 2		0		0		1		0		PWM PHC 9bit			0x01FF 		TOP						BOTTOM
+ * 3		0		0		1		1		PWM PHC 10bit			0x03FF 		TOP						BOTTOM
+ * 4		0		1		0		0		CTC						OCRnA 		Immediate				MAX
+ * 5		0		1		0		1		Fast PWM 8bit			0x00FF 		TOP						TOP
+ * 6		0		1		1		0		Fast PWM 9bit			0x01FF 		TOP						TOP
+ * 7		0		1		1		1		Fast PWM 10bit			0x03FF 		TOP						TOP
+ * 8		1		0		0		0		PWM PHFC				ICRn 		BOTTOM					BOTTOM
+ * 9		1		0		0		1		PWM PHFC				OCRnA 		BOTTOM					BOTTOM
+ * 10		1		0		1		0		PWM PHC 				ICRn 		TOP						BOTTOM
+ * 11		1		0		1		1		PWM PHC 				OCRnA 		TOP						BOTTOM
+ * 12		1		1		0		0		CTC						ICRn 		Immediate				MAX
+ * 13		1		1		0		1		Reverced				----- 		----					----
+ * 14		1		1		1		0		FPWM					ICRn 		TOP						TOP
+ * 15		1		1		1		1		FPWM					OCRnA 		TOP						TOP
+ */
+
+						//TIMER1
+#define TIMER1_WF_NORMAL 				((0 << WGM13) | (0 << WGM12) | (0 << WGM11) | (0 << WGM10))
+#define TIMER1_WF_PWM_PHC_8B			((0 << WGM13) | (0 << WGM12) | (0 << WGM11) | (1 << WGM10))
+#define TIMER1_WF_PWM_PHC_9B			((0 << WGM13) | (0 << WGM12) | (1 << WGM11) | (0 << WGM10))
+#define TIMER1_WF_PWM_PHC_10B			((0 << WGM13) | (0 << WGM12) | (1 << WGM11) | (1 << WGM10))
+#define TIMER1_WF_CTC_TOPOCR1A			((0 << WGM13) | (1 << WGM12) | (0 << WGM11) | (0 << WGM10))
+#define TIMER1_WF_FPWM_8B 				((0 << WGM13) | (1 << WGM12) | (0 << WGM11) | (1 << WGM10))
+#define TIMER1_WF_FPWM_9B 				((0 << WGM13) | (1 << WGM12) | (1 << WGM11) | (0 << WGM10))
+#define TIMER1_WF_FPWM_10B 				((0 << WGM13) | (1 << WGM12) | (1 << WGM11) | (1 << WGM10))
+#define TIMER1_WF_PWM_PHFC_TOPICR1		((1 << WGM13) | (0 << WGM12) | (0 << WGM11) | (0 << WGM10))
+#define TIMER1_WF_PWM_PHFC_TOPOCR1A		((1 << WGM13) | (0 << WGM12) | (0 << WGM11) | (1 << WGM10))
+#define TIMER1_WF_PWM_PHC_TOPICR1 		((1 << WGM13) | (0 << WGM12) | (1 << WGM11) | (0 << WGM10))
+#define TIMER1_WF_PWM_PHC_TOPOCR1A 		((1 << WGM13) | (0 << WGM12) | (1 << WGM11) | (1 << WGM10))
+#define TIMER1_WF_CTC_TOPICR1			((1 << WGM13) | (1 << WGM12) | (0 << WGM11) | (0 << WGM10))
+#define TIMER1_WF_FPWM_TOPICR1			((1 << WGM13) | (1 << WGM12) | (1 << WGM11) | (0 << WGM10))
+#define TIMER1_WF_FPWM_TOPOCR1A			((1 << WGM13) | (1 << WGM12) | (1 << WGM11) | (1 << WGM10))
+
+						//TIMER3
+#define TIMER3_WF_NORMAL 				((0 << WGM33) | (0 << WGM32) | (0 << WGM31) | (0 << WGM30))
+#define TIMER3_WF_PWM_PHC_8B			((0 << WGM33) | (0 << WGM32) | (0 << WGM31) | (1 << WGM30))
+#define TIMER3_WF_PWM_PHC_9B			((0 << WGM33) | (0 << WGM32) | (1 << WGM31) | (0 << WGM30))
+#define TIMER3_WF_PWM_PHC_10B			((0 << WGM33) | (0 << WGM32) | (1 << WGM31) | (1 << WGM30))
+#define TIMER3_WF_CTC_TOPOCR3A			((0 << WGM33) | (1 << WGM32) | (0 << WGM31) | (0 << WGM30))
+#define TIMER3_WF_FPWM_8B 				((0 << WGM33) | (1 << WGM32) | (0 << WGM31) | (1 << WGM30))
+#define TIMER3_WF_FPWM_9B 				((0 << WGM33) | (1 << WGM32) | (1 << WGM31) | (0 << WGM30))
+#define TIMER3_WF_FPWM_10B 				((0 << WGM33) | (1 << WGM32) | (1 << WGM31) | (1 << WGM30))
+#define TIMER3_WF_PWM_PHFC_TOPICR3		((1 << WGM33) | (0 << WGM32) | (0 << WGM31) | (0 << WGM30))
+#define TIMER3_WF_PWM_PHFC_TOPOCR3A		((1 << WGM33) | (0 << WGM32) | (0 << WGM31) | (1 << WGM30))
+#define TIMER3_WF_PWM_PHC_TOPICR1 		((1 << WGM33) | (0 << WGM32) | (1 << WGM31) | (0 << WGM30))
+#define TIMER3_WF_PWM_PHC_TOPOCR3A 		((1 << WGM33) | (0 << WGM32) | (1 << WGM31) | (1 << WGM30))
+#define TIMER3_WF_CTC_TOPICR3			((1 << WGM33) | (1 << WGM32) | (0 << WGM31) | (0 << WGM30))
+#define TIMER3_WF_FPWM_TOPICR3			((1 << WGM33) | (1 << WGM32) | (1 << WGM31) | (0 << WGM30))
+#define TIMER3_WF_FPWM_TOPOCR3A			((1 << WGM33) | (1 << WGM32) | (1 << WGM31) | (1 << WGM30))
+
+						//TIMER4
+#define TIMER4_WF_NORMAL 				((0 << WGM43) | (0 << WGM42) | (0 << WGM41) | (0 << WGM40))
+#define TIMER4_WF_PWM_PHC_8B			((0 << WGM43) | (0 << WGM42) | (0 << WGM41) | (1 << WGM40))
+#define TIMER4_WF_PWM_PHC_9B			((0 << WGM43) | (0 << WGM42) | (1 << WGM41) | (0 << WGM40))
+#define TIMER4_WF_PWM_PHC_10B			((0 << WGM43) | (0 << WGM42) | (1 << WGM41) | (1 << WGM40))
+#define TIMER4_WF_CTC_TOPOCR4A			((0 << WGM43) | (1 << WGM42) | (0 << WGM41) | (0 << WGM40))
+#define TIMER4_WF_FPWM_8B 				((0 << WGM43) | (1 << WGM42) | (0 << WGM41) | (1 << WGM40))
+#define TIMER4_WF_FPWM_9B 				((0 << WGM43) | (1 << WGM42) | (1 << WGM41) | (0 << WGM40))
+#define TIMER4_WF_FPWM_10B 				((0 << WGM43) | (1 << WGM42) | (1 << WGM41) | (1 << WGM40))
+#define TIMER4_WF_PWM_PHFC_TOPICR4		((1 << WGM43) | (0 << WGM42) | (0 << WGM41) | (0 << WGM40))
+#define TIMER4_WF_PWM_PHFC_TOPOCR4A		((1 << WGM43) | (0 << WGM42) | (0 << WGM41) | (1 << WGM40))
+#define TIMER4_WF_PWM_PHC_TOPICR4 		((1 << WGM43) | (0 << WGM42) | (1 << WGM41) | (0 << WGM40))
+#define TIMER4_WF_PWM_PHC_TOPOCR4A 		((1 << WGM43) | (0 << WGM42) | (1 << WGM41) | (1 << WGM40))
+#define TIMER4_WF_CTC_TOPICR4			((1 << WGM43) | (1 << WGM42) | (0 << WGM41) | (0 << WGM40))
+#define TIMER4_WF_FPWM_TOPICR4			((1 << WGM43) | (1 << WGM42) | (1 << WGM41) | (0 << WGM40))
+#define TIMER4_WF_FPWM_TOPOCR4A			((1 << WGM43) | (1 << WGM42) | (1 << WGM41) | (1 << WGM40))
+
+						//TIMER5
+#define TIMER5_WF_NORMAL 				((0 << WGM53) | (0 << WGM52) | (0 << WGM51) | (0 << WGM35))
+#define TIMER5_WF_PWM_PHC_8B			((0 << WGM53) | (0 << WGM52) | (0 << WGM51) | (1 << WGM35))
+#define TIMER5_WF_PWM_PHC_9B			((0 << WGM53) | (0 << WGM52) | (1 << WGM51) | (0 << WGM35))
+#define TIMER5_WF_PWM_PHC_10B			((0 << WGM53) | (0 << WGM52) | (1 << WGM51) | (1 << WGM35))
+#define TIMER5_WF_CTC_TOPOCR5A			((0 << WGM53) | (1 << WGM52) | (0 << WGM51) | (0 << WGM35))
+#define TIMER5_WF_FPWM_8B 				((0 << WGM53) | (1 << WGM52) | (0 << WGM51) | (1 << WGM35))
+#define TIMER5_WF_FPWM_9B 				((0 << WGM53) | (1 << WGM52) | (1 << WGM51) | (0 << WGM35))
+#define TIMER5_WF_FPWM_10B 				((0 << WGM53) | (1 << WGM52) | (1 << WGM51) | (1 << WGM35))
+#define TIMER5_WF_PWM_PHFC_TOPICR5		((1 << WGM53) | (0 << WGM52) | (0 << WGM51) | (0 << WGM35))
+#define TIMER5_WF_PWM_PHFC_TOPOCR5A		((1 << WGM53) | (0 << WGM52) | (0 << WGM51) | (1 << WGM35))
+#define TIMER5_WF_PWM_PHC_TOPICR5 		((1 << WGM53) | (0 << WGM52) | (1 << WGM51) | (0 << WGM35))
+#define TIMER5_WF_PWM_PHC_TOPOCR5A 		((1 << WGM53) | (0 << WGM52) | (1 << WGM51) | (1 << WGM35))
+#define TIMER5_WF_CTC_TOPICR5			((1 << WGM53) | (1 << WGM52) | (0 << WGM51) | (0 << WGM35))
+#define TIMER5_WF_FPWM_TOPICR5			((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (0 << WGM35))
+#define TIMER5_WF_FPWM_TOPOCR5A			((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (1 << WGM35))
+
+
+
+/*
+ *								TIMER/COUNTER[1345] Clock select bit description
+ *	CSn2	CSn1	CSn0		Desc
+ *	1		0		0			No clock src
+ *	1		0		1			clk/1
+ *	1		1		0			clk/8
+ *	1		1		1			clk/64
+ *	0		0		0			clk/256
+ *	0		0		1			clk/1024
+ *	0		1		0			EXT src on Tn pin, falling edge
+ *	0		1		1			EXT src on Tn pin, rising edge
+ */
+									//TIMER1
+#define TIMER1_CLK_SRC_NO				((1 << CS12) | (0 << CS11) | (0 << CS10))
+#define TIMER1_CLK_SRC_1				((1 << CS12) | (0 << CS11) | (1 << CS10))
+#define TIMER1_CLK_SRC_8				((1 << CS12) | (1 << CS11) | (0 << CS10))
+#define TIMER1_CLK_SRC_64				((1 << CS12) | (1 << CS11) | (1 << CS10))
+#define TIMER1_CLK_SRC_256				((0 << CS12) | (0 << CS11) | (0 << CS10))
+#define TIMER1_CLK_SRC_1024				((0 << CS12) | (0 << CS11) | (1 << CS10))
+#define TIMER1_CLK_SRC_EXT_FALLING		((0 << CS12) | (1 << CS11) | (0 << CS10))
+#define TIMER1_CLK_SRC_EXT_RISING		((0 << CS12) | (1 << CS11) | (1 << CS10))
+
+									//TIMER3
+#define TIMER3_CLK_SRC_NO				((1 << CS32) | (0 << CS31) | (0 << CS30))
+#define TIMER3_CLK_SRC_1				((1 << CS32) | (0 << CS31) | (1 << CS30))
+#define TIMER3_CLK_SRC_8				((1 << CS32) | (1 << CS31) | (0 << CS30))
+#define TIMER3_CLK_SRC_64				((1 << CS32) | (1 << CS31) | (1 << CS30))
+#define TIMER3_CLK_SRC_256				((0 << CS32) | (0 << CS31) | (0 << CS30))
+#define TIMER3_CLK_SRC_1024				((0 << CS32) | (0 << CS31) | (1 << CS30))
+#define TIMER3_CLK_SRC_EXT_FALLING		((0 << CS32) | (1 << CS31) | (0 << CS30))
+#define TIMER3_CLK_SRC_EXT_RISING		((0 << CS32) | (1 << CS31) | (1 << CS30))
+
+									//TIMER4
+#define TIMER4_CLK_SRC_NO				((1 << CS42) | (0 << CS41) | (0 << CS40))
+#define TIMER4_CLK_SRC_1				((1 << CS42) | (0 << CS41) | (1 << CS40))
+#define TIMER4_CLK_SRC_8				((1 << CS42) | (1 << CS41) | (0 << CS40))
+#define TIMER4_CLK_SRC_64				((1 << CS42) | (1 << CS41) | (1 << CS40))
+#define TIMER4_CLK_SRC_256				((0 << CS42) | (0 << CS41) | (0 << CS40))
+#define TIMER4_CLK_SRC_1024				((0 << CS42) | (0 << CS41) | (1 << CS40))
+#define TIMER4_CLK_SRC_EXT_FALLING		((0 << CS42) | (1 << CS41) | (0 << CS40))
+#define TIMER4_CLK_SRC_EXT_RISING		((0 << CS42) | (1 << CS41) | (1 << CS40))
+
+									//TIMER5
+#define TIMER4_CLK_SRC_NO				((1 << CS52) | (0 << CS51) | (0 << CS50))
+#define TIMER4_CLK_SRC_1				((1 << CS52) | (0 << CS51) | (1 << CS50))
+#define TIMER4_CLK_SRC_8				((1 << CS52) | (1 << CS51) | (0 << CS50))
+#define TIMER4_CLK_SRC_64				((1 << CS52) | (1 << CS51) | (1 << CS50))
+#define TIMER4_CLK_SRC_256				((0 << CS52) | (0 << CS51) | (0 << CS50))
+#define TIMER4_CLK_SRC_1024				((0 << CS52) | (0 << CS51) | (1 << CS50))
+#define TIMER4_CLK_SRC_EXT_FALLING		((0 << CS52) | (1 << CS51) | (0 << CS50))
+#define TIMER4_CLK_SRC_EXT_RISING		((0 << CS52) | (1 << CS51) | (1 << CS50))
+

@@ -73,7 +73,7 @@ int getCountsOfBits(int __in)//get count if digits for int
  * Input    __in: dec num for converting
  * Output   ptr to char array with bin num
 */
-char* dec2bin(int __in)//convert dec num to bin C-string
+char* dec2bin(int __in)
 {
 	
 	byte __len = (int)getCountsOfBits(__in);
@@ -81,7 +81,7 @@ char* dec2bin(int __in)//convert dec num to bin C-string
 	{
 		__len = 1;
 	}
-	char *__res = (char*)malloc(__len);//WARNING! memory leak!
+	char *__res = (char*)malloc(__len);
 	while(__len)	
 	{
 		__len--;

@@ -1,0 +1,18 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"include_autocomplete_settings":
+	{
+		"include_locations":
+		[
+			{
+                "path": ".",
+                "ignore": []
+            }
+        ]
+	}
+}
