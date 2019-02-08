@@ -184,14 +184,14 @@ void shiftLeft(uint8_t* arr, uint32_t len, uint32_t el)
  				uint32_t len: length of array
  *	Output:		none
  */
-void shiftRight(void* arr, uint32_t len, uint32_t el)
+void shiftRight(uint8_t* arr, uint32_t len, uint32_t el)
 {
 	//cli();									//block interrupts, atomic block
 
 	//for(uint32_t i = len - el; i < len - el; i++)
-	while(len - el >= 0)
+	while(len >= el)
 	{
-		//arr[len] = arr[len - el];
+		arr[len] = arr[len - el];
 		len--;
 	}
 
@@ -376,7 +376,7 @@ void twiStart(void)
 	//cli();												//block interrupts, must be atomic
 
 	if(_twi_status != I2C_READ
-		&& _twi_status != I2C_WRITE || 1)
+		&& _twi_status != I2C_WRITE)
 	{
 		uint8_t bytes = _twi_usr_in_lens[0];				//get num of bytes to send
 		shiftLeft(_twi_usr_in_lens, _twi_usr_lens--, 1);	//shift array with lens of packs to left for 1 element
@@ -641,33 +641,13 @@ volatile uint8_t scheduleQueueLen = 0;
  *	Input:		void* func: ptr to func
  *	Output:		none
  */
-void scheduleAddFunc(void* func)
+void scheduleAddFunc(void(* func)())
 {
 	cli();
 	scheduleQueue[scheduleQueueLen++] = func;
 	sei();
 }
 
-
-/*
- *	Function:	scheduleRemoveFunc
- *	Desc:		Remove func fom schedule task queue
- *	Input:		void* func: ptr to func
- *	Output:		none
- */
-void scheduleRemoveFunc(void* func)
-{
-	cli();
-	for(uint8_t i = 0; i < scheduleQueueLen; i++)
-	{
-		if(scheduleQueue[i] == func)
-		{
-			scheduleRemoveFunc(i);
-			break;
-		}
-	}
-	sei();
-}
 /*
  *	Function:	scheduleRemoveFunc
  *	Desc:		Remove func fom schedule task queue
@@ -682,6 +662,26 @@ void scheduleRemoveFunc(uint8_t func)
 		scheduleQueue[q] = scheduleQueue[q + 1];
 	}
 	scheduleQueueLen--;
+	sei();
+}
+
+/*
+ *	Function:	scheduleRemoveFunc
+ *	Desc:		Remove func fom schedule task queue
+ *	Input:		void* func: ptr to func
+ *	Output:		none
+ */
+void scheduleRemoveFunc(void(* func)())
+{
+	cli();
+	for(uint8_t i = 0; i < scheduleQueueLen; i++)
+	{
+		if(scheduleQueue[i] == func)
+		{
+			scheduleRemoveFunc(i);
+			break;
+		}
+	}
 	sei();
 }
 
@@ -841,7 +841,7 @@ int main()
 	for(uint8_t i = 0; i < 8; i++)
 	{
 
-		PORTK = (1 << i) | ((1 << i - 1) - 1);
+		PORTK = (1 << i) | ((1 << (i - 1)) - 1);
 		delay(100);
 		addrs[i] += (i + 1)*2;
 		p[0] = 0x8A;
@@ -850,7 +850,7 @@ int main()
 		USART0Print("i:");
 		USART0Print(i);
 		USART0Print("\t\t\t\t");
-		USART0Println((1 << i) | ((1 << i - 1) - 1));
+		USART0Println((1 << i) | ((1 << (i - 1)) - 1));
 		USART0Print("\t\t\t\t\t\t");
 		USART0Println(addrs[i]);
 		twiAddPack(0x29, p, 2, I2C_WRITE);//change vl53l0x addr
@@ -958,7 +958,7 @@ int main()
 	delay(500);*/
 	//I2C_SetFreq(0x40);
 	//uint8_t* p = (uint8_t*)malloc(sizeof(uint8_t) * 4);
-	int res = 0;
+	//int res = 0;
 
 
 
