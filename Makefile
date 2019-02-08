@@ -1,6 +1,6 @@
 MAINFILENAME=main
 MCU=atmega2560
-CFLAGS=-c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL) 
+CFLAGS=-c -O1 -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL) 
 
 
 all: main
@@ -35,4 +35,4 @@ clean:
 	rm -rf ./*.o ./*.d ./*.eep ./*.elf ./*.hex
 
 size:
-	avr-size $(MAINFILENAME).elf -A --mcu=$(MCU) -d
+	avr-size $(MAINFILENAME).elf -A --mcu=$(MCU) -d -h
