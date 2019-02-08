@@ -150,7 +150,7 @@
 
 	#if USE_USART0_INPUT == 1
 
-		#define _MAX_BUF_SIZE_ 256
+		#define _MAX_BUF_SIZE_ 254
 
 		volatile char _inputBuf_[_MAX_BUF_SIZE_];//buffer for input from USART0
 		volatile uint8_t _inputBufCounterInput_ = 0;//index of last char placed by system
@@ -175,7 +175,7 @@
 
 			_inputBuf_[_inputBufCounterInput_] = UDR0;	//save data
 
-			if(_inputBuf_[_inputBufCounterInput_] != NULL)//check for garbage
+			if(_inputBuf_[_inputBufCounterInput_] != '\0')//check for garbage
 			{
 				_inputBufEmpty_ = false;				//set empty flag down
 				_inputBufCounterInput_++;				//go next index for writing
@@ -201,6 +201,7 @@
 			{
 				_inputBufCounterOutput_ = 0;				//start from zero
 				_inputBufEmpty_ = true;						//with empty buf
+				return '\0';								//for bypassing -Wreturn-type
 			}
 			else if(_inputBufCounterOutput_ >= _inputBufCounterInput_)//check that counter for output not overtaked input
 			{
@@ -223,7 +224,7 @@
 			}
 			else
 			{
-				return NULL;					//ERROR
+				return '\0';					//ERROR
 			}
 		}
 
@@ -253,7 +254,8 @@
 		*/
 		void USART0Flush(void)
 		{
-			uint8_t __temp;
+			uint8_t __temp = 0;
+			__temp = __temp;//for bypassing -Wunused-but-set-variable
 			while(UCSR0A & (1 << RXC0))
 			{
 				__temp = UDR0;
@@ -294,7 +296,7 @@
 		#if USE_USART0_INPUT == 1
 			for(int i = 0; i < _MAX_BUF_SIZE_; i++)//flush data array
 			{
-				_inputBuf_[i] = NULL;
+				_inputBuf_[i] = '\0';
 			}
 		#endif //if USE_USART0_INPUT == 1
 

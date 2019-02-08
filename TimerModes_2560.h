@@ -324,7 +324,6 @@
 #define TIMER3_COMC_NPWM_TOGGLE		((0 << COM3C1) | (0 << COM3C0))
 #define TIMER3_COMC_NPWM_CLEAR		((1 << COM3C1) | (0 << COM3C0))
 #define TIMER3_COMC_NPWM_SET		((1 << COM3C1) | (1 << COM3C0))
-#define TIMER3_COMC_MASK			((1 << COM3C1) | (1 << COM3C0))
 
 			//TIMER4
 #define TIMER4_COMA_NPWM_NORMAL		((0 << COM4A1) | (0 << COM4A0))
@@ -343,7 +342,6 @@
 #define TIMER4_COMC_NPWM_TOGGLE		((0 << COM4C1) | (0 << COM4C0))
 #define TIMER4_COMC_NPWM_CLEAR		((1 << COM4C1) | (0 << COM4C0))
 #define TIMER4_COMC_NPWM_SET		((1 << COM4C1) | (1 << COM4C0))
-#define TIMER4_COMC_MASK			((1 << COM4C1) | (1 << COM4C0))
 
 			//TIMER5
 #define TIMER5_COMA_NPWM_NORMAL		((0 << COM5A1) | (0 << COM5A0))
@@ -397,7 +395,6 @@
 #define TIMER1_COMC_FPWM_WGM_SET	((0 << COM1C1) | (1 << COM1C0))
 #define TIMER1_COMC_FPWM_CM_ST		((1 << COM1C1) | (0 << COM1C0))
 #define TIMER1_COMC_FPWM_SM_CT		((1 << COM1C1) | (1 << COM1C0))
-#define TIMER1_COMC_MASK			((1 << COM1C1) | (1 << COM1C1))
 
 				//TIMER3
 #define TIMER3_COMA_FPWM_NORMAL		((0 << COM3A1) | (0 << COM3A0))
@@ -454,7 +451,6 @@
 #define TIMER5_COMC_FPWM_WGM_SET	((0 << COM5C1) | (1 << COM5C0))
 #define TIMER5_COMC_FPWM_CM_ST		((1 << COM5C1) | (0 << COM5C0))
 #define TIMER5_COMC_FPWM_SM_CT		((1 << COM5C1) | (1 << COM5C0))
-#define TIMER5_COMC_MASK			((1 << COM5C1) | (1 << COM5C1))
 
 
 

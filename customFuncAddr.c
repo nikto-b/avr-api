@@ -17,7 +17,7 @@ inline void callCustomFunc(uint8_t __addr)
  * 			__func: ptr to user's func for setting
  * Output   none
 */
-inline void setCustomFunc(uint8_t __addr, void* __func)
+inline void setCustomFunc(uint8_t __addr, void(* __func)())
 {
 	if(__addr < INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS)
 		customFuncs[__addr] = __func;

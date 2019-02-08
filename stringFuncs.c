@@ -85,7 +85,7 @@ char* dec2bin(int __in)
 	while(__len)	
 	{
 		__len--;
-		__res[__len] = (__in & 1 == 1)? '1' : '0';// + '0';
+		__res[__len] = ((__in & 1) == 1)? '1' : '0';// + '0';
 		__in >>= 1;
 	}
 	return __res;
@@ -237,10 +237,10 @@ char* bool2str(bool __in)//convert bool var to char array
 {
 	if(__in)
 	{
-		return "true";
+		return (char*)"true";
 	}
 	else
 	{
-		return "false";
+		return (char*)"false";
 	}
 }
