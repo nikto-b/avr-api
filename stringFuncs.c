@@ -72,9 +72,9 @@ byte getCountsOfDigits(uint16_t __number) //get count of digits for byte
  * Input    __in: num for counting
  * Output   num of bits
 */
-int getCountsOfBits(int __in)//get count if digits for int
+int getCountsOfBits(uint64_t __in)//get count if digits for int
 {
-	int __counter = 0;
+	byte __counter = 0;
 	while(__in)
 	{
 		__counter++;
@@ -90,15 +90,16 @@ int getCountsOfBits(int __in)//get count if digits for int
  * Input    __in: dec num for converting
  * Output   ptr to char array with bin num
 */
-char* dec2bin(int __in)
+char* dec2bin(uint64_t __in)
 {
 	
-	byte __len = (int)getCountsOfBits(__in);
+	byte __len = getCountsOfBits(__in);
 	if(__in == 0)
 	{
 		__len = 1;
 	}
-	char *__res = (char*)malloc(__len);
+	char *__res = (char*)malloc(__len + 1);
+	__res[__len] = '\0';
 	while(__len)	
 	{
 		__len--;

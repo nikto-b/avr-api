@@ -67,7 +67,7 @@
 		 * 			__mode: mode used for sending num
 		 * Output   none
 		*/
-		void USART0Print(int __data, byte __mode)
+		void USART0Print(uint64_t __data, byte __mode)
 		{
 			switch(__mode)
 			{

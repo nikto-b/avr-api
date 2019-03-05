@@ -4,7 +4,6 @@
 #include <util/delay.h> 	//include for delay func
 #include <avr/interrupt.h>	//include interrupt funcs
 #include <stdlib.h>
-#include <string.h>
 
 #define NUM_OF_ANALOG_PINS 7
 #define ARDUINO_SUPPORT 0
@@ -861,12 +860,13 @@ void schFuckDelay(void)
 	delay(250);
 }
 
-void schIdle(void)//do idle work
+/*void schIdle(void)//do idle work
 {
 	//this func will never be called
 	PORTB &= ~(1 << 7);
 	USART0Send('i');
-}
+}*/
+#define schIdle	0
 
 
 /*
@@ -877,11 +877,11 @@ void schIdle(void)//do idle work
  */
 void schedule(void)
 {
-	PORTB |= 1 << 7;//enable in-fg
-
-	if(scheduleQueue[scheduleCounter] != 0
-		&& scheduleQueue[scheduleCounter] != (&schIdle))
+	if(scheduleQueue[scheduleCounter] != 0)
+	{
+		PORTB |= 1 << 7;//enable in-fg
 		scheduleQueue[scheduleCounter++]();
+	}
 	else
 		scheduleCounter++;
 
@@ -1018,15 +1018,41 @@ bool contains(char* _inbuf, uint16_t _len, char _ch)
 	return false;
 }
 
-void foo()
+
+void recvUsart()
 {
-	//PORTB = 0xFF;
-	//USART0Send(USART0Read());
 	usartInBuf[usartInBufCounter++] = USART0Read();
-	if((contains(usartInBuf, usartInBufCounter, '(') && contains(usartInBuf, usartInBufCounter, ')')) || (contains(usartInBuf, usartInBufCounter, '{') && contains(usartInBuf, usartInBufCounter, '}')))
+}
+
+
+void runControlCmd(char* _in)
+{
+	USART0Print("CMD: ");
+	USART0Println(_in);
+}
+
+void setArr(char* _in)
+{
+	USART0Print("ARR: ");
+	USART0Println(_in);
+}
+
+void setVar(char* _in)
+{
+	USART0Print("VAR: ");
+	USART0Println(_in);
+}
+
+
+
+void parseInputCmds(void)
+{
+	if((	contains(usartInBuf, usartInBufCounter, '(') && contains(usartInBuf, usartInBufCounter, ')')) 
+		|| (contains(usartInBuf, usartInBufCounter, '{') && contains(usartInBuf, usartInBufCounter, '}'))
+		|| (contains(usartInBuf, usartInBufCounter, '[') && contains(usartInBuf, usartInBufCounter, ']')))
 	{
-		USART0Println("contains data");
-		USART0Println(usartInBufCounter - 2);
+		//USART0Println("contains data");
+		//USART0Println(usartInBufCounter - 2);
 		char* _arr = (char*)malloc((usartInBufCounter * sizeof(char)) - 1);
 		_arr[usartInBufCounter- 2 ] = '\0';
 		usartInBufCounter -= 1;
@@ -1035,15 +1061,23 @@ void foo()
 			_arr[usartInBufCounter - 1] = usartInBuf[usartInBufCounter];
 		}
 
-		USART0Println(_arr);
 		usartInBufCounter = 0;
+		if(usartInBuf[0] == '(')
+		{
+			runControlCmd(_arr);
+		}
+		else if(usartInBuf[0] == '{')
+		{
+			setVar(_arr);
+		}
+		else if(usartInBuf[0] == '[')
+		{
+			setArr(_arr);
+		}
+
+		//USART0Println(_arr);
 		free(_arr);
 	}
-}
-
-void parseInputCmds(void)
-{
-	
 }
 
 int main()
@@ -1061,9 +1095,8 @@ int main()
 	delay(100);
 	PORTH = 1 << 5;
 	delay(100);*/
-
-
 	sei();
+
 
 	//ATOMIC_FORCED(USART0Println("AAA");)
 
@@ -1084,10 +1117,23 @@ int main()
 		USART0Println("a");
 	)*/
 
-	setCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_RX, foo);
+	setCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_RX, recvUsart);
 
 
 	USART0Begin(115200);
+
+
+	USART0Println("starting init");
+
+
+
+	uint64_t var = 0xFFFE;
+	//uint16_t ar = getCountsOfBits(var);
+	//USART0Println(ar);
+	USART0Print(var, BIN);
+	while(1){asm("NOP");}
+
+
 	uint16_t arr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
 	//sendArr(1, arr);
 	//sendSomeData([]()->char*{return prepareCmdMessage("command_sample");});
@@ -1108,9 +1154,6 @@ int main()
 	//	delay(200);
 		//USART0Println(++var);
 	//}
-	USART0Println("starting init");
-
-
 	I2C_SetFreq(0x40);
 	uint8_t* p = (uint8_t*)malloc(sizeof(uint8_t) * 4);
 	for(uint8_t i = 0; i < NUM_OF_TOFS; i++)
@@ -1262,6 +1305,7 @@ int main()
 	TIMER0SetA(255);
 
 	scheduleAddFunc(vlPrint);
+	scheduleAddFunc(parseInputCmds);
 	//scheduleAddFunc(vlStartMeasure);
 
 	//scheduleAddFunc(schIdle);
@@ -1304,197 +1348,6 @@ int main()
 	asm("NOP");//do nothing
 	asm("NOP");//do nothing
 	asm("NOP");//do nothing
-	goto loop;
-	//goto loop;
-	//goto loop;
-
-	/*PORTB = 1 << 7;
-	delay(500);
-	PORTB = 0;
-	delay(500);*/
-	//I2C_SetFreq(0x40);
-	//uint8_t* p = (uint8_t*)malloc(sizeof(uint8_t) * 4);
-	//int res = 0;
-
-
-
-/*
-	p[0] = SYSRANGE_START;
-	p[1] = 0x01;
-	twiAddPack(0x20, p, 2, I2C_WRITE);
-	twiStart();
-	delay(50);
-	p[0] = RESULT_RANGE_STATUS + 10;
-	twiAddPack(0x20, p, 1, I2C_WRITE);
-	p[0] = 2;
-	twiAddPack(0x20, p, 1, I2C_READ);
-	p[0] = SYSTEM_INTERRUPT_CLEAR;
-	p[1] = 0x01;
-	twiAddPack(0x20, p, 2, I2C_WRITE);
-	twiStart();
-
-	while(!twiHadRead())
-	{
-		asm("NOP");//do nothing
-	}
-	res = ((int)twiGetByte());
-	res <<= 8;
-	while(!twiHadRead())
-	{
-		asm("NOP");//do nothing
-	}
-	//USART0Print("R ");
-	res |= ((int)twiGetByte());
-	USART0Println(res);
-	delay(50);
-	/*p[0] = 0x8A;
-	twiAddPack(0x29, p, 1, I2C_WRITE);
-	uint8_t* pp = (uint8_t*)malloc(sizeof(uint8_t) * 1);
-	pp[0] = 2;
-	twiAddPack(0x29, pp, 1, I2C_READ);
-
-	//delete[] p;
-	twiStart();
-	while(!twiHadRead())
-	{
-		asm("NOP");//do nothing
-	}
-	USART0Print("R ");
-	USART0Println((int)twiGetByte());
-	while(!twiHadRead())
-	{
-		asm("NOP");//do nothing
-	}
-	USART0Print("R ");
-	USART0Println((int)twiGetByte());*/
-
-	/*
-	while(!twiHadRead())
-	{
-		delay(100);
-		PORTB = 1 << 7;
-		delay(100);
-		PORTB = 0;
-	}
-	USART0Print("READED: ");
-	USART0Println((int)twiGetByte());*/
-/*
-	for(int i = 0; i < 8; i++)
-	{
-		//PORTF = (1 << i) | ((1 << i - 1) - 1);
-		USART0Print("INIT: ");
-		USART0Println(i);
-		PORTF = (1 << i) | ((1 << i - 1) - 1);
-		writeReg(0x29, 0x8A, 0x29 + i + 1);
-		delay(400);
-	}
-	PORTF = 255;
-	PORTK = 1;
-	writeReg(0x29, 0x8A, 0x29 + 8 + 1);
-	delay(500);
-	USART0Println("INIT COMPLETED");
-
-	//TIMER0Init(TIMER0_COMB_FPWM_CM_ST, TIMER0_WF_FPWM_TOPOCR0A, TIMER0_CLK_SRC_1);
-	//TIMER3Init(TIMER3_COMA_FPWM_CM_ST)
-	//OCR0B = 255; 
-
-	//I2C_SetFreq(0x40);
-	
-				//LB
-	/*TCCR3A=(1<<COM3A1)|(1<<WGM30);
-	TCCR3B=(1<<CS30);	
-	OCR3A = 1023;*/
-	/*			//RF
-	TCCR0A = (1 << COM0B1) | (1 << WGM30);
-	TCCR0B = (1 << CS00);
-	OCR0B = 1023;*/
-	/*			//LF
-	TCCR3A=(1<<COM3C1)|(1<<WGM30);
-	TCCR3B=(1<<CS30);	
-	OCR3C = 1023;*/
-				//RB
-	/*TCCR4A=(1<<COM4A1)|(1<<WGM40);
-	TCCR4B=(1<<CS40);
-	OCR4A = 1023;*/
-	/*
-	int var;
-	
-	loop:
-	USART0Println("		write");
-	writeReg(0x29, SYSRANGE_START, 0x01);
-	delay(500);
-	USART0Println("		read");
-	var = (readReg16B(0x29, RESULT_RANGE_STATUS + 10));
-	USART0Println("		write");
-	delay(100);
-	writeReg(0x29, SYSTEM_INTERRUPT_CLEAR, 0x01);
-	USART0Print("							var=");
-	USART0Println(var);
-	delay(300);
-	//goto loop;
-	/*for(int i = 0; i < 256; i++)
-	{
-		OCR0B = i;
-		delay(10);
-	}
-	for(int i = 255; i>= 0; i--)
-	{
-		OCR0B = i;
-		delay(10);
-	}*/
-	/*
-	writeReg(0x29, SYSRANGE_START, 0x01);
-	delay(300);
-	var = (readReg16B(0x29, RESULT_RANGE_STATUS + 10));
-	writeReg(0x29, SYSTEM_INTERRUPT_CLEAR, 0x01);
-	*/
-	//delay(100);
-	/*
-	for(int i = 0; i < 8; i++)
-	{
-		USART0Println(readLen(0x29));
-	}
-	if(I2C_GetError())
-	{
-		USART0Println("STOP!!!");
-		USART0Println("IN");
-		for(int i = 0; i < _twi_in_len; i++)
-		{
-			USART0Print(i);
-			USART0Send(':');
-			USART0Println(_twi_in_buf[i]);
-		}
-		USART0Println("OUT");
-		for(int i = 0; i < _twi_out_len; i++)
-		{
-			USART0Print(i);
-			USART0Send(':');
-			USART0Println(_twi_out_buf[i]);
-		}
-		USART0Println("MAS");
-		for(int i = 0; i < _twi_master_len; i++)
-		{
-			USART0Print(i);
-			USART0Send(':');
-			USART0Println(_twi_master_buf[i]);
-		}
-		USART0Println("IN_LENS");
-		for(int i = 0; i < _twi_in_lens_len; i++)
-		{
-			USART0Print(i);
-			USART0Send(':');
-			USART0Println(_twi_in_lens_buf[i]);
-		}
-		
-		USART0Println();
-		USART0Println(I2C_GetError());
-		//srestart();
-		while(1);
-	}
-	
-	USART0Println();
-	USART0Println();
-	*/
 	goto loop;
 	return 0;
 }

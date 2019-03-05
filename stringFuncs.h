@@ -15,9 +15,9 @@ byte getCountsOfDigits(int __number__); //get count of digits for int
 byte getCountsOfDigits(long __number__); //get count of digits for long
 byte getCountsOfDigits(byte __number__); //get count of digits for byte
 
-int getCountsOfBits(int __in__);//get count if digits for int
+int getCountsOfBits(uint64_t __in__);//get count if digits for int
     
-char* dec2bin(int __in__);//convert dec num to bin C-string
+char* dec2bin(uint64_t __in__);//convert dec num to bin C-string
 
 int bin2dec(char* __in__);//convert bin num to dec int
 
