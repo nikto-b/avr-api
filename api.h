@@ -64,6 +64,10 @@
  *	)
  */
 
+//#ifndef USE_LEGACY_VER
+//	#define USE_LEGACY_VER 0
+//#endif
+
 
 #ifdef __OPTIMIZE_SIZE__ 					//if optimizing for size
 	#define ATOMIC_SMART ATOMIC_SMART_2		//prefer to use RAM instead of ROM

@@ -14,5 +14,9 @@
                 "ignore": []
             }
         ]
+	},
+	"settings": {
+	    "SublimeLinter.linters.avrgcc.extra_flags": "-O1 -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=atmega2560",
+	    "SublimeLinter.linters.avrgcc.include_locations": "${project_path}/api.h"
 	}
 }

@@ -4,10 +4,12 @@
 #include <util/delay.h> 	//include for delay func
 #include <avr/interrupt.h>	//include interrupt funcs
 #include <stdlib.h>
+#include <string.h>
 
 #define NUM_OF_ANALOG_PINS 7
 #define ARDUINO_SUPPORT 0
 #define USE_FUNC_INPUT_PROTECTOR 0
+
 
 //-----------ADC-----------
 #define USE_ADC 1
@@ -33,15 +35,38 @@
 #define USE_CUSTOM_INTERRUPTS 1
 
 
-#define USE_WATCHDOG 1
+#define USE_WATCHDOG 0
 
 #include "./api.h"				//custom lib for AVR
 #define DEBUG					0
+
+#define DISTANCE_METER_ARR_INDEX	1
 /*
 uint16_t lens[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 uint8_t currI2CAddr = 0x00;
 uint8_t addrs[8] = {0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53, 0x53};
 */
+
+#define NUM_OF_TOFS 8
+volatile uint8_t addrs[NUM_OF_TOFS];
+volatile uint16_t measures[NUM_OF_TOFS];
+volatile uint16_t oscCalVal[NUM_OF_TOFS];
+volatile uint8_t stopVars[NUM_OF_TOFS];
+volatile uint8_t tofsRangeouted = 0;
+
+inline void setTofRangeouted(uint8_t _tof, uint8_t _isR)
+{
+	tofsRangeouted &= ~(1 << _tof);
+	tofsRangeouted |= (_isR & 1) << _tof;
+}
+
+inline uint8_t isTofRangeouted(uint8_t _tof)
+{
+	return (tofsRangeouted >> _tof) & 1;
+}
+
+
+
 
 enum regAddr
 {
@@ -283,7 +308,9 @@ uint8_t twiGetByte(void)
 	}
 	else
 	{
-		USART0Println("nothing to read");
+		#if DEBUG == 1
+			USART0Println("nothing to read");
+		#endif //if DEBUG == 1
 		return 0xFF;//nothing to read
 	}
 }
@@ -400,11 +427,12 @@ void twiStart(void)
 	}
 	else
 	{
-		USART0Println("\t\t\t\t\t\t\t\ttrying to restart");
-		USART0Print("status:");
-		USART0Println(_twi_status);
+		#if DEBUG == 1
+			USART0Println("\t\t\t\t\t\t\t\ttrying to restart");
+			USART0Print("status:");
+			USART0Println(_twi_status);
+		#endif //if DEBUG == 1
 	}
-
 	//sei();												//allow interrupts, atomic block ended
 }
 
@@ -431,7 +459,7 @@ void twiStop(void)
 	if(_twi_usr_packs > 0)
 	{
 		#if DEBUG == 1
-			USART0Print("RESTART");
+			USART0Println("RESTART");
 		#endif //if DEBUG == 1
 		twiStart();					//kick state machine for new start
 	}
@@ -532,6 +560,7 @@ ISR(TWI_vect)
 						USART0Println("Switching to read mode...");
 					#endif //if DEBUG == 1
 					//_twi_start();
+					_twi_status = I2C_STANDBY;
 					twiStart();
 				}
 				//_twi_reply(_TWI_NACK);
@@ -542,7 +571,26 @@ ISR(TWI_vect)
 		{
 			#if DEBUG == 1
 				USART0Println("0x20");
+				USART0Println("\t\t\tFAIL");
+				for(uint8_t i = 0; i < NUM_OF_TOFS; i++)
+				{
+					USART0Print(i);
+					USART0Print("\t");
+					USART0Println(addrs[i]);
+				}
 			#endif //if DEBUG == 1
+				//handling of error
+			if(_twi_status == I2C_READ) //TODO: TEST IT!
+			{
+				//for(uint8_t i = 0; i < _twi_out_queue[1]; i++)
+					//_twi_in_queue[_twi_in_len++] = -1;
+			}
+			else if((_twi_usr_in_queue[0] & 1) == 0)
+			{
+				//USART0Println("bypassing errors on try-to-read");
+				//for(uint8_t i = 0; i < _twi_usr_in_queue[1]; i++)
+				//	_twi_in_queue[_twi_in_len++] = -1;
+			}
 			_twi_status = I2C_FAIL;
 			twiStop();
 			break;
@@ -617,6 +665,7 @@ ISR(TWI_vect)
 			//USART0Print("\t\t\t");
 			//USART0Println((int)TWDR);
 			_twi_in_queue[_twi_in_len++] = TWDR;
+			_twi_status = I2C_STANDBY;
 			twiStop();
 			break;
 		}
@@ -635,6 +684,126 @@ volatile uint8_t scheduleQueueLen = 0;
 
 
 
+
+
+
+char* prepareVarMessage(uint8_t _reg, uint8_t _var)
+{
+	uint8_t _len = 4;
+
+	uint8_t _t1 = getCountsOfDigits(_reg);
+	uint8_t _t2 = getCountsOfDigits(_var);
+
+	_len += _t1;
+	_len += _t2;
+
+	char* _ret = (char*)malloc(_len * sizeof(char));
+	_ret[_len - 1] = '\0';								//null-terminator
+
+	_ret[0] = '{';									//add beginning
+
+	char* _t = byte2str(_reg);
+	for(uint8_t i = 0; i < _t1; i++)					//copy reg part to ret
+	{
+		_ret[i + 1] = _t[i];
+	}
+
+	_ret[_t1 +  1] = ':';							//add spacing
+
+	free(_t);
+	
+	_t = byte2str(_var);
+	for(uint8_t i = 0; i < _t2; i++)					//copy var part to ret
+	{
+		_ret[i + 2 + _t1] = _t[i];
+	}
+	_ret[_len - 2] = '}';							//add ending
+	free(_t);
+	return _ret;
+}
+
+char* _prepareArrayMessage(uint8_t _reg, uint16_t* arr, uint32_t _arrLen)
+{
+	//USART0Println(_arrLen);
+	uint32_t _len = 3;
+	uint32_t _t1 = getCountsOfDigits(_reg);
+	uint32_t _t2 = 0;
+	for(uint32_t i = 0; i < _arrLen; i++)
+	{
+		_t2 += getCountsOfDigits(arr[i]);
+	}
+	_len += _t1 + _t2 + _arrLen;
+
+	char* _ret = (char*)malloc(_len * sizeof(char));
+	_ret[0] = '[';
+	_ret[_len - 1] = '\0';
+
+	char* _t = byte2str(_reg);	
+	for(uint8_t i = 0; i < _t1; i++)					//copy reg part to ret
+	{
+		_ret[i + 1] = _t[i];
+	}
+	free(_t);
+	_ret[_t1 +  1] = ':';							//add spacing
+	uint32_t lastI = _t1 + 1;
+	for(uint32_t i = 0; i < _arrLen; i++)
+	{
+		_t = int2str(arr[i]);
+		for(uint32_t q = 0; q < getCountsOfDigits(arr[i]); q++)
+		{
+			_ret[++lastI] = _t[q];
+		}
+		_ret[++lastI] = ',';
+		free(_t);
+	}
+	_ret[_len - 2] = ']';
+	return _ret;
+}
+
+char* _prepareCmdMessage(char* _cmd, uint8_t _len)
+{
+	char* _ret = (char*)malloc(_len + 3);
+	for(uint8_t i = 0; i < _len; i++)
+	{
+		_ret[i + 1] = _cmd[i]; 
+	}
+	_ret[_len + 2] = '\0';
+	_ret[0] = '(';
+	_ret[_len + 1] = ')';
+	return _ret;
+}
+
+#define getByteCount(x)	(sizeof(*x))
+
+#define prepareCmdMessage(x) _prepareCmdMessage(x, (sizeof(x) / getByteCount(x)) - 1)
+#define prepareArrayMessage(x, y) _prepareArrayMessage(x, y, sizeof(y) / getByteCount(y))
+
+#define sendSomeData(x) 							\
+{													\
+	char* _t = x;	/*run string-creator func*/		\
+	USART0Println(_t);	/*send created string*/		\
+	free(_t);		/*delete string*/				\
+}
+
+#define sendCmd(x) 		sendSomeData(	[&]()->char*	{return prepareCmdMessage(x);}()			)
+
+#define sendArr(x, y) 	sendSomeData(	[&]()->char*	{return prepareArrayMessage(x, y);}()		)
+
+#define sendArrDynamic(x, y, z) sendSomeData(	[&]()->char*	{return _prepareArrayMessage(x, y, z);}()	)
+
+/*void sendArr(uint8_t x, uint16_t* y)
+{
+	_sendArr(x, y);
+}*/
+
+/*void sendArr(uint8_t x, uint16_t* y, uint32_t len)
+{
+	_sendArrDynamic(x, y, len);
+}*/
+
+
+
+
 /*
  *	Function:	scheduleAddFunc
  *	Desc:		Add func to repeat by schedule
@@ -643,9 +812,10 @@ volatile uint8_t scheduleQueueLen = 0;
  */
 void scheduleAddFunc(void(* func)())
 {
-	cli();
-	scheduleQueue[scheduleQueueLen++] = func;
-	sei();
+	ATOMIC_FORCED
+	(
+		scheduleQueue[scheduleQueueLen++] = func;
+	)
 }
 
 /*
@@ -673,22 +843,31 @@ void scheduleRemoveFunc(uint8_t func)
  */
 void scheduleRemoveFunc(void(* func)())
 {
-	cli();
-	for(uint8_t i = 0; i < scheduleQueueLen; i++)
-	{
-		if(scheduleQueue[i] == func)
+	ATOMIC_SMART
+	(
+		for(uint8_t i = 0; i < scheduleQueueLen; i++)
 		{
-			scheduleRemoveFunc(i);
-			break;
+			if(scheduleQueue[i] == func)
+			{
+				scheduleRemoveFunc(i);
+				break;
+			}
 		}
-	}
-	sei();
+	)
 }
 
 void schFuckDelay(void)
 {
 	delay(250);
 }
+
+void schIdle(void)//do idle work
+{
+	//this func will never be called
+	PORTB &= ~(1 << 7);
+	USART0Send('i');
+}
+
 
 /*
  *	Function:	schedule
@@ -700,19 +879,17 @@ void schedule(void)
 {
 	PORTB |= 1 << 7;//enable in-fg
 
-	if(scheduleQueue[scheduleCounter] != 0)
+	if(scheduleQueue[scheduleCounter] != 0
+		&& scheduleQueue[scheduleCounter] != (&schIdle))
 		scheduleQueue[scheduleCounter++]();
+	else
+		scheduleCounter++;
 
 	if(scheduleCounter >= scheduleQueueLen)
 		scheduleCounter = 0;
 
 	PORTB &= ~(1 << 7);//disable in-fg
 }
-
-volatile uint8_t addrs[8] = {0x29, 0x29, 0x29, 0x29, 0x29, 0x29, 0x29, 0x29};
-volatile uint8_t measures[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-
-
 
 void usartSchSend(void)
 {
@@ -728,11 +905,10 @@ uint16_t vlMess = -1;
 
 void vlStartMeasure(void)
 {
-	//USART0Println("startmess");
-	uint8_t* p = (uint8_t*)malloc(4 * sizeof(uint8_t));
+	uint8_t* p = (uint8_t*)malloc(5 * sizeof(uint8_t));
 	p[0] = SYSRANGE_START;
 	p[1] = 0x01;
-	for(uint8_t i = 0; i < 8; i++)
+	for(uint8_t i = 0; i < NUM_OF_TOFS; i++)
 	{
 		twiAddPack(addrs[i], p, 2, I2C_WRITE);
 	}
@@ -742,8 +918,8 @@ void vlStartMeasure(void)
 
 void vlReqReadMeasure(void)
 {
-	uint8_t* p = (uint8_t*)malloc(4 * sizeof(uint8_t));
-	for(uint8_t i = 0; i < 8; i++)
+	uint8_t* p = (uint8_t*)malloc(2 * sizeof(uint8_t));
+	for(uint8_t i = 0; i < NUM_OF_TOFS; i++)
 	{
 		p[0] = RESULT_RANGE_STATUS + 10;
 		twiAddPack(addrs[i], p, 1, I2C_WRITE);
@@ -752,8 +928,15 @@ void vlReqReadMeasure(void)
 		p[0] = SYSTEM_INTERRUPT_CLEAR;
 		p[1] = 0x01;
 		twiAddPack(addrs[i], p, 2, I2C_WRITE);
+		/*p[0] = RESULT_RANGE_STATUS + 10;
+		twiAddPack(addrs[i], p, 1, I2C_WRITE);
+		p[0] = 2;
+		twiAddPack(addrs[i], p, 1, I2C_WRITE);
+		p[0] = SYSTEM_INTERRUPT_CLEAR;
+		p[1] = 0x01;
+		twiAddPack(addrs[i], p, 2, I2C_WRITE);*/
+		twiStart();
 	}
-	twiStart();
 	free(p);
 }
 
@@ -762,15 +945,34 @@ void vlSaveMess(void)
 	//USART0Println("save");
 	if(twiHadRead)
 	{
-		for(uint8_t i = 0; i < 8; i++)
-		{
-			uint16_t buf = twiGetByte();
-			buf <<= 8;
-			buf |= twiGetByte();
-			//buf -= 30;
-			cli();
-			measures[i] = buf;
-		}
+		ATOMIC_FORCED
+		(
+			for(uint8_t i = 0; i < NUM_OF_TOFS; i++)
+			{
+				uint16_t buf = twiGetByte();
+				buf <<= 8;
+				buf |= twiGetByte();
+				//buf -= 30;
+				if((uint16_t)buf - 30 < 2000)
+				{
+					//measures[i] = buf;
+					if((measures[i] > buf && measures[i] - buf < 30)
+						|| (measures[i] < buf && buf - measures[i] < 30))
+					{
+						//USART0Println("smoothing data");
+						measures[i] = ((uint32_t)measures[i] +  (uint32_t)buf) / 2;
+					}
+					else
+					{
+						measures[i] = buf;
+					}
+					setTofRangeouted(i, 0);
+				}
+				else
+					setTofRangeouted(i, 1);
+					//measures[i] = 0xFFF;
+			}
+		)
 		//_twi_in_len = 0;
 	}
 	else
@@ -781,27 +983,74 @@ void vlSaveMess(void)
 
 void vlPrint()
 {
-	for(uint8_t i = 0; i < 8; i++)
+	/*for(uint8_t i = 0; i < NUM_OF_TOFS; i++)
 	{
 		USART0Print(i);
 		USART0Print("\t\t\t");
-		USART0Println(measures[i]);
-	}
+		USART0Print(measures[i]);
+		if(isTofRangeouted(i))
+			USART0Print("\t\tR!");
+		USART0Println();
+	}*/
+	//sendArrDynamic(1, measures, NUM_OF_TOFS);
+	char* _t = _prepareArrayMessage(DISTANCE_METER_ARR_INDEX, measures, 8);
+	USART0Println(_t);
+	free(_t);
 	USART0Println();
 }
 
-void schIdle()
+
+#define calcMacroPeriod(vcsel_period_pclks) ((((uint32_t)2304 * (vcsel_period_pclks) * 1655) + 500) / 1000)
+
+
+char usartInBuf[512];
+volatile uint16_t usartInBufCounter = 0;
+
+bool contains(char* _inbuf, uint16_t _len, char _ch)
 {
-	PORTB = ~(1 << 7);
-	//delay(10);
+	for(uint16_t i = 0; i < _len; i++)
+	{
+		if(_inbuf[i] == _ch)
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
+void foo()
+{
+	//PORTB = 0xFF;
+	//USART0Send(USART0Read());
+	usartInBuf[usartInBufCounter++] = USART0Read();
+	if((contains(usartInBuf, usartInBufCounter, '(') && contains(usartInBuf, usartInBufCounter, ')')) || (contains(usartInBuf, usartInBufCounter, '{') && contains(usartInBuf, usartInBufCounter, '}')))
+	{
+		USART0Println("contains data");
+		USART0Println(usartInBufCounter - 2);
+		char* _arr = (char*)malloc((usartInBufCounter * sizeof(char)) - 1);
+		_arr[usartInBufCounter- 2 ] = '\0';
+		usartInBufCounter -= 1;
+		while(usartInBufCounter-- > 1)
+		{
+			_arr[usartInBufCounter - 1] = usartInBuf[usartInBufCounter];
+		}
 
+		USART0Println(_arr);
+		usartInBufCounter = 0;
+		free(_arr);
+	}
+}
+
+void parseInputCmds(void)
+{
+	
+}
 
 int main()
 {
 	DDRH = (1 << 5) | (1 << 7);
-	DDRB = (1 << 7);   
+	//DDRB = (1 << 7);
+	DDRB = 0xFF;
 	DDRK = 255;
 	PORTK = 0;
 	PORTH = 0;
@@ -816,32 +1065,64 @@ int main()
 
 	sei();
 
-	ATOMIC_SMART_1
+	//ATOMIC_FORCED(USART0Println("AAA");)
+
+	/*ATOMIC_SMART_1
 	(
-		USART0Println("");
+		USART0Println("a");
 	)
 	ATOMIC_SMART_2
 	(
-		USART0Println("");
+		USART0Println("a");
 	)
 	ATOMIC_FORCED
 	(
-		USART0Println("");
+		USART0Println("a");
 	)
 	ATOMIC_SMART
 	(
-		USART0Println("");
-	)
+		USART0Println("a");
+	)*/
+
+	setCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_RX, foo);
+
 
 	USART0Begin(115200);
+	uint16_t arr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
+	//sendArr(1, arr);
+	//sendSomeData([]()->char*{return prepareCmdMessage("command_sample");});
+	//sendCmd("cmd");
+	/*uint16_t* a = (uint16_t)malloc(500*sizeof(uint16_t));
+	for(int i = 0; i < 500; i++)
+	{
+		a[i] = i;
+	}
+	//char* aa = prepareArrayMessage(1, a, 500);
+	char* aa = prepareCmdMessage("fuckuuuuu");
+	USART0Println(aa);
+	//free(a);
+	free(aa);*/
+	//uint32_t var = 0;
+	//while(1)
+	//{
+	//	delay(200);
+		//USART0Println(++var);
+	//}
 	USART0Println("starting init");
+
 
 	I2C_SetFreq(0x40);
 	uint8_t* p = (uint8_t*)malloc(sizeof(uint8_t) * 4);
-	for(uint8_t i = 0; i < 8; i++)
+	for(uint8_t i = 0; i < NUM_OF_TOFS; i++)
 	{
+		addrs[i] = 0x29;
+		measures[i] = 0;
+	}
 
-		PORTK = (1 << i) | ((1 << (i - 1)) - 1);
+
+	for(uint8_t i = 0; i < NUM_OF_TOFS && false; i++)
+	{
+		PORTK = (1 << (i + 1)) - 1;
 		delay(100);
 		addrs[i] += (i + 1)*2;
 		p[0] = 0x8A;
@@ -854,6 +1135,16 @@ int main()
 		USART0Print("\t\t\t\t\t\t");
 		USART0Println(addrs[i]);
 		twiAddPack(0x29, p, 2, I2C_WRITE);//change vl53l0x addr
+
+		auto writeReg = [&](uint8_t a, uint8_t b)
+		{
+			p[0] = a;
+			p[1] = b;
+			twiAddPack(addrs[i], p, 2, I2C_WRITE);
+			twiStart();
+		};
+
+
 		p[0] = 0x88;
 		p[1] = 0x00;
 		twiAddPack(addrs[i], p, 2, I2C_WRITE);
@@ -885,14 +1176,78 @@ int main()
 		//twiAddPack(0x20, p, 2, I2C_WRITE);
 		twiStart();
 		USART0Println("waiting for stop var");
+		sei();
+		
 		while(!twiHadRead())
 		{
 			asm("NOP");//do nothing
+			asm("NOP");//do nothing
+			asm("NOP");//do nothing
 		}
+		
 		//delay(50);
-		int stop_var = ((int)twiGetByte());
+		stopVars[i] = ((int)twiGetByte());
 		USART0Print("stop var:");
-		USART0Println(stop_var);
+		USART0Println(stopVars[i]);
+		auto decodeTimeout = [&](uint16_t reg_val) -> uint16_t
+		{
+			return (uint16_t)((reg_val & 0x00FF) << 
+				(uint16_t)((reg_val & 0xFF00) >> 8)) + 1;
+		};
+		auto encodeTimeout = [&](uint16_t _t) -> uint16_t
+		{
+			uint32_t ls = 0;
+			uint32_t ms = 0;
+			if(_t > 0)
+			{
+				ls = _t - 1;
+				while((ls & 0xFFFFFF00) > 0)
+				{
+					ls >>= 1;
+					ms++;
+				}
+				return (ms << 8) | (ls & 0xFF);
+			}
+			else
+			{
+				return 0;
+			}
+		};
+
+		auto readReg16B = [&](uint8_t reg) -> uint16_t
+		{
+			p[0] = reg;
+			twiAddPack(addrs[i], p, 1, I2C_WRITE);
+			p[0] = 2;
+			twiAddPack(addrs[i], p, 1, I2C_READ);
+			twiStart();
+			USART0Println("waiting for 16 bit num...");
+			while(!twiHadRead())
+			{
+				asm("NOP");//do nothing
+			}
+			return (uint16_t)((twiGetByte() << 8) | twiGetByte());
+		};
+		oscCalVal[i] = readReg16B(OSC_CALIBRATE_VAL);
+		//p[0] = FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI;
+		//p[1] = encodeTimeout(1000) & 0xFF;
+		//p[2] = (encodeTimeout(1000) >> 8) & 0xFF;
+		//twiAddPack(addrs[i], p, 3, I2C_WRITE);
+		//twiStart();
+		p[0] = FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT;
+		p[1] = ((int)150*(1 << 7)) & 0xFF;
+		p[2] = (((int)150*(1 << 7)) >> 8) & 0xFF;
+		twiAddPack(addrs[i], p, 3, I2C_WRITE);
+		twiStart();
+
+		auto timeoutMicrosecondsToMclks = [&](uint32_t timeout_period_us, uint8_t vcsel_period_pclks) -> uint32_t
+		{
+		  uint32_t macro_period_ns = calcMacroPeriod(vcsel_period_pclks);
+
+		  return (((timeout_period_us * 1000) + (macro_period_ns / 2)) / macro_period_ns);
+		};
+
+
 	}
 
 
@@ -907,29 +1262,30 @@ int main()
 	TIMER0SetA(255);
 
 	scheduleAddFunc(vlPrint);
-	scheduleAddFunc(vlStartMeasure);
+	//scheduleAddFunc(vlStartMeasure);
+
+	//scheduleAddFunc(schIdle);
+	//scheduleAddFunc(schIdle);
+	//scheduleAddFunc(schIdle);
+	//scheduleAddFunc(schIdle);
+	//scheduleAddFunc(schIdle);
+	
+	
+
+	//scheduleAddFunc(vlReqReadMeasure);
 
 	scheduleAddFunc(schIdle);
 	scheduleAddFunc(schIdle);
 	scheduleAddFunc(schIdle);
 	scheduleAddFunc(schIdle);
 	scheduleAddFunc(schIdle);
-	
-	
-
-	scheduleAddFunc(vlReqReadMeasure);
-
-	
 	scheduleAddFunc(schIdle);
 	scheduleAddFunc(schIdle);
 	scheduleAddFunc(schIdle);
 	scheduleAddFunc(schIdle);
-	scheduleAddFunc(schIdle);
-	
-	
 
 
-	scheduleAddFunc(vlSaveMess);
+	//scheduleAddFunc(vlSaveMess);
 
 	/*scheduleAddFunc(schIdle);
 	scheduleAddFunc(schIdle);

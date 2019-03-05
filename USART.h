@@ -9,6 +9,7 @@
 	#endif //ifndef DEC
 	
 	#ifndef EOL
+		#pragma message The EOL not defined! Using NULL
 		#define EOL 0
 	#endif
 	
@@ -29,7 +30,7 @@
 		void USARTSend(unsigned char);
 		
 		//send char array function
-		void USARTPrint(char*);
+		void USARTPrint(const char*);
 		void USARTPrint(int);
 		void USARTPrint(int, int);
 		void USARTPrint(int, byte);

@@ -274,7 +274,7 @@
 #define TIMER2_CLK_SRC_128		((1 << CS22) | (0 << CS21) | (1 << CS20))
 #define TIMER2_CLK_SRC_256		((1 << CS22) | (1 << CS21) | (0 << CS20))
 #define TIMER2_CLK_SRC_1024		((1 << CS22) | (1 << CS21) | (1 << CS20))
-#define TIMER2_CLK_MASK			((1 << CS22) | (1 << CS21) | (1 << CS20))
+#define TIMER2_CLK_SRC_MASK			((1 << CS22) | (1 << CS21) | (1 << CS20))
 
 /*
  * 								TIMER/COUNTER[1345] Compare Output Mode, non-PWM
@@ -658,7 +658,7 @@
 #define TIMER1_CLK_SRC_1024				((0 << CS12) | (0 << CS11) | (1 << CS10))
 #define TIMER1_CLK_SRC_EXT_FALLING		((0 << CS12) | (1 << CS11) | (0 << CS10))
 #define TIMER1_CLK_SRC_EXT_RISING		((0 << CS12) | (1 << CS11) | (1 << CS10))
-#define TIMER1_CLK_MASK					((1 << CS12) | (1 << CS11) | (1 << CS10))
+#define TIMER1_CLK_SRC_MASK					((1 << CS12) | (1 << CS11) | (1 << CS10))
 
 									//TIMER3
 #define TIMER3_CLK_SRC_NO				((1 << CS32) | (0 << CS31) | (0 << CS30))
@@ -669,7 +669,7 @@
 #define TIMER3_CLK_SRC_1024				((0 << CS32) | (0 << CS31) | (1 << CS30))
 #define TIMER3_CLK_SRC_EXT_FALLING		((0 << CS32) | (1 << CS31) | (0 << CS30))
 #define TIMER3_CLK_SRC_EXT_RISING		((0 << CS32) | (1 << CS31) | (1 << CS30))
-#define TIMER3_CLK_MASK					((1 << CS32) | (1 << CS31) | (1 << CS30))
+#define TIMER3_CLK_SRC_MASK					((1 << CS32) | (1 << CS31) | (1 << CS30))
 
 									//TIMER4
 #define TIMER4_CLK_SRC_NO				((1 << CS42) | (0 << CS41) | (0 << CS40))
@@ -680,7 +680,7 @@
 #define TIMER4_CLK_SRC_1024				((0 << CS42) | (0 << CS41) | (1 << CS40))
 #define TIMER4_CLK_SRC_EXT_FALLING		((0 << CS42) | (1 << CS41) | (0 << CS40))
 #define TIMER4_CLK_SRC_EXT_RISING		((0 << CS42) | (1 << CS41) | (1 << CS40))
-#define TIMER4_CLK_MASK					((1 << CS42) | (1 << CS41) | (1 << CS40))
+#define TIMER4_CLK_SRC_MASK					((1 << CS42) | (1 << CS41) | (1 << CS40))
 
 									//TIMER5
 #define TIMER5_CLK_SRC_NO				((1 << CS52) | (0 << CS51) | (0 << CS50))
@@ -691,5 +691,5 @@
 #define TIMER5_CLK_SRC_1024				((0 << CS52) | (0 << CS51) | (1 << CS50))
 #define TIMER5_CLK_SRC_EXT_FALLING		((0 << CS52) | (1 << CS51) | (0 << CS50))
 #define TIMER5_CLK_SRC_EXT_RISING		((0 << CS52) | (1 << CS51) | (1 << CS50))
-#define TIMER5_CLK_MASK					((1 << CS52) | (1 << CS51) | (1 << CS50))
+#define TIMER5_CLK_SRC_MASK					((1 << CS52) | (1 << CS51) | (1 << CS50))
 

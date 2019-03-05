@@ -40,6 +40,23 @@ byte getCountsOfDigits(long __number) //get count of digits for long
 */
 byte getCountsOfDigits(byte __number) //get count of digits for byte
 {
+	byte __count = __number == 0;
+	while (__number != 0) 
+	{
+		__count++;
+		__number /= 10;
+	}
+	return __count;
+}
+
+/*
+ * Function getCountsOfDigits
+ * Desc     Return num of digits
+ * Input    __number: num for counting digits
+ * Output   num of digits
+*/
+byte getCountsOfDigits(uint16_t __number) //get count of digits for byte
+{
 	int __count = __number == 0;
 	while (__number != 0) 
 	{

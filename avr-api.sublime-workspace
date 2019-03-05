@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"_arr",
+				"_arrLen"
+			],
+			[
+				"usart",
+				"usartInBufCounter"
+			],
+			[
+				"usartIn",
+				"usartInBufCounter"
+			],
+			[
+				"USAR",
+				"USART0Println"
+			],
+			[
+				"USART",
+				"USART0Println"
+			],
+			[
+				"USA",
+				"USART0Send"
+			],
+			[
+				"uit",
+				"uint8_t"
+			],
+			[
+				"get",
+				"getCountsOfDigits"
+			],
+			[
 				"TIMER0_WF_F",
 				"TIMER0_WF_FPWM_TOPOCR0A\t(TimerModes_2560.h)"
 			],
@@ -31,7 +63,7 @@
 			"file": "main.cpp",
 			"settings":
 			{
-				"buffer_size": 23741,
+				"buffer_size": 32200,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -40,33 +72,67 @@
 			"file": "Timers.c",
 			"settings":
 			{
-				"buffer_size": 1025,
+				"buffer_size": 8556,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Timers.h",
+			"file": "USART.c",
 			"settings":
 			{
-				"buffer_size": 5135,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Timer.c.old",
-			"settings":
-			{
-				"buffer_size": 35176,
+				"buffer_size": 8703,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "TimerModes_2560.h",
+			"file": "USART.h",
 			"settings":
 			{
-				"buffer_size": 33750,
+				"buffer_size": 1085,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "digitalRegisters.c",
+			"settings":
+			{
+				"buffer_size": 1418,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "api.h",
+			"settings":
+			{
+				"buffer_size": 3176,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "customFuncAddr.c",
+			"settings":
+			{
+				"buffer_size": 554,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "customFuncAddr.h",
+			"settings":
+			{
+				"buffer_size": 4225,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "stringFuncs.c",
+			"settings":
+			{
+				"buffer_size": 5346,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -100,8 +166,48 @@
 		"selected_items":
 		[
 			[
+				"toggle me",
+				"View: Toggle Menu"
+			],
+			[
 				"toggle",
+				"View: Toggle Menu"
+			],
+			[
+				"autosa",
+				"Toggle AutoSave: all files"
+			],
+			[
+				"package",
+				"Preferences: Browse Packages"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"men",
+				"View: Toggle Menu"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"side",
 				"View: Toggle Side Bar"
+			],
+			[
+				"autosave",
+				"Toggle AutoSave: all files"
+			],
+			[
+				"menu",
+				"View: Toggle Menu"
+			],
+			[
+				"git",
+				"GitGutter: Disable for View"
 			],
 			[
 				"tab",
@@ -118,14 +224,6 @@
 			[
 				"tabs",
 				"View: Toggle Tabs"
-			],
-			[
-				"men",
-				"View: Toggle Menu"
-			],
-			[
-				"menu",
-				"View: Toggle Menu"
 			],
 			[
 				"sidebar",
@@ -192,10 +290,6 @@
 				"Package Control: List Packages"
 			],
 			[
-				"install",
-				"Package Control: Install Package"
-			],
-			[
 				"Package Control: ena",
 				"Package Control: Enable Package"
 			],
@@ -253,16 +347,27 @@
 	},
 	"expanded_folders":
 	[
-		"/home/nikto_b/C++/avr-api"
+		"/home/nikto_b/Documents/C++/avr-api"
 	],
 	"file_history":
 	[
+		"/home/nikto_b/Documents/C++/avr-api/avr-api.sublime-project",
+		"/home/nikto_b/C++/avr-api/main.cpp",
+		"/home/nikto_b/.config/sublime-text-3/Packages/User/intellitip.sublime-settings",
+		"/home/nikto_b/.config/sublime-text-3/Packages/Intellitip/intellitip.sublime-settings",
+		"/home/nikto_b/C++/avr-api/Timers.h",
+		"/home/nikto_b/C++/avr-api/Timer.c.old",
+		"/home/nikto_b/C++/avr-api/TimerModes_2560.h",
+		"/home/nikto_b/C++/avr-api/Timers.c",
+		"/home/nikto_b/C++/avr-api/Makefile",
+		"/home/nikto_b/C++/avr-api/stringFuncs.c",
+		"/home/nikto_b/C++/avr-api/api.h",
+		"/home/nikto_b/C++/avr-api/avr-api.sublime-project",
 		"/home/nikto_b/C++/avr-api/TimerModes_2560.h.old",
 		"/home/nikto_b/C++/avr-api/main.d",
 		"/home/nikto_b/C++/avr-api/main.eep",
 		"/home/nikto_b/C++/avr-api/main.elf",
 		"/home/nikto_b/C++/avr-api/main.hex",
-		"/home/nikto_b/C++/avr-api/Makefile",
 		"/home/nikto_b/Arduino/sketch_dec02a/sketch_dec02a.ino",
 		"/home/nikto_b/C++/avr-api/watchdogModes.h",
 		"/home/nikto_b/C++/avr-api/watchdog.h",
@@ -272,23 +377,16 @@
 		"/home/nikto_b/C++/avr-api/USARTModes.h",
 		"/home/nikto_b/C++/avr-api/USART.h",
 		"/home/nikto_b/C++/avr-api/USART.c",
-		"/home/nikto_b/C++/avr-api/Timers.h",
-		"/home/nikto_b/C++/avr-api/Timers.c",
-		"/home/nikto_b/C++/avr-api/TimerModes_2560.h",
 		"/home/nikto_b/C++/avr-api/stringFuncs.h",
-		"/home/nikto_b/C++/avr-api/stringFuncs.c",
 		"/home/nikto_b/C++/avr-api/settings.h",
 		"/home/nikto_b/C++/avr-api/FuncsInputProtector.h",
 		"/home/nikto_b/C++/avr-api/FuncsInputProtector.c",
 		"/home/nikto_b/C++/avr-api/digitalRegisters.h",
 		"/home/nikto_b/C++/avr-api/digitalRegisters.c",
-		"/home/nikto_b/C++/avr-api/api.h",
 		"/home/nikto_b/C++/avr-api/ADCModes.h",
 		"/home/nikto_b/C++/avr-api/ADC.h",
-		"/home/nikto_b/C++/avr-api/main.cpp",
 		"/home/nikto_b/C++/avr-api/ADC.c",
 		"/home/nikto_b/.config/sublime-text-3/Packages/Terminality/README.md",
-		"/home/nikto_b/C++/avr-api/avr-api.sublime-project",
 		"/home/nikto_b/C++/avr-api/delayMicroseconds.c",
 		"/home/nikto_b/C++/avr-api/customFuncAddr.h",
 		"/home/nikto_b/C++/avr-api/customFuncAddr.c",
@@ -303,7 +401,7 @@
 	],
 	"find":
 	{
-		"height": 22.0
+		"height": 40.8923230309
 	},
 	"find_in_files":
 	{
@@ -314,9 +412,15 @@
 	},
 	"find_state":
 	{
-		"case_sensitive": false,
+		"case_sensitive": true,
 		"find_history":
 		[
+			"0",
+			"A",
+			"string",
+			"string ",
+			"hex",
+			"]);\n",
 			"Phase Correct PWM Mode(",
 			"clock select",
 			"disconnected",
@@ -346,6 +450,8 @@
 		"regex": false,
 		"replace_history":
 		[
+			"n",
+			"B"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -356,7 +462,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -365,27 +471,74 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 23741,
+						"buffer_size": 32200,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								22624,
-								22624
+								922,
+								922
 							]
 						],
 						"settings":
 						{
+							"SL.13.region_keys":
+							[
+								"SL.avrgcc.Highlights.|f15ce704d65bfbb76c845c5706dfa49ce1cc104cd18d4604ff5545ae1383a3fa|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|c131d6011592bc5eae24598dbe5b79034463028bd540399134e993daf2759e4b|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|932320c24efec5102cf283a520a2789f2c8ac54e677004a1e3a14569e26dc072|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|9929831b0b1deab19e1c7ebb030632a8cc2349c973a5328dabbf9d0629eb7b57|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|575252933bbc71001d2b064c5040d64a9918278036c1096574be00ce531eb09a|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|3374f0b32b08277c611af1f74a383509253910d64347974b4ae215614563dd2f|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|f4541863b56409e6ba0337ee6eb959f96bdeb5bcf901475ef9f6fbc9255608df|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|11a86ae31efb1939c633821d8d9405b25819f2215fb75f026ff6f1681c04844f|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|1408653d390bedb7802a31c416bba267e529050f750b5aa24f821706e97f797e|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|ae025d48fe2be111851e583d5e37b261884c480bd09bda905c076f215ebefc15|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Gutter.|region.yellowish markup.warning.sublime_linter|dot",
+								"sublime_linter.protected_regions",
+								"SL.avrgcc.Highlights.|29efd58893857b6ac794a977260679f8772fe0f1f5f051b0ce97620a9e87a65a|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|50a498f7b7ae3cdd0821d5facacc7c29e5a761f23695e5fb63d90078f76c90b0|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|fc42f8d61c6578821c76500411a89433202ba04f2e9aec7b93c553efd52a97ae|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|1441cceabbbe6630f032ba3c62789eb44342838e6e75fc53712a1a2afc2f9d6f|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|006f6021e94705a4cff6bfe63483c7a8501c23baf8eabf80a02b45e7bac9e478|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|414a52b3980796b809c9e6726c0245d3368242d6559732822a58f07ce8071206|region.yellowish markup.warning.sublime_linter|32"
+							],
+							"SL.92.region_keys":
+							[
+								"SL.avrgcc.Highlights.|f169766232afde12ad8017dac313caefdfe2b8d036c473b4985a05c4f25f04e7|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|77043b6d66851ea5404196bae0e2e136741146b07a4bde64c225fa43e17a018f|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|a61d7e47923a68e016767798517b9d4ddb84f6a2330b5f9b3c08dd8b13dde25f|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Gutter.|region.yellowish markup.warning.sublime_linter|dot",
+								"SL.avrgcc.Highlights.|0ea3f8d1d8fba93390f768ae7b6a524e65b9688300efb717bcd57ff280ebc4d3|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|2af03914f9e4dec6c4ebf5cdcb43957e4d8e8844a77909ebbe50e03b476cb9c5|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|7005132d2fde99219b5fc57c8bb2c8a926f9c76f98d0ba0063ad11fd31029cf4|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|7ee2e741c96dc5daf5975dac48ef89c0687768ed2a0bfc730c3fa532597d5d8f|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|3057b4876793fb1e670f9fc7775b0a0ed924f4e4f27bbe6ff9cfe546af016a24|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|012fc152ee498c46ba9fca6d5b12142929bd628cd2d50c4af1263955437063f5|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|9936f560a64ac28890fc76c15804bc04df3ecea12152899a45c88ffaceaae4b7|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|69dfb79b36c8d3ff410a37ce8316d4fd61e64b06ab346a1facbfbc3a2235526f|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|478145d363f2976457ce497a30b132ddb4989881e43f241195a387528049a185|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|f9fe2be6788541f20f5a67efa811b1b7c8758cb1286a0ad39c80dbe48c23ed1e|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|510e980ef34be5f59d2bcc62a9bf13b856556cd3b9b795a3b559394e6114b007|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|779f18f49e0d3eafec56eb8da95c234c8198339de1a10221f941ea8d466ff123|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|a9ad92ea208a37dddfbde004d593993d86558d9087b1219c62a526d9c7ab619c|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|e7ee0ca2e948418ab67f66823227ffa45a7d2826b0db43de2fc80b1e80f8139b|region.yellowish markup.warning.sublime_linter|32",
+								"sublime_linter.protected_regions"
+							],
+							"git_gutter_enable": false,
+							"git_gutter_is_enabled": false,
+							"history_list_is_closing": true,
+							"intellitip_row": 1045,
 							"syntax": "Packages/C++/C++.sublime-syntax",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 11284.0,
+						"translation.y": 221.335992024,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -394,20 +547,58 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1025,
+						"buffer_size": 8556,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								403,
-								403
+								437,
+								437
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/C++/C.sublime-syntax"
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "USART.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8703,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								457,
+								457
+							]
+						],
+						"settings":
+						{
+							"SL.15.region_keys":
+							[
+							],
+							"SL.21.region_keys":
+							[
+							],
+							"git_gutter_is_enabled": true,
+							"intellitip_row": 204,
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -417,20 +608,20 @@
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "Timers.h",
+					"buffer": 3,
+					"file": "USART.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5135,
+						"buffer_size": 1085,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								289,
-								289
+								671,
+								671
 							]
 						],
 						"settings":
@@ -439,36 +630,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "Timer.c.old",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 35176,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1015,
-								1015
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 65.0,
+						"translation.y": 152.542372881,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
@@ -476,30 +638,214 @@
 				},
 				{
 					"buffer": 4,
-					"file": "TimerModes_2560.h",
+					"file": "digitalRegisters.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33750,
+						"buffer_size": 1418,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5286,
-								5286
+								649,
+								649
 							]
 						],
 						"settings":
 						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 204.386839482,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "api.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3176,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2110,
+								2110
+							]
+						],
+						"settings":
+						{
+							"SL.129.region_keys":
+							[
+								"SL.avrgcc.Highlights.|b4b8ce057ad4b127a9320b6303317f41fee4dd2a3db89cc05aca0cb569533779|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|a845eea7d4b12587cd4a4bf124e4518b86c41469c0e407c07aa0277a85f3d0b3|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|f0a651ed479c3982a3c32fd3863f92f93dd4cca3e57d81caae17803e35adc4f1|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Gutter.|region.yellowish markup.warning.sublime_linter|dot",
+								"SL.avrgcc.Highlights.|7c812bc3e1b8081fd25e46fcbf728d376979bb8aceec0109f8ff36403265e302|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|9d8ac89f956ab2efd8d6dad9e4c4e07a7d0b14a9d8578ed876b16fd05b1a04cf|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|c0390dbf6d89805afc3ff9f3877cfd321bb3a189f0e8b460b822a2c0d44382a9|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.avrgcc.Highlights.|2fe4610c9f94d455a40f06fb401a322d99a74e0eaa3564e9116b9d8c369dc2f1|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|960b7bd6ff7565fb6240d108242e548acbd7b7c406ec8874e5661069c417f426|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|7ddffaf15a6221427c511de815c0f6317d0d21b47d9ec9dbc4405506e69cf9c4|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|4508af295af74a24fa7513f01c39734e99a439d0153b2a4fdc3087eaca1a2c50|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|b39e1cb8d62cae56bf025ea38506765ca099d7981fc08e0412fa23b646876e4b|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|878126445240214013609947166d570a1be6eacdc22fc5b9c2586a12bf2f3b1d|region.yellowish markup.warning.sublime_linter|32",
+								"sublime_linter.protected_regions"
+							],
+							"git_gutter_is_enabled": true,
+							"intellitip_row": 74,
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 485.54336989,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "customFuncAddr.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 554,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"SL.132.region_keys":
+							[
+								"SL.avrgcc.Highlights.|4d58fddc1b2b256e2b6e7407e7c23b989c419b04a5f0cd7a4b94108ad19eb788|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.avrgcc.Highlights.|62e0246f7eb2570e7ce57d049d2c276529b29c4ba8fd238b56e6b6c5328dafd5|region.redish markup.error.sublime_linter|32",
+								"sublime_linter.protected_regions"
+							],
+							"git_gutter_is_enabled": true,
+							"intellitip_row": 0,
+							"syntax": "Packages/C++/C.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "customFuncAddr.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4225,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1763,
+								1763
+							]
+						],
+						"settings":
+						{
+							"SL.131.region_keys":
+							[
+								"SL.avrgcc.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.avrgcc.Highlights.|2ca1d9095e6d94a228da6150709281787b570c56eb57ad48fbca8e9a08ab3cff|region.redish markup.error.sublime_linter|32",
+								"sublime_linter.protected_regions"
+							],
+							"SL.16.region_keys":
+							[
+								"sublime_linter.protected_regions",
+								"SL.avrgcc.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.avrgcc.Highlights.|2ca1d9095e6d94a228da6150709281787b570c56eb57ad48fbca8e9a08ab3cff|region.redish markup.error.sublime_linter|32"
+							],
+							"git_gutter_is_enabled": true,
+							"intellitip_row": 24,
 							"syntax": "Packages/C++/C++.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1157.0,
+						"translation.y": 235.294117647,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "stringFuncs.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5346,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								967,
+								967
+							]
+						],
+						"settings":
+						{
+							"SL.128.region_keys":
+							[
+								"SL.avrgcc.Highlights.|f72d11d6df899338b4b1841a3bf472f411fc762c99bcc0258811b338965364d3|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|626611092dbcd8858946dc84c11a3ffba7bb633fcb6c1cd6102d24648e80a279|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|1203c77b241c77587f64b72347c687ccb40145ea0658a450416f8490266fde31|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|aad9df1ae362bd04e80af197cad3ff5acaceacfc2fd4b743858d923a8216c140|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Gutter.|region.yellowish markup.warning.sublime_linter|dot",
+								"SL.avrgcc.Highlights.|349a0583d6558f1bd4ee2c82940b3fa95fc7ba5465f50ec0277e93c5957fe682|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|b1f764591a59322677b890a872f192771a00671c540c74a9fac0179b4a29ffb4|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Gutter.|region.redish markup.error.sublime_linter|dot",
+								"SL.avrgcc.Highlights.|1588a972acfab9d480113a3d670aa39e8f8138eda9001cef3bf177bdea7f3e6c|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|cfc9d33f18b88e94e1d2dc0a81574b0886fdf289b105e656f41baeb353721a1f|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|e6722e86d460d50279563a0daf097178de080246700b89b33dc6f9efe458c3bb|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|a91234e85fefe9b1b083d021ce2bfa1867e11ae468bbb53203b570031cdbe20f|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|dd1055e96f463068df78190d2492775a2ba3300b9c194167379abc3c778d33eb|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|440fd734ba630ab7d1991c89fd4a1397e6776f206b93125833366138e6c09a17|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|06965bc77ea809f621788f9ecacc45edb7c1c5954b92f2dc8775f001d9684563|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|2d01a8b88e7f85de0e0af454f13c0a6546bf51325563efa06fa60b550691bf2d|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|6609141f75440a9f54e82f031c8633756c9bb54057982768c8440747b3d37a34|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|d39f7db262389d44dd7ad5a705213e4318471d18697d14b02c1686b5f6ca9f9f|region.redish markup.error.sublime_linter|32",
+								"SL.avrgcc.Highlights.|c4ccd1462c415b38a4c38dd9b7e57b7c640570fd68348a0c6ec21e621ea6e3d9|region.yellowish markup.warning.sublime_linter|32",
+								"SL.avrgcc.Highlights.|8c99b08f6ee6a50c425837c1d76e8127a6c655972d6d3b8f0fadfe9873ed430c|region.redish markup.error.sublime_linter|32",
+								"sublime_linter.protected_regions"
+							],
+							"git_gutter_is_enabled": true,
+							"intellitip_row": 50,
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -507,7 +853,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 22.0
+		"height": 26.9192422732
 	},
 	"input":
 	{
@@ -536,6 +882,10 @@
 		]
 	},
 	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 0.0
+	},
 	"output.exec":
 	{
 		"height": 115.0
@@ -544,11 +894,15 @@
 	{
 		"height": 0.0
 	},
+	"output.unsaved_changes":
+	{
+		"height": 31.0
+	},
 	"pinned_build_system": "Packages/C++/C++ Single File.sublime-build",
 	"project": "avr-api.sublime-project",
 	"replace":
 	{
-		"height": 40.0
+		"height": 72.7966101695
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -593,7 +947,7 @@
 	"show_minimap": true,
 	"show_open_files": false,
 	"show_tabs": true,
-	"side_bar_visible": true,
+	"side_bar_visible": false,
 	"side_bar_width": 186.0,
 	"status_bar_visible": true,
 	"template_settings":
