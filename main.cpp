@@ -1127,12 +1127,6 @@ int main()
 
 
 
-	uint64_t var = 0xFFFE;
-	//uint16_t ar = getCountsOfBits(var);
-	//USART0Println(ar);
-	USART0Print(var, BIN);
-	while(1){asm("NOP");}
-
 
 	uint16_t arr[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0};
 	//sendArr(1, arr);
@@ -1146,7 +1140,7 @@ int main()
 	//char* aa = prepareArrayMessage(1, a, 500);
 	char* aa = prepareCmdMessage("fuckuuuuu");
 	USART0Println(aa);
-	//free(a);
+	//free(a);	
 	free(aa);*/
 	//uint32_t var = 0;
 	//while(1)
