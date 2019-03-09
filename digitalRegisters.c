@@ -1,20 +1,11 @@
-#define PortReg(port) ((port))
-#define DirReg(port) (((port) - 1))
-#define PinReg(port) (((port) - 2))
+#pragma once
 
-#if defined(PORTA)
-	#define START_PORT PORTA
-#elif defined(PORTB)
-	#define START_PORT PORTB
-#else
-	#error "can't find begining port"
-#endif
+#include "base.h"
+#include "digitalRegisters.h"
 
 
 
 
-#define HIGH 1
-#define LOW 0
 
 /*
  * Function digitalWrite

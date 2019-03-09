@@ -1,4 +1,15 @@
+#pragma once
+
 #define INT_ALOWED ((SREG >> 7) & 1)
+
+
+
+#include "digitalRegisters.h"
+#include "Timers.h"
+#include "USART.h"
+#include "ADC.h"
+#include "watchdog.h"
+#include "customFuncAddr.h"
 
 //block interrupts for running user's code, 
 //will allow interrupts after running user's code
@@ -75,18 +86,8 @@
 	#define ATOMIC_SMART ATOMIC_SMART_1		//prefer to use ROM instead of RAM
 #endif	//ifndef __OPTIMIZE_SIZE__
 
-#include "customFuncAddr.h"
-
-#include "settings.h"
 
 
-
-#if USE_FUNC_INPUT_PROTECTOR == 1
-	#include "FuncsInputProtector.h"//because of dependences on TimerModes and ADCModes
-#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-
-
-#include "digitalRegisters.h"
 
 
 #define byte uint8_t		//define for 8 bit var
@@ -99,33 +100,5 @@
 #define delay(x) _delay_ms(x)
 
 
-void delayMicroseconds(uint64_t _us);
-#include "delayMicroseconds.c"
 
-
-#if USE_TIMERS == 1
-	#include "TimerModes_2560.h" //TODO: refactor
-	#include "Timers.h"
-#endif //if USE_TIMERS == 1
-
-
-#if USE_USART == 1
-	#pragma message "using USART"
-	#include "USART.h"
-#endif
-
-
-#if USE_ADC == 1
-	#include "ADCModes.h"
-	#include "ADC.h"
-#endif //if USE_ADC == 1
-
-#if USE_WATCHDOG == 1
-	#include "watchdogModes.h"
-	#include "watchdog.h"
-#endif //if USE_WATCHDOG == 1
-
-
-#if USE_FUNC_INPUT_PROTECTOR == 1
-	#include "FuncsInputProtector.c"
-#endif //if USE_FUNC_INPUT_PROTECTOR == 1
+//#include "FuncsInputProtector.c"

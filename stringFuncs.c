@@ -1,3 +1,7 @@
+#pragma once
+
+#include "stringFuncs.h"
+
 /*
  * Function getCountsOfDigits
  * Desc     Return num of digits

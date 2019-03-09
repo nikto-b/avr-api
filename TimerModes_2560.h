@@ -1,3 +1,5 @@
+#pragma once
+
 #define _TIMER_MODES
 
 

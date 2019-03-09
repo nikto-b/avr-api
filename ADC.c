@@ -1,4 +1,11 @@
-#if defined(ADCL) && USE_ADC == 1
+#pragma once
+
+#include "base.h"
+#include "ADC.h"
+#define NUM_OF_ANALOG_PINS 10
+#include "customFuncAddr.h"
+
+#if defined(ADCL)
 	#pragma message "ADC found"
 	#define ADC_DATA_MASK 1023
 	#define ADC_CHANGED_MASK 1024
@@ -37,7 +44,7 @@
 	 * Input    _contr: control signal
 	 * Output   none
 	*/
-	inline void ADCSendControl(uint8_t __contr)
+	  void ADCSendControl(uint8_t __contr)
 	{
 		#if USE_FUNC_INPUT_PROTECTOR == 1
 			if(!validateADCControl(__contr))
@@ -55,7 +62,7 @@
 	 * Input    __ref: analog reference source
 	 * Output   none
 	*/
-	inline void ADCSetRef(uint8_t __ref)
+	  void ADCSetRef(uint8_t __ref)
 	{
 		#if USE_FUNC_INPUT_PROTECTOR == 1
 			if(!validateADCREF(__ref))
@@ -74,7 +81,7 @@
 	 * Input    __prescaller: prescaller to set
 	 * Output   none
 	*/
-	inline void ADCSetPrescaller(uint8_t __prescaller)
+	  void ADCSetPrescaller(uint8_t __prescaller)
 	{
 		#if USE_FUNC_INPUT_PROTECTOR == 1
 			if(!validateADCPrescaller(__prescaller))
@@ -108,7 +115,7 @@
 	 * Input    __mask: mask for disabling
 	 * Output   none
 	*/
-	inline void ADCDisableDigitalInput0to7(uint8_t __mask)
+	  void ADCDisableDigitalInput0to7(uint8_t __mask)
 	{
 		DIDR0 = __mask;
 	}
@@ -119,7 +126,7 @@
 	 * Input    __mask: mask for disabling
 	 * Output   none
 	*/
-	inline void ADCDisableDigitalInput8to15(uint8_t __mask)
+	  void ADCDisableDigitalInput8to15(uint8_t __mask)
 	{
 		DIDR2 = __mask;
 	}
@@ -130,7 +137,7 @@
 	 * Input    none
 	 * Output   none
 	*/
-	inline void ADCEnable(void)
+	  void ADCEnable(void)
 	{
 		ADCSendControl(ADC_CONTROL_ENABLE);
 	}
@@ -141,7 +148,7 @@
 	 * Input    none
 	 * Output   none
 	*/
-	inline void ADCDisable(void)
+	  void ADCDisable(void)
 	{
 		ADCSRA = (ADCSRA & ~ADC_CONTROL_ENABLE);
 	}
@@ -152,7 +159,7 @@
 	 * Input    none
 	 * Output   none
 	*/
-	inline void ADCStartConvert(void)
+	  void ADCStartConvert(void)
 	{
 		ADCSendControl(ADC_CONTROL_START_CONVERTION);
 	}
@@ -163,7 +170,7 @@
 	 * Input    none
 	 * Output   none
 	*/
-	inline void ADCStopConvert(void)
+	  void ADCStopConvert(void)
 	{
 		ADCSRA = (ADCSRA & ~ADC_CONTROL_START_CONVERTION);
 	}
@@ -174,7 +181,7 @@
 	 * Input    none
 	 * Output   none
 	*/
-	inline void ADCFlush(void)
+	  void ADCFlush(void)
 	{
 		ADCSRA = 0;
 		ADCSRB = 0;

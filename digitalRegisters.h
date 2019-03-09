@@ -1,4 +1,24 @@
-#include "digitalRegisters.c"
+#pragma once
+
+#include "base.h"
+
+
+#define HIGH 1
+#define LOW 0
+
+
+
+#define PortReg(port) ((port))
+#define DirReg(port) (((port) - 1))
+#define PinReg(port) (((port) - 2))
+
+#if defined(PORTA)
+	#define START_PORT PORTA
+#elif defined(PORTB)
+	#define START_PORT PORTB
+#else
+	#error "can't find begining port"
+#endif
 
 //for counting ports
 #define PA 0

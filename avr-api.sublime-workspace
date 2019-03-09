@@ -75,7 +75,25 @@
 			"file": "main.cpp",
 			"settings":
 			{
-				"buffer_size": 29054,
+				"buffer_size": 29068,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "ADC.c",
+			"settings":
+			{
+				"buffer_size": 5541,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "digitalRegisters.h",
+			"settings":
+			{
+				"buffer_size": 14588,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -84,7 +102,7 @@
 			"file": "TimerModes_2560.h",
 			"settings":
 			{
-				"buffer_size": 33534,
+				"buffer_size": 33548,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -93,7 +111,7 @@
 			"file": "Timers.c",
 			"settings":
 			{
-				"buffer_size": 15560,
+				"buffer_size": 15574,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -102,7 +120,7 @@
 			"file": "USART.c",
 			"settings":
 			{
-				"buffer_size": 8708,
+				"buffer_size": 8722,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -111,7 +129,7 @@
 			"file": "USART.h",
 			"settings":
 			{
-				"buffer_size": 1085,
+				"buffer_size": 1099,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -120,7 +138,8 @@
 			"file": "digitalRegisters.c",
 			"settings":
 			{
-				"buffer_size": 1418,
+				"buffer_size": 1432,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -128,7 +147,8 @@
 			"file": "api.h",
 			"settings":
 			{
-				"buffer_size": 3239,
+				"buffer_size": 3253,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -136,7 +156,7 @@
 			"file": "customFuncAddr.c",
 			"settings":
 			{
-				"buffer_size": 554,
+				"buffer_size": 568,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -145,7 +165,8 @@
 			"file": "customFuncAddr.h",
 			"settings":
 			{
-				"buffer_size": 4225,
+				"buffer_size": 4239,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -153,7 +174,7 @@
 			"file": "stringFuncs.c",
 			"settings":
 			{
-				"buffer_size": 5378,
+				"buffer_size": 5392,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -162,7 +183,7 @@
 			"file": "stringFuncs.h",
 			"settings":
 			{
-				"buffer_size": 1185,
+				"buffer_size": 1199,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -435,7 +456,7 @@
 	],
 	"find":
 	{
-		"height": 39.8803589232
+		"height": 39.8953140578
 	},
 	"find_in_files":
 	{
@@ -499,7 +520,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -508,15 +529,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 29054,
+						"buffer_size": 29068,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								28397,
-								28397
+								14,
+								14
 							]
 						],
 						"settings":
@@ -572,55 +593,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 19366.8993021,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "TimerModes_2560.h",
+					"file": "ADC.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33534,
+						"buffer_size": 5541,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2393,
-								2396
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/C++/C++.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "Timers.c",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 15560,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								15497,
-								15497
+								389,
+								389
 							]
 						],
 						"settings":
@@ -632,24 +625,110 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "USART.c",
+					"buffer": 2,
+					"file": "digitalRegisters.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8708,
+						"buffer_size": 14588,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1530,
-								1530
+								13,
+								13
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "TimerModes_2560.h",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 33548,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14,
+								14
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "Timers.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 15574,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14,
+								14
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/C++/C.sublime-syntax",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "USART.c",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8722,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14,
+								14
 							]
 						],
 						"settings":
@@ -666,27 +745,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 465.603190429,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 6,
 					"file": "USART.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1085,
+						"buffer_size": 1099,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								671,
-								671
+								12,
+								12
 							]
 						],
 						"settings":
@@ -698,24 +777,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 7,
 					"file": "digitalRegisters.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1418,
+						"buffer_size": 1432,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								649,
-								649
+								183,
+								183
 							]
 						],
 						"settings":
@@ -727,16 +806,16 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 8,
 					"file": "api.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3239,
+						"buffer_size": 3253,
 						"regions":
 						{
 						},
@@ -773,27 +852,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 605.18444666,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 9,
 					"file": "customFuncAddr.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 554,
+						"buffer_size": 568,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								14,
+								14
 							]
 						],
 						"settings":
@@ -813,24 +892,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 10,
 					"file": "customFuncAddr.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4225,
+						"buffer_size": 4239,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1763,
-								1763
+								14,
+								14
 							]
 						],
 						"settings":
@@ -855,24 +934,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 11,
 					"file": "stringFuncs.c",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5378,
+						"buffer_size": 5392,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2075,
-								2075
+								14,
+								14
 							]
 						],
 						"settings":
@@ -907,27 +986,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 680.957128614,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 12,
 					"file": "stringFuncs.h",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1185,
+						"buffer_size": 1199,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1038,
-								1038
+								14,
+								14
 							]
 						],
 						"settings":
@@ -938,7 +1017,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]

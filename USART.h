@@ -1,56 +1,52 @@
-#if USE_USART0 == 1
+#pragma once
 
-	#ifndef DEC
-		#define DEC 0
-	#endif //ifndef DEC
-	
-	#ifndef BIN
-		#define BIN 1
-	#endif //ifndef DEC
-	
-	#ifndef EOL
-		#pragma message The EOL not defined! Using NULL
-		#define EOL 0
-	#endif
-	
-	#include "stringFuncs.h"
-	#include "USARTModes.h"
-	#include "USART.c"
-		
-	//set bit settings of USART, mode on input
-	void USART0SetBitSettings(uint8_t);
-	//init function, baudrate on input
-	void USARTBegin(uint64_t);
-	
-	
-	#if USE_USART0_OUTPUT == 1//if using output
-		#pragma message "using USART output"
-		
-		//send one char function
-		void USARTSend(unsigned char);
-		
-		//send char array function
-		void USARTPrint(const char*);
-		void USARTPrint(int);
-		void USARTPrint(int, int);
-		void USARTPrint(int, byte);
-	#endif //if USE_USART0_OUTPUT == 1
-	
-	
-	#if USE_USART0_INPUT == 1//if using input
-		#pragma message "using USART input"
-		
-		//get recieved data
-		char USARTRead(void);
-		//get is any data recieved
-		bool USART0Available(void);
-		//remove all recieved data
-		void USART0Flush(void);
+#ifndef DEC
+	#define DEC 0
+#endif //ifndef DEC
 
-	#endif //if USE_USART0_INPUT == 1
+#ifndef BIN
+	#define BIN 1
+#endif //ifndef DEC
+
+#ifndef EOL
+	#pragma message The EOL not defined! Using NULL
+	#define EOL 0
+#endif
+
+#include "stringFuncs.h"
+#include "USARTModes.h"
+#include "customFuncAddr.h"
+#include "base.h"
+	
+//set bit settings of USART, mode on input
+void USART0SetBitSettings(uint8_t);
+//init function, baudrate on input
+void USART0Begin(uint64_t);
 
 
+#pragma message "using USART output"
+
+//send one char function
+void USART0Send(unsigned char);
+
+//send char array function
+void USART0Print(const char* __data);
+void USART0Print(int);
+void USART0Print(int, int);
+void USART0Print(int, byte);
+
+void USART0Println();
+void USART0Println(const char* __data);
+void USART0Println(int);
+void USART0Println(int data, int mode);
+
+
+
+#pragma message "using USART input"
 	
-#endif //if USE_USART0 == 1
-
-
+//get recieved data
+char USART0Read(void);
+//get is any data recieved
+bool USART0Available(void);
+//remove all recieved data
+void USART0Flush(void);
