@@ -34,10 +34,6 @@ int digitalRead(uint8_t __pin)
 	return (*(&START_PORT - 2 + __port * 3) >> __pin) & 1;
 }
 
-#define OUTPUT 0
-#define INPUT 1
-#define INPUT_PULLUP 2
-
 /*
  * Function pinMode
  * Desc     set mode of pin(I/O)

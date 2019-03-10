@@ -6,6 +6,10 @@
 #define HIGH 1
 #define LOW 0
 
+#define OUTPUT 0
+#define INPUT 1
+#define INPUT_PULLUP 2
+
 
 
 #define PortReg(port) ((port))
