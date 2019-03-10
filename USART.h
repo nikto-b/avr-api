@@ -1,5 +1,7 @@
 #pragma once
 
+#include "settings.h"
+
 #ifndef DEC
 	#define DEC 0
 #endif //ifndef DEC
