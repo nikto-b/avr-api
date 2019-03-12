@@ -4,6 +4,9 @@
 #include "TimerModes_2560.h"
 
 
+void analogWrite(uint8_t _pin, uint16_t _num);
+void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num);
+
 
 #ifdef TCCR0A 	//TIMER0
 	void TIMER0Init(uint8_t _com ,uint8_t _wfmode, uint8_t _clk);
@@ -75,7 +78,7 @@
 	  void TIMER1EnableCOMPBInterrupt();
 	  void TIMER1DisableCOMPBInterrupt();
 	
-	#ifdef OCR1CL
+	#if defined(OCR1CL)
 		void TIMER1SetC(uint16_t);
 	#else //ifdef OCR1CL
 		void TIMER1SetC(uint8_t);

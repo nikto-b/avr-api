@@ -51,7 +51,7 @@ ISR(TIMER ## n ## _COMP ## k ## _vect)							\
 /* Input    __k: what num set to 		*/						\
 /* Output   none						*/						\
 /**/															\
-void TIMER ## n ## Set ## k(uint16_t __k)						\
+void TIMER ## n ## Set ## k (uint16_t __k)						\
 {																\
 	OCR ## n ## k ## H = (uint8_t)__k;		/*set high registers of num*/\
 	OCR ## n ## k ## L = (uint8_t)(__k >> 8);	/*set low registers of num*/\
@@ -100,7 +100,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 	GENSETCLK(0)
 	#if (defined(OCIE0A))
 		GENISR_COMPk(0, A)
-		#ifdef OCR0_COMPAL
+		#ifdef OCR0AL
 			GENSETk_16B(0, A)
 		#else
 			GENSETk_8B(0, A)
@@ -111,7 +111,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE0B))
 		GENISR_COMPk(0, B)
-		#ifdef OCR0_COMPBL
+		#ifdef OCR0BL
 			GENSETk_16B(0, B)
 		#else
 			GENSETk_8B(0, B)
@@ -122,7 +122,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE0C))
 		GENISR_COMPk(0, C)
-		#ifdef OCR0_COMPCL
+		#ifdef OCR0CL
 			GENSETk_16B(0, C)
 		#else
 			GENSETk_8B(0, C)
@@ -138,7 +138,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 	GENSETCLK(1)
 	#if (defined(OCIE1A))
 		GENISR_COMPk(1, A)
-		#ifdef OCR1_COMPAL
+		#ifdef OCR1AL
 			GENSETk_16B(1, A)
 		#else
 			GENSETk_8B(1, A)
@@ -149,7 +149,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE1B))
 		GENISR_COMPk(1, B)
-		#ifdef OCR1_COMPBL
+		#ifdef OCR1BL
 			GENSETk_16B(1, B)
 		#else
 			GENSETk_8B(1, B)
@@ -160,11 +160,17 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE1C))
 		GENISR_COMPk(1, C)
-		#ifdef OCR1_COMPCL
+		#ifdef OCR1CL
 			GENSETk_16B(1, C)
 		#else
 			GENSETk_8B(1, C)
 		#endif
+		void TIMER1SetC (uint16_t __k)						\
+		{																\
+			OCR1CH = (uint8_t)__k;		/*set high registers of num*/\
+			OCR1CL = (uint8_t)(__k >> 8);	/*set low registers of num*/\
+		}
+
 		GENENABLECOMPkINTERRUPT(1, C)
 		GENDISABLECOMPkINTERRUPT(1, C)
 	#endif //if defined(OCIE1C) && TIMER1_USE_COMPC
@@ -178,7 +184,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 	GENSETCLK(2)
 	#if (defined(OCIE2A))
 		GENISR_COMPk(2, A)
-		#ifdef OCR2_COMPAL
+		#ifdef OCR2AL
 			GENSETk_16B(2, A)
 		#else
 			GENSETk_8B(2, A)
@@ -189,7 +195,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE2B))
 		GENISR_COMPk(2, B)
-		#ifdef OCR2_COMPBL
+		#ifdef OCR2BL
 			GENSETk_16B(2, B)
 		#else
 			GENSETk_8B(2, B)
@@ -200,7 +206,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE2C))
 		GENISR_COMPk(2, C)
-		#ifdef OCR2_COMPCL
+		#ifdef OCR2CL
 			GENSETk_16B(2, C)
 		#else
 			GENSETk_8B(2, C)
@@ -214,9 +220,9 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 #ifdef TCCR3A
 	GENINIT(3)
 	GENSETCLK(3)
-	#if (defined(OCIE3A))
+	#ifdef OCIE3A
 		GENISR_COMPk(3, A)
-		#ifdef OCR3_COMPAL
+		#ifdef OCR3AL
 			GENSETk_16B(3, A)
 		#else
 			GENSETk_8B(3, A)
@@ -227,7 +233,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE3B))
 		GENISR_COMPk(3, B)
-		#ifdef OCR3_COMPBL
+		#ifdef OCR3BL
 			GENSETk_16B(3, B)
 		#else
 			GENSETk_8B(3, B)
@@ -238,7 +244,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE3C))
 		GENISR_COMPk(3, C)
-		#ifdef OCR3_COMPCL
+		#ifdef OCR3CL
 			GENSETk_16B(3, C)
 		#else
 			GENSETk_8B(3, C)
@@ -255,7 +261,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 	GENSETCLK(4)
 	#if (defined(OCIE4A))
 		GENISR_COMPk(4, A)
-		#ifdef OCR4_COMPAL
+		#ifdef OCR4AL
 			GENSETk_16B(4, A)
 		#else
 			GENSETk_8B(4, A)
@@ -266,7 +272,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE4B))
 		GENISR_COMPk(4, B)
-		#ifdef OCR4_COMPBL
+		#ifdef OCR4BL
 			GENSETk_16B(4, B)
 		#else
 			GENSETk_8B(4, B)
@@ -277,7 +283,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE4C))
 		GENISR_COMPk(4, C)
-		#ifdef OCR4_COMPCL
+		#ifdef OCR4CL
 			GENSETk_16B(4, C)
 		#else
 			GENSETk_8B(4, C)
@@ -293,7 +299,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 	GENSETCLK(5)
 	#if (defined(OCIE5A))
 		GENISR_COMPk(5, A)
-		#ifdef OCR5_COMPAL
+		#ifdef OCR5AL
 			GENSETk_16B(5, A)
 		#else
 			GENSETk_8B(5, A)
@@ -304,7 +310,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE5B))
 		GENISR_COMPk(5, B)
-		#ifdef OCR5_COMPBL
+		#ifdef OCR5BL
 			GENSETk_16B(5, B)
 		#else
 			GENSETk_8B(5, B)
@@ -315,7 +321,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE5C))
 		GENISR_COMPk(5, C)
-		#ifdef OCR5_COMPCL
+		#ifdef OCR5CL
 			GENSETk_16B(5, C)
 		#else
 			GENSETk_8B(5, C)
@@ -332,7 +338,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 	GENSETCLK(6)
 	#if (defined(OCIE6A))
 		GENISR_COMPk(6, A)
-		#ifdef OCR6_COMPAL
+		#ifdef OCR6AL
 			GENSETk_16B(6, A)
 		#else
 			GENSETk_8B(6, A)
@@ -343,7 +349,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE6B))
 		GENISR_COMPk(6, B)
-		#ifdef OCR6_COMPBL
+		#ifdef OCR6BL
 			GENSETk_16B(6, B)
 		#else
 			GENSETk_8B(6, B)
@@ -354,7 +360,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE6C) && TIMER6_USE_COMPC == 1)
 		GENISR_COMPk(6, C)
-		#ifdef OCR6_COMPCL
+		#ifdef OCR6CL
 			GENSETk_16B(6, C)
 		#else
 			GENSETk_8B(6, C)
@@ -371,7 +377,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 	GENSETCLK(7)
 	#if (defined(OCIE7A))
 		GENISR_COMPk(7, A)
-		#ifdef OCR7_COMPAL
+		#ifdef OCR7AL
 			GENSETk_16B(7, A)
 		#else
 			GENSETk_8B(7, A)
@@ -382,7 +388,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE7B) && TIMER7_USE_COMPB == 1)
 		GENISR_COMPk(7, B)
-		#ifdef OCR7_COMPBL
+		#ifdef OCR7BL
 			GENSETk_16B(7, B)
 		#else
 			GENSETk_8B(7, B)
@@ -393,7 +399,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE7C))
 		GENISR_COMPk(7, C)
-		#ifdef OCR7_COMPCL
+		#ifdef OCR7CL
 			GENSETk_16B(7, C)
 		#else
 			GENSETk_8B(7, C)
@@ -410,7 +416,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 	GENSETCLK(8)
 	#if (defined(OCIE8A))
 		GENISR_COMPk(8, A)
-		#ifdef OCR8_COMPAL
+		#ifdef OCR8AL
 			GENSETk_16B(8, A)
 		#else
 			GENSETk_8B(8, A)
@@ -421,7 +427,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE8B))
 		GENISR_COMPk(8, B)
-		#ifdef OCR8_COMPBL
+		#ifdef OCR8BL
 			GENSETk_16B(8, B)
 		#else
 			GENSETk_8B(8, B)
@@ -432,7 +438,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 
 	#if (defined(OCIE8C))
 		GENISR_COMPk(8, C)
-		#ifdef OCR8_COMPCL
+		#ifdef OCR8CL
 			GENSETk_16B(8, C)
 		#else
 			GENSETk_8B(8, C)
@@ -458,3 +464,332 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 #undef GENSETk_8B
 #undef GENSETAk_16B
 
+
+
+
+void analogWrite(uint8_t _pin, uint16_t _num)
+{
+	uint8_t _timer = _pin / 4;
+	uint8_t _ch = _pin % 4;
+	analogWrite(_timer, _ch, _num);
+}
+
+void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
+{
+	switch(_timer)
+	{
+		#ifdef TCCR0A
+		case 0:
+		{
+			switch(_ch)
+			{
+				#ifdef OCIE0A
+				case 0:
+				{
+					TIMER0Init(TIMER0_FPWM_NORMAL, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1);
+					TIMER0SetA(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE0B
+				case 1:
+				{
+					TIMER0Init(TIMER0_FPWM_NORMAL, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1);
+					TIMER0SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE0C
+				case 2:
+				{
+					TIMER0Init(TIMER0_FPWM_NORMAL, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1);
+					TIMER0SetC(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE0D
+				case 3:
+				{
+					TIMER0Init(TIMER0_FPWM_NORMAL, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1);
+					TIMER0SetD(_num);
+					break;
+				}
+				#endif
+			}
+			break;
+		}
+		#endif
+		#ifdef TCCR1A
+		case 1:
+		{
+			switch(_ch)
+			{
+				#ifdef OCIE1A
+				case 0:
+				{
+					TIMER1Init(TIMER1_COMA_FPWM_NORMAL, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1);
+					TIMER1SetA(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE1B
+				case 1:
+				{
+					TIMER1Init(TIMER1_COMB_FPWM_NORMAL, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1);
+					TIMER1SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE1C
+				case 2:
+				{
+					TIMER1Init(TIMER1_COMC_FPWM_NORMAL, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1);
+					TIMER1SetC(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE1D
+				case 3:
+				{
+					break;
+				}
+				#endif
+			}
+			break;
+		}
+		#endif
+		#ifdef TCCR2A
+		case 2:
+		{
+			switch(_ch)
+			{
+				#ifdef OCIE2A
+				case 0:
+				{
+					//TIMER2Init(TIMER2_FPWM_NORMAL, TIMER2_COMA_WF_FPWM, TIMER2_CLK_SRC_1);
+					//TIMER2SetA(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE2B
+				case 1:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE2C
+				case 2:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE2D
+				case 3:
+				{
+					break;
+				}
+				#endif
+			}
+			break;
+		}
+		#endif
+		#ifdef TCCR3A
+		case 3:
+		{
+			switch(_ch)
+			{
+				#ifdef OCIE3A
+				case 0:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE3B
+				case 1:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE3C
+				case 2:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE3D
+				case 3:
+				{
+					break;
+				}
+				#endif
+			}
+			break;
+		}
+		#endif
+		#ifdef TCCR4A
+		case 4:
+		{
+			switch(_ch)
+			{
+				#ifdef OCIE4A
+				case 0:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE4B
+				case 1:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE4C
+				case 2:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE4D
+				case 3:
+				{
+					break;
+				}
+				#endif
+			}
+			break;
+		}
+		#endif
+		#ifdef TCCR5A
+		case 5:
+		{
+			switch(_ch)
+			{
+				#ifdef OCIE5A
+				case 0:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE5B
+				case 1:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE5C
+				case 2:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE5D
+				case 3:
+				{
+					break;
+				}
+				#endif
+			}
+			break;
+		}
+		#endif
+		#ifdef TCCR6A
+		case 6:
+		{
+			switch(_ch)
+			{
+				#ifdef OCIE6A
+				case 0:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE6B
+				case 1:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE6C
+				case 2:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE6D
+				case 3:
+				{
+					break;
+				}
+				#endif
+			}
+			break;
+		}
+		#endif
+		#ifdef TCCR7A
+		case 7:
+		{
+			switch(_ch)
+			{
+				#ifdef OCIE7A
+				case 0:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE7B
+				case 1:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE7C
+				case 2:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE7D
+				case 3:
+				{
+					break;
+				}
+				#endif
+			}
+			break;
+		}
+		#endif
+		#ifdef TCCR8A
+		case 8:
+		{
+			switch(_ch)
+			{
+				#ifdef OCIE8A
+				case 0:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE8B
+				case 1:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE8C
+				case 2:
+				{
+					break;
+				}
+				#endif
+				#ifdef OCIE8D
+				case 3:
+				{
+					break;
+				}
+				#endif
+			}
+			break;
+		}
+		#endif
+	}
+}

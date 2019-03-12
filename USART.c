@@ -176,13 +176,9 @@ ISR(USART0_RX_vect)		   //interrupt handler called after recieving data
 		_inputBufEmpty_ = false;				//set empty flag down
 		_inputBufCounterInput_++;				//go next index for writing
 	}
+
 	
 	callCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_RX);
-	/*#ifdef INTERRUPT_CUSTOMFUNC_USART0_RX
-		if(funcs[INTERRUPT_CUSTOMFUNC_USART0_RX] != NULL)
-			funcs[INTERRUPT_CUSTOMFUNC_USART0_RX]();//call custom function
-	#endif
-	*/
 }
 
 /*
@@ -287,35 +283,27 @@ void USART0SetBitSettings(uint8_t __bitness)
 */
 void USART0Begin(uint64_t __baud)
 {
-	#if USE_USART0_INPUT == 1
 		for(int i = 0; i < _MAX_BUF_SIZE_; i++)//flush data array
 		{
 			_inputBuf_[i] = '\0';
 		}
-	#endif //if USE_USART0_INPUT == 1
 
 	UCSR0A = 1 <<  U2X0;									 //double speed mode
 	uint16_t __baudPrescaller =  ((F_CPU / (8 * __baud))) - 1;//((Clock rate / (16 * baudrate))) - 1
 														   //for U2X0 mode:
 														  //((Clock rate / (8 * baudrate))) - 1
-	#if USE_SERIAL_FASTBAUD == 1
 		if (((F_CPU == 16000000UL) && (__baud == 57600)) || (__baudPrescaller > 4095))	//disable double speed mode
 		{																				//if prescaller is too high
 			UCSR0A = 0;
 			__baudPrescaller = (F_CPU / (16 * __baud));
 		}
-	#endif //if USE_SERIAL_FASTBAUD == 1
 
 	UBRR0L = (uint8_t)(__baudPrescaller);//set low bits of baud prescaller
 	UBRR0H = (uint8_t)(__baudPrescaller >> 8);//set high bits of baud prescaller
 
-	#if USE_USART0_INPUT == 1
 		UCSR0B |= (1 << RXEN0) | (1 << RXCIE0);//enable recieve and interrupt on recieve
-	#endif //if USE_USART0_INPUT == 1
 
-	#if USE_USART0_OUTPUT == 1
 		UCSR0B |= (1 << TXEN0) | (1 << TXCIE0);//enable trancieve and interrupt on trancieve
-	#endif //if USE_USART0_OUTPUT == 1		  //
 											 //TODO: changable bit size
 	UCSR0C = (1 << UCSZ00) | (1 << UCSZ01); //set USART0 Character Size to 8 bit
 	/*

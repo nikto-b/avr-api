@@ -415,7 +415,7 @@
 #define TIMER3_COMC_FPWM_WGM_SET	((0 << COM3C1) | (1 << COM3C0))
 #define TIMER3_COMC_FPWM_CM_ST		((1 << COM3C1) | (0 << COM3C0))
 #define TIMER3_COMC_FPWM_SM_CT		((1 << COM3C1) | (1 << COM3C0))
-#define TIMER3_COMC_MASK			((1 << COM3C1) | (1 << COM3C1))
+#define TIMER3_COMC_MASK			((1 << COM3C1) | (1 << COM3C0))
 
 				//TIMER4
 #define TIMER4_COMA_FPWM_NORMAL		((0 << COM4A1) | (0 << COM4A0))

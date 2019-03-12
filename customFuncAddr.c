@@ -1,6 +1,7 @@
 #pragma once
 
 #include "customFuncAddr.h"
+#include "USART.h"
 
 void (*customFuncs[INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS])();
 
@@ -13,7 +14,10 @@ void (*customFuncs[INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS])();
 void callCustomFunc(unsigned char __addr)
 {
 	if(customFuncs[__addr] != NULL)
+	{
+		//USART0Println("CALL");
 		customFuncs[__addr]();
+	}
 }
 
 /*
@@ -26,5 +30,9 @@ void callCustomFunc(unsigned char __addr)
 void setCustomFunc(uint8_t __addr, void(* __func)())
 {
 	if(__addr < INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS)
+	{
+		//USART0Print("ADD");
+		//USART0Println(__addr);
 		customFuncs[__addr] = __func;
+	}
 }

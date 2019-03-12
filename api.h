@@ -4,12 +4,13 @@
 
 #include "settings.h"
 
+#include "customFuncAddr.h"
+
 #include "digitalRegisters.h"
 #include "Timers.h"
 #include "USART.h"
 #include "ADC.h"
 #include "watchdog.h"
-#include "customFuncAddr.h"
 
 //block interrupts for running user's code, 
 //will allow interrupts after running user's code
