@@ -19,7 +19,10 @@
 #include "USARTModes.h"
 #include "customFuncAddr.h"
 #include "base.h"
-	
+
+
+
+
 //set bit settings of USART, mode on input
 void USART0SetBitSettings(uint8_t);
 //init function, baudrate on input

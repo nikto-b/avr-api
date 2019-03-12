@@ -2,16 +2,26 @@
 
 #include "USART.h"
 
+
+#define USART_TX_BUF_LEN 200
+char _usart0_txbuf [USART_TX_BUF_LEN];
+uint16_t _usart0_txbuf_len_start = 0;
+uint16_t _usart0_txbuf_len_end = 0;
+
 /* 
  * Function USART0Send
  * Desc     Send byte to USART0
  * Input    _data: byte to send
  * Output   none
 */
-void USART0Send(char __data)			//send 1 byte to USART0
+void USART0Send(unsigned char __data)			//send 1 byte to USART0
 {
-	while(!(UCSR0A & (1 << UDRE0))){}//TODO: send to buf and get with interrupt
-	UDR0 = __data;
+	//while(!(UCSR0A & (1 << UDRE0))){}//TODO: send to buf and get with interrupt
+	//UDR0 = __data;
+	if(!(UCSR0A & (1 << UDRE0)) || _usart0_txbuf_len_end != 0)
+		_usart0_txbuf[_usart0_txbuf_len_end++] = __data;
+	else
+		UDR0 = __data;
 	/*
 	 * The transmit buffer can only be written
 	 * when the UDRE0 Flag in the UCSR0A Register is set
@@ -138,6 +148,15 @@ void USART0Println(int __data, byte __mode)
 */
 ISR(USART0_TX_vect)//interrupt handler called aftar transmitting data
 {
+	if(_usart0_txbuf_len_start != _usart0_txbuf_len_end)
+	{
+		UDR0 = _usart0_txbuf[_usart0_txbuf_len_start++];
+	}
+	else
+	{
+		_usart0_txbuf_len_start = 0;
+		_usart0_txbuf_len_end = 0;
+	}
 	callCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_TX);
 	/*#ifdef INTERRUPT_CUSTOMFUNC_USART0_TX
 		if(funcs[INTERRUPT_CUSTOMFUNC_USART0_TX] != NULL)
