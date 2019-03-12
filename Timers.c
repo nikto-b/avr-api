@@ -53,8 +53,8 @@ ISR(TIMER ## n ## _COMP ## k ## _vect)							\
 /**/															\
 void TIMER ## n ## Set ## k (uint16_t __k)						\
 {																\
-	OCR ## n ## k ## H = (uint8_t)__k;		/*set high registers of num*/\
-	OCR ## n ## k ## L = (uint8_t)(__k >> 8);	/*set low registers of num*/\
+	OCR ## n ## k ## L = (uint8_t)__k;		/*set high registers of num*/\
+	OCR ## n ## k ## H = (uint8_t)(__k >> 8);	/*set low registers of num*/\
 }
 
 #define GENSETk_8B(n, k)										\
