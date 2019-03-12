@@ -160,11 +160,11 @@
  * 1 			1			Set OC2A on Compare Match
  */
 
-#define TMER2_COMA_NPWM_NORMAL		((0 << COM2A1) | (0 << COM2A0))
-#define TMER2_COMA_NPWM_TOGGLE		((0 << COM2A1) | (1 << COM2A0))
-#define TMER2_COMA_NPWM_CLEAR		((1 << COM2A1) | (0 << COM2A0))
-#define TMER2_COMA_NPWM_SET			((1 << COM2A1) | (1 << COM2A0))
-#define TIMER2_COMA_MASK			((1 << COM2A1) | (1 << COM2A0))
+#define TIMER2_COMA_NORMAL				((0 << COM2A1) | (0 << COM2A1))
+#define TIMER2_COMA_WGM_SET				((0 << COM2A1) | (1 << COM2A1))
+#define TIMER2_COMA_CM_ST				((1 << COM2A1) | (0 << COM2A1))
+#define TIMER2_COMA_SM_CT				((0 << COM2A1) | (0 << COM2A1))
+#define TIMER2_COMA_MASK				((1 << COM2A1) | (1 << COM2A0))
 
 /*
  * 											T/C2	Compare Output Mode, Fast PWM Mode
@@ -178,11 +178,6 @@
  *
  * 1			1			Set OC2A on Compare Match, clear OC2A at TOP
  */
-
-#define TIMER2_COMA_FPWM_NORMAL				((0 << COM2A1) | (0 << COM2A1))
-#define TIMER2_COMA_FPWM_WGM_SET			((0 << COM2A1) | (1 << COM2A1))
-#define TIMER2_COMA_FPWM_CMST				((1 << COM2A1) | (0 << COM2A1))
-#define TIMER2_COMA_FPWM_SM_CT				((0 << COM2A1) | (0 << COM2A1))
 
 
 /*
@@ -215,13 +210,6 @@
  *
  * 1 			1			Set OC2B on Compare Match
  */
-
-#define TIMER2_COMB_NPWM_NORMAL			((0 << COM2B1) | (0 << COM2B0))
-#define TIMER2_COMB_NPWM_TOGGLE			((0 << COM2B1) | (1 << COM2B0))
-#define TIMER2_COMB_NPWM_CLEAR			((1 << COM2B1) | (0 << COM2B0))
-#define TIMER2_COMB_NPWM_SET			((1 << COM2B1) | (1 << COM2B0))
-#define TIMER2_COMB_MASK				((1 << COM2B1) | (1 << COM2B0))
-
 /*
  * 											T/C2	Compare Output Mode, Fast PWM Mode
  * COM2B1		COM2B0		Description
@@ -234,9 +222,12 @@
  * 1			1			Set OC2B on Compare Match, clear OC2B at TOP
  */
 
-#define TIMER2_COMB_FPWM_NORMAL		((0 << COM2B1) | (0 << COM2B1))
-#define TIMER2_COMB_FPWM_CM_ST		((1 << COM2B1) | (0 << COM2B1))
-#define TIMER2_COMB_FPWM_CT_SM		((1 << COM2B1) | (1 << COM2B1))
+
+#define TIMER2_COMB_NORMAL			((0 << COM2B1) | (0 << COM2B0))
+#define TIMER2_COMB_TOGGLE			((0 << COM2B1) | (1 << COM2B0))
+#define TIMER2_COMB_CM_ST			((1 << COM2B1) | (0 << COM2B1))
+#define TIMER2_COMB_CT_SM			((1 << COM2B1) | (1 << COM2B1))
+#define TIMER2_COMB_MASK			((1 << COM2B1) | (1 << COM2B0))
 
 /*
  * 										T/C2		Compare Output Mode, Phase Correct PWM Mode
@@ -249,10 +240,6 @@
  * 
  * 1			1			Set OC2B on Compare Match when up-counting. Clear OC2B on Compare Match when down-counting.
  */
-
-#define TIMER2_COMB_PWM_PHC_NORMAL			((0 << COM2B1) | (0 << COM2B0))
-#define TIMER2_COMB_PWM_PHC_CMUC_SMDC		((1 << COM2B1) | (0 << COM2B0))
-#define TIMER2_COMB_PWM_PHC_SMUC_CMDC		((1 << COM2B1) | (1 << COM2B0))
 
 
 /*
@@ -620,22 +607,22 @@
 #define TIMER4_WF_MASK					((1 << WGM43) | (1 << WGM42) | (1 << WGM41) | (1 << WGM40))
 
 						//TIMER5
-#define TIMER5_WF_NORMAL 				((0 << WGM53) | (0 << WGM52) | (0 << WGM51) | (0 << WGM35))
-#define TIMER5_WF_PWM_PHC_8B			((0 << WGM53) | (0 << WGM52) | (0 << WGM51) | (1 << WGM35))
-#define TIMER5_WF_PWM_PHC_9B			((0 << WGM53) | (0 << WGM52) | (1 << WGM51) | (0 << WGM35))
-#define TIMER5_WF_PWM_PHC_10B			((0 << WGM53) | (0 << WGM52) | (1 << WGM51) | (1 << WGM35))
-#define TIMER5_WF_CTC_TOPOCR5A			((0 << WGM53) | (1 << WGM52) | (0 << WGM51) | (0 << WGM35))
-#define TIMER5_WF_FPWM_8B 				((0 << WGM53) | (1 << WGM52) | (0 << WGM51) | (1 << WGM35))
-#define TIMER5_WF_FPWM_9B 				((0 << WGM53) | (1 << WGM52) | (1 << WGM51) | (0 << WGM35))
-#define TIMER5_WF_FPWM_10B 				((0 << WGM53) | (1 << WGM52) | (1 << WGM51) | (1 << WGM35))
-#define TIMER5_WF_PWM_PHFC_TOPICR5		((1 << WGM53) | (0 << WGM52) | (0 << WGM51) | (0 << WGM35))
-#define TIMER5_WF_PWM_PHFC_TOPOCR5A		((1 << WGM53) | (0 << WGM52) | (0 << WGM51) | (1 << WGM35))
-#define TIMER5_WF_PWM_PHC_TOPICR5 		((1 << WGM53) | (0 << WGM52) | (1 << WGM51) | (0 << WGM35))
-#define TIMER5_WF_PWM_PHC_TOPOCR5A 		((1 << WGM53) | (0 << WGM52) | (1 << WGM51) | (1 << WGM35))
-#define TIMER5_WF_CTC_TOPICR5			((1 << WGM53) | (1 << WGM52) | (0 << WGM51) | (0 << WGM35))
-#define TIMER5_WF_FPWM_TOPICR5			((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (0 << WGM35))
-#define TIMER5_WF_FPWM_TOPOCR5A			((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (1 << WGM35))
-#define TIMER5_WF_MASK					((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (1 << WGM35))
+#define TIMER5_WF_NORMAL 				((0 << WGM53) | (0 << WGM52) | (0 << WGM51) | (0 << WGM53))
+#define TIMER5_WF_PWM_PHC_8B			((0 << WGM53) | (0 << WGM52) | (0 << WGM51) | (1 << WGM53))
+#define TIMER5_WF_PWM_PHC_9B			((0 << WGM53) | (0 << WGM52) | (1 << WGM51) | (0 << WGM53))
+#define TIMER5_WF_PWM_PHC_10B			((0 << WGM53) | (0 << WGM52) | (1 << WGM51) | (1 << WGM53))
+#define TIMER5_WF_CTC_TOPOCR5A			((0 << WGM53) | (1 << WGM52) | (0 << WGM51) | (0 << WGM53))
+#define TIMER5_WF_FPWM_8B 				((0 << WGM53) | (1 << WGM52) | (0 << WGM51) | (1 << WGM53))
+#define TIMER5_WF_FPWM_9B 				((0 << WGM53) | (1 << WGM52) | (1 << WGM51) | (0 << WGM53))
+#define TIMER5_WF_FPWM_10B 				((0 << WGM53) | (1 << WGM52) | (1 << WGM51) | (1 << WGM53))
+#define TIMER5_WF_PWM_PHFC_TOPICR5		((1 << WGM53) | (0 << WGM52) | (0 << WGM51) | (0 << WGM53))
+#define TIMER5_WF_PWM_PHFC_TOPOCR5A		((1 << WGM53) | (0 << WGM52) | (0 << WGM51) | (1 << WGM53))
+#define TIMER5_WF_PWM_PHC_TOPICR5 		((1 << WGM53) | (0 << WGM52) | (1 << WGM51) | (0 << WGM53))
+#define TIMER5_WF_PWM_PHC_TOPOCR5A 		((1 << WGM53) | (0 << WGM52) | (1 << WGM51) | (1 << WGM53))
+#define TIMER5_WF_CTC_TOPICR5			((1 << WGM53) | (1 << WGM52) | (0 << WGM51) | (0 << WGM53))
+#define TIMER5_WF_FPWM_TOPICR5			((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (0 << WGM53))
+#define TIMER5_WF_FPWM_TOPOCR5A			((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (1 << WGM53))
+#define TIMER5_WF_MASK					((1 << WGM53) | (1 << WGM52) | (1 << WGM51) | (1 << WGM53))
 
 
 

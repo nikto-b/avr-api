@@ -508,7 +508,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE0A
 				case 0:
 				{
-					TIMER0Init(TIMER0_COMA_FPWM_CM_ST, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1);
+					TIMER0Init(TIMER0_COMA_FPWM_CM_ST, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1024);
 					TIMER0SetA(_num);
 					break;
 				}
@@ -516,7 +516,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE0B
 				case 1:
 				{
-					TIMER0Init(TIMER0_COMB_FPWM_NORMAL, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1);
+					TIMER0Init(TIMER0_COMB_FPWM_NORMAL, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1024);
 					TIMER0SetB(_num);
 					break;
 				}
@@ -524,7 +524,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE0C
 				case 2:
 				{
-					TIMER0Init(TIMER0_COMC_FPWM_NORMAL, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1);
+					TIMER0Init(TIMER0_COMC_FPWM_NORMAL, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1024);
 					TIMER0SetC(_num);
 					break;
 				}
@@ -541,7 +541,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE1A
 				case 0:
 				{
-					TIMER1Init(TIMER1_COMA_NORMAL, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1);
+					TIMER1Init(TIMER1_COMA_CM_ST, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1024);
 					TIMER1SetA(_num);
 					break;
 				}
@@ -549,7 +549,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE1B
 				case 1:
 				{
-					TIMER1Init(TIMER1_COMB_NORMAL, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1);
+					TIMER1Init(TIMER1_COMB_CM_ST, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1024);
 					TIMER1SetB(_num);
 					break;
 				}
@@ -557,7 +557,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE1C
 				case 2:
 				{
-					TIMER1Init(TIMER1_COMC_NORMAL, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1);
+					TIMER1Init(TIMER1_COMC_CM_ST, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1024);
 					TIMER1SetC(_num);
 					break;
 				}
@@ -574,20 +574,24 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE2A
 				case 0:
 				{
-					//TIMER2Init(TIMER2_FPWM_NORMAL, TIMER2_COMA_WF_FPWM, TIMER2_CLK_SRC_1);
-					//TIMER2SetA(_num);
+					TIMER2Init(TIMER2_COMA_CM_ST, TIMER2_WF_FPWM, TIMER2_CLK_SRC_1024);
+					TIMER2SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE2B
 				case 1:
 				{
+					TIMER2Init(TIMER2_COMB_CM_ST, TIMER2_WF_FPWM, TIMER2_CLK_SRC_1024);
+					TIMER2SetB(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE2C
 				case 2:
 				{
+					TIMER2Init(TIMER2_COMC_CM_ST, TIMER2_WF_FPWM, TIMER2_CLK_SRC_1024);
+					TIMER2SetC(_num);
 					break;
 				}
 				#endif
@@ -603,18 +607,24 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE3A
 				case 0:
 				{
+					TIMER3Init(TIMER3_COMA_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);
+					TIMER3SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE3B
 				case 1:
 				{
+					TIMER3Init(TIMER3_COMB_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);
+					TIMER3SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE3C
 				case 2:
 				{
+					TIMER3Init(TIMER3_COMC_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);
+					TIMER3SetA(_num);
 					break;
 				}
 				#endif
@@ -630,18 +640,24 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE4A
 				case 0:
 				{
+					TIMER4Init(TIMER4_COMA_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
+					TIMER4SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE4B
 				case 1:
 				{
+					TIMER4Init(TIMER4_COMB_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
+					TIMER4SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE4C
 				case 2:
 				{
+					TIMER4Init(TIMER4_COMC_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
+					TIMER4SetA(_num);
 					break;
 				}
 				#endif
@@ -657,18 +673,24 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE5A
 				case 0:
 				{
+					TIMER5Init(TIMER5_COMA_CM_ST, TIMER5_WF_FPWM_8B, TIMER5_CLK_SRC_1024);
+					TIMER5SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE5B
 				case 1:
 				{
+					TIMER5Init(TIMER5_COMB_CM_ST, TIMER5_WF_FPWM_8B, TIMER5_CLK_SRC_1024);
+					TIMER5SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE5C
 				case 2:
 				{
+					TIMER5Init(TIMER5_COMC_CM_ST, TIMER5_WF_FPWM_8B, TIMER5_CLK_SRC_1024);
+					TIMER5SetA(_num);
 					break;
 				}
 				#endif
@@ -684,18 +706,24 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE6A
 				case 0:
 				{
+					TIMER6Init(TIMER6_COMA_CM_ST, TIMER6_WF_FPWM, TIMER6_CLK_SRC_1024);
+					TIMER6SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE6B
 				case 1:
 				{
+					TIMER6Init(TIMER6_COMB_CM_ST, TIMER6_WF_FPWM, TIMER6_CLK_SRC_1024);
+					TIMER6SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE6C
 				case 2:
 				{
+					TIMER6Init(TIMER6_COMC_CM_ST, TIMER6_WF_FPWM, TIMER6_CLK_SRC_1024);
+					TIMER6SetA(_num);
 					break;
 				}
 				#endif
@@ -711,18 +739,24 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE7A
 				case 0:
 				{
+					TIMER7Init(TIMER7_COMA_CM_ST, TIMER7_WF_FPWM, TIMER7_CLK_SRC_1024);
+					TIMER7SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE7B
 				case 1:
 				{
+					TIMER7Init(TIMER7_COMB_CM_ST, TIMER7_WF_FPWM, TIMER7_CLK_SRC_1024);
+					TIMER7SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE7C
 				case 2:
 				{
+					TIMER7Init(TIMER7_COMC_CM_ST, TIMER7_WF_FPWM, TIMER7_CLK_SRC_1024);
+					TIMER7SetA(_num);
 					break;
 				}
 				#endif
@@ -738,18 +772,24 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				#ifdef OCIE8A
 				case 0:
 				{
+					TIMER8Init(TIMER8_COMA_CM_ST, TIMER8_WF_FPWM, TIMER8_CLK_SRC_1024);
+					TIMER8SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE8B
 				case 1:
 				{
+					TIMER8Init(TIMER8_COMB_CM_ST, TIMER8_WF_FPWM, TIMER8_CLK_SRC_1024);
+					TIMER8SetA(_num);
 					break;
 				}
 				#endif
 				#ifdef OCIE8C
 				case 2:
 				{
+					TIMER8Init(TIMER8_COMC_CM_ST, TIMER8_WF_FPWM, TIMER8_CLK_SRC_1024);
+					TIMER8SetA(_num);
 					break;
 				}
 				#endif
