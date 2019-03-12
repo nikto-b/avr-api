@@ -11,6 +11,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num);
 #ifdef TCCR0A 	//TIMER0
 	void TIMER0Init(uint8_t _com ,uint8_t _wfmode, uint8_t _clk);
 	void TIMER0SetCLK(uint8_t);
+	void TIMER0Flush();
 	
 	//just for fun
 	#ifdef OCR0AL//check 16 bit

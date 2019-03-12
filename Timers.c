@@ -11,10 +11,10 @@
 /*			_wfmode: what Waveform generation mode use to 	*/	\
 /*			_clk: what clock source use to 					*/	\
 /* Output   none	 										*/	\
-/**/																\
+/**/															\
 void TIMER ## n ## Init(uint8_t _com ,uint8_t _wfmode, uint8_t _clk)\
 {																\
-	TCCR ## n ## A = _wfmode | _com;							\
+	TCCR ## n ## A = (TCCR ## n ## A & ~(_wfmode | _com)) | (_wfmode | _com);\
 	TCCR ## n ## B = _clk & TIMER ## n ## _CLK_SRC_MASK;		\
 }
 
@@ -93,11 +93,25 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 	TIMSK ## n &= ~(1 << OCIE ## n ## k );/*disable interrupt on compare with k num*/\
 }
 
+#define GENFLUSH(n)												\
+/*														*/		\
+/* Function TIMERnDisableCOMPkInterrupt					*/		\
+/* Desc     Disable interrupt on compare with k num		*/		\
+/* Input    none										*/		\
+/* Output   none										*/		\
+/**/															\
+void TIMER ## n ## Flush()										\
+{																\
+	TIMSK ## n = 0;												\
+	TCCR ## n ## A = 0;											\
+	TCCR ## n ## B = 0;											\
+}
 
 
 #ifdef TCCR0A
 	GENINIT(0)
 	GENSETCLK(0)
+	GENFLUSH(0)
 	#if (defined(OCIE0A))
 		GENISR_COMPk(0, A)
 		#ifdef OCR0AL
@@ -136,6 +150,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 #ifdef TCCR1A
 	GENINIT(1)
 	GENSETCLK(1)
+	GENFLUSH(1)
 	#if (defined(OCIE1A))
 		GENISR_COMPk(1, A)
 		#ifdef OCR1AL
@@ -165,11 +180,11 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 		#else
 			GENSETk_8B(1, C)
 		#endif
-		void TIMER1SetC (uint16_t __k)						\
-		{																\
-			OCR1CH = (uint8_t)__k;		/*set high registers of num*/\
-			OCR1CL = (uint8_t)(__k >> 8);	/*set low registers of num*/\
-		}
+		//void TIMER1SetC (uint16_t __k)						\
+		//{																\
+		//	OCR1CH = (uint8_t)__k;		/*set high registers of num*/\
+		//	OCR1CL = (uint8_t)(__k >> 8);	/*set low registers of num*/\
+		//}
 
 		GENENABLECOMPkINTERRUPT(1, C)
 		GENDISABLECOMPkINTERRUPT(1, C)
@@ -182,6 +197,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 #ifdef TCCR2A
 	GENINIT(2)
 	GENSETCLK(2)
+	GENFLUSH(2)
 	#if (defined(OCIE2A))
 		GENISR_COMPk(2, A)
 		#ifdef OCR2AL
@@ -220,6 +236,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 #ifdef TCCR3A
 	GENINIT(3)
 	GENSETCLK(3)
+	GENFLUSH(3)
 	#ifdef OCIE3A
 		GENISR_COMPk(3, A)
 		#ifdef OCR3AL
@@ -259,6 +276,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 #ifdef TCCR4A
 	GENINIT(4)
 	GENSETCLK(4)
+	GENFLUSH(4)
 	#if (defined(OCIE4A))
 		GENISR_COMPk(4, A)
 		#ifdef OCR4AL
@@ -297,6 +315,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 #ifdef TCCR5A
 	GENINIT(5)
 	GENSETCLK(5)
+	GENFLUSH(5)
 	#if (defined(OCIE5A))
 		GENISR_COMPk(5, A)
 		#ifdef OCR5AL
@@ -336,6 +355,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 #ifdef TCCR6A
 	GENINIT(6)
 	GENSETCLK(6)
+	GENFLUSH(6)
 	#if (defined(OCIE6A))
 		GENISR_COMPk(6, A)
 		#ifdef OCR6AL
@@ -375,6 +395,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 #ifdef TCCR7A
 	GENINIT(7)
 	GENSETCLK(7)
+	GENFLUSH(7)
 	#if (defined(OCIE7A))
 		GENISR_COMPk(7, A)
 		#ifdef OCR7AL
@@ -414,6 +435,7 @@ void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
 #ifdef TCCR8A
 	GENINIT(8)
 	GENSETCLK(8)
+	GENFLUSH(8)
 	#if (defined(OCIE8A))
 		GENISR_COMPk(8, A)
 		#ifdef OCR8AL
