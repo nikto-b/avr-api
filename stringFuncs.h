@@ -32,3 +32,12 @@ char* long2str(long __in);//convert long var to char array
 char* byte2str(byte __in);//convert byte var to char array
 char* bool2str(bool __in);//convert bool var to char array
 
+
+
+bool contains(const char* _inbuf, uint16_t _len, char _ch);
+bool contains(const char* _inbuf, char _ch);
+uint16_t indexOf(const char* _in, char _c);
+uint16_t indexOf(const char* _in, uint16_t _len, char _c);
+char* strCut(const char* _in, uint16_t start, uint16_t end);
+char* strSplit(const char* _in, char _opening, char _closing);
+char* strSplit(const char* _in, uint16_t _len, char _opening, char _closing);

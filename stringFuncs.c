@@ -266,3 +266,149 @@ char* bool2str(bool __in)//convert bool var to char array
 		return (char*)"false";
 	}
 }
+
+/*
+ *	Function:	contains
+ *	Desc:		Check input cstr for containing a char
+ *	Input:		const char* _inbuf: input string(char array)
+ 				uint16_t _len: len of input char array
+ 				char _ch: what char search to
+ *	Output:		bool
+ */
+bool contains(const char* _inbuf, uint16_t _len, char _ch)
+{
+	for(uint16_t i = 0; i < _len; i++)
+	{
+		if(_inbuf[i] == _ch)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+/*
+ *	Function:	contains
+ *	Desc:		Check input cstr for containing a char
+ *	Input:		char* _inbuf: input cstr
+ 				char _ch: what char search to
+ *	Output:		bool
+ */
+bool contains(const char* _inbuf, char _ch)
+{
+	while(*_inbuf)
+	{
+		if(*_inbuf == _ch)
+			return true;
+		_inbuf++;
+	}
+	return false;
+}
+
+/*
+ *	Function:	indexOf
+ *	Desc:		Search for char in cstr and return index of char
+ *	Input:		const char* _in: cstr
+ 				char _c: what char search to
+ *	Output:		uint16_t: index of char
+ */
+uint16_t indexOf(const char* _in, char _c)
+{
+	uint16_t _ret = 0;
+	while(*_in != 0)
+	{
+		if(*_in == _c)
+			return _ret;
+		_in++;
+		_ret++;
+	}
+	return 0xFFFF;
+}
+/*
+ *	Function:	indexOf
+ *	Desc:		Search for char in cstr and return index of char
+ *	Input:		const char* _in: cstr
+ 				uint16_t _len: len of cstr
+ 				char _c: what char search to
+ *	Output:		uint16_t: index of char
+ */
+uint16_t indexOf(const char* _in, uint16_t _len, char _c)
+{
+	uint16_t _ret = 0;
+
+	while(--_len)
+	{
+		if(_in[_len] == _c)
+			return _len;
+	}
+	return 0xFFFF;
+}
+/*
+ *	Function:	strcut
+ *	Desc:		Cut substr from start index to end index
+ *	Input:		const char* _in: cstr
+ 				uint16_t start: index of start
+ 				uint16_t end: index of end
+ *	Output:		char*: ptr on cutted substr
+ */
+char* strCut(const char* _in, uint16_t start, uint16_t end)
+{
+	if(end >= start)
+	{
+		char* _arr = malloc(sizeof(char) * (end - start + 2));
+		uint16_t i = 1;
+		while(i <= end - start)
+		{
+			_arr[i - 1] = _in[start + i];
+			i++;
+		}
+		_arr[end - start + 1] = 0;
+		return _arr;
+	}
+	else
+		return 0;
+}
+/*
+ *	Function:	strSplit
+ *	Desc:		Cut substr from start char to end char 
+ 				Example:	callling strSplit("qwerty(abc)uiop", '(', ')') will return "abc"
+ *	Input:		const char* _in: cstr
+ 				char _opening: opening char
+ 				char _closing: closing char
+ *	Output:		char*: ptr on cutted substr
+ */
+char* strSplit(const char* _in, char _opening, char _closing)
+{
+	uint16_t	opening = indexOf(_in, _opening),
+				closing = indexOf(_in, _closing);
+	if(closing - opening > 1)
+	{
+		char* _arr = strCut(_in, opening + 1, closing - 1);
+		return _arr;
+	}
+	else
+		return 0;
+}
+/*
+ *	Function:	strSplit
+ *	Desc:		Cut substr from start char to end char 
+ 				Example:	callling strSplit("qwerty(abc)uiop", strlen("qwerty(abc)uiop"), '(', ')') will return "abc"
+ *	Input:		const char* _in: cstr
+ 				uint16_t _len: len of input cstr
+ 				char _opening: opening char
+ 				char _closing: closing char
+ *	Output:		char*: ptr on cutted substr
+ */
+char* strSplit(const char* _in, uint16_t _len, char _opening, char _closing)
+{
+	uint16_t opening = indexOf(_in, _len, _opening);
+	uint16_t closing = indexOf(_in, _len, _closing);
+	if(closing - opening > 1)
+	{
+		char* _arr = strCut(_in, opening + 1, closing - 1);
+		return _arr;
+	}
+	else
+		return 0;
+}
+
