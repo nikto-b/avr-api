@@ -5,6 +5,7 @@
 MCUNAME=atmega328p
 PROGRAMMER=arduino
 FILENAME=main
+#USBPORT=/dev/ttyACM0
 USBPORT=/dev/ttyUSB0
 
 BAUDRATE=9600

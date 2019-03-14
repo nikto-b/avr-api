@@ -1,1444 +1,801 @@
-/*
- * TODO:	COMPC on T/C №1,3,4
-*/
- 
+#pragma once
+
+#include "Timers.h"
+#include "customFuncAddr.h"
+
+#define GENINIT(n)												\
+/*															*/	\
+/* Function TIMERnInit										*/	\
+/* Desc     init T/Cn 										*/	\
+/* Input    _com: what Compare Output Mode use to 			*/	\
+/*			_wfmode: what Waveform generation mode use to 	*/	\
+/*			_clk: what clock source use to 					*/	\
+/* Output   none	 										*/	\
+/**/															\
+void TIMER ## n ## Init(uint8_t _com ,uint8_t _wfmode, uint8_t _clk)\
+{																\
+	TCCR ## n ## A = (TCCR ## n ## A & ~(_wfmode | _com)) | (_wfmode | _com);\
+	TCCR ## n ## B = _clk & TIMER ## n ## _CLK_SRC_MASK;		\
+}
 
 
-#if USE_TIMERS == 1
-	#if defined(TCCR0A)//if mcu have TIMER0
-		#pragma message "TIMER0 found"
-		
+#define GENSETCLK(n)											\
+/*															*/	\
+/* Function TIMERnSetCLK									*/	\
+/* Desc     Change clock source in T/Cn 					*/	\
+/* Input    _clk: what clk change to 						*/	\
+/* Output   none 											*/	\
+/**/															\
+void TIMER ## n ## SetCLK(uint8_t _clk)							\
+{																\
+	TCCR ## n ## B &= ~TIMER ## n ## _CLK_SRC_MASK;				\
+	TCCR ## n ## B |= _clk & TIMER ## n ## _CLK_SRC_MASK;		\
+}
 
-		/*
-		 * Function TIMER0Init
-		 * Desc     init T/C0
-		 * Input    __mode: what mode of T/C0
-		 * Output   none
-		*/
-		void TIMER0Init(uint8_t __mode)
+#define GENISR_COMPk(n, k)										\
+/*														*/		\
+/* Function: ISR(TIMERn_COMPk_vect)						*/		\
+/* Desc: Interrupt handler for T/Cn Compare with A 		*/		\
+/* Input: interrupt vector 								*/		\
+/* Output: none											*/		\
+/**/															\
+ISR(TIMER ## n ## _COMP ## k ## _vect)							\
+{																\
+	callCustomFunc(INTERRUPT_CUSTOMFUNC_TC ## n ## _COMP ## k);	\
+}
+
+#define GENSETk_16B(n, k)										\
+/*										*/						\
+/* Function TIMERnSetk					*/						\
+/* Desc     Set k num of T/Cn 			*/						\
+/* Input    __k: what num set to 		*/						\
+/* Output   none						*/						\
+/**/															\
+void TIMER ## n ## Set ## k (uint16_t __k)						\
+{																\
+	OCR ## n ## k ## L = (uint8_t)__k;		/*set high registers of num*/\
+	OCR ## n ## k ## H = (uint8_t)(__k >> 8);	/*set low registers of num*/\
+}
+
+#define GENSETk_8B(n, k)										\
+/*															*/	\
+/* Function TIMERnSetk 										*/	\
+/* Desc     set k num of T/Cn 								*/	\
+/* Input    __k: what num set to 							*/	\
+/* Output   none 											*/	\
+/**/ 															\
+void TIMER ## n ## Set ## k(uint8_t __k)						\
+{																\
+	OCR ## n ## k = (uint8_t)__k;/*set k num*/ 					\
+}
+
+#define GENENABLECOMPkINTERRUPT(n, k)							\
+/*															*/	\
+/* Function TIMERnEnableCOMkInterrupt						*/	\
+/* Desc     enable interrupt on compare with k num 			*/	\
+/* Input    none											*/	\
+/* Output   none											*/	\
+/**/															\
+void TIMER ## n ## EnableCOMP ## k ## Interrupt(void)	\
+{																\
+	TIMSK ## n = (TIMSK ## n & ~(1 << OCIE ## n ## k )) | (1 << OCIE ## n ## k );/*enable interrupt on compare with k num*/\
+}
+
+#define GENDISABLECOMPkINTERRUPT(n, k)							\
+/*														*/		\
+/* Function TIMERnDisableCOMPkInterrupt					*/		\
+/* Desc     Disable interrupt on compare with k num		*/		\
+/* Input    none										*/		\
+/* Output   none										*/		\
+/**/															\
+void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
+{																\
+	TIMSK ## n &= ~(1 << OCIE ## n ## k );/*disable interrupt on compare with k num*/\
+}
+
+#define GENFLUSH(n)												\
+/*														*/		\
+/* Function TIMERnDisableCOMPkInterrupt					*/		\
+/* Desc     Disable interrupt on compare with k num		*/		\
+/* Input    none										*/		\
+/* Output   none										*/		\
+/**/															\
+void TIMER ## n ## Flush()										\
+{																\
+	TIMSK ## n = 0;												\
+	TCCR ## n ## A = 0;											\
+	TCCR ## n ## B = 0;											\
+}
+
+
+#ifdef TCCR0A
+	GENINIT(0)
+	GENSETCLK(0)
+	GENFLUSH(0)
+	#if (defined(OCIE0A))
+		GENISR_COMPk(0, A)
+		#ifdef OCR0AL
+			GENSETk_16B(0, A)
+		#else
+			GENSETk_8B(0, A)
+		#endif
+		GENENABLECOMPkINTERRUPT(0, A)
+		GENDISABLECOMPkINTERRUPT(0, A)
+	#endif //if defined(OCIE0A) && TIMER0_USE_COMPA
+
+	#if (defined(OCIE0B))
+		GENISR_COMPk(0, B)
+		#ifdef OCR0BL
+			GENSETk_16B(0, B)
+		#else
+			GENSETk_8B(0, B)
+		#endif
+		GENENABLECOMPkINTERRUPT(0, B)
+		GENDISABLECOMPkINTERRUPT(0, B)
+	#endif //if defined(OCIE0B) && TIMER0_USE_COMPB
+
+	#if (defined(OCIE0C))
+		GENISR_COMPk(0, C)
+		#ifdef OCR0CL
+			GENSETk_16B(0, C)
+		#else
+			GENSETk_8B(0, C)
+		#endif
+		GENENABLECOMPkINTERRUPT(0, C)
+		GENDISABLECOMPkINTERRUPT(0, C)
+	#endif //if defined(OCIE0C) && TIMER0_USE_COMPC
+#endif	//ifdef TCCR0A
+
+
+#ifdef TCCR1A
+	GENINIT(1)
+	GENSETCLK(1)
+	GENFLUSH(1)
+	#if (defined(OCIE1A))
+		GENISR_COMPk(1, A)
+		#ifdef OCR1AL
+			GENSETk_16B(1, A)
+		#else
+			GENSETk_8B(1, A)
+		#endif
+		GENENABLECOMPkINTERRUPT(1, A)
+		GENDISABLECOMPkINTERRUPT(1, A)
+	#endif //if defined(OCIE1A) && TIMER1_USE_COMPA
+
+	#if (defined(OCIE1B))
+		GENISR_COMPk(1, B)
+		#ifdef OCR1BL
+			GENSETk_16B(1, B)
+		#else
+			GENSETk_8B(1, B)
+		#endif
+		GENENABLECOMPkINTERRUPT(1, B)
+		GENDISABLECOMPkINTERRUPT(1, B)
+	#endif //if defined(OCIE1B) && TIMER1_USE_COMPB
+
+	#if (defined(OCIE1C))
+		GENISR_COMPk(1, C)
+		#ifdef OCR1CL
+			GENSETk_16B(1, C)
+		#else
+			GENSETk_8B(1, C)
+		#endif
+		//void TIMER1SetC (uint16_t __k)						\
+		//{																\
+		//	OCR1CH = (uint8_t)__k;		/*set high registers of num*/\
+		//	OCR1CL = (uint8_t)(__k >> 8);	/*set low registers of num*/\
+		//}
+
+		GENENABLECOMPkINTERRUPT(1, C)
+		GENDISABLECOMPkINTERRUPT(1, C)
+	#endif //if defined(OCIE1C) && TIMER1_USE_COMPC
+#endif	//ifdef TCCR1A
+
+
+
+
+#ifdef TCCR2A
+	GENINIT(2)
+	GENSETCLK(2)
+	GENFLUSH(2)
+	#if (defined(OCIE2A))
+		GENISR_COMPk(2, A)
+		#ifdef OCR2AL
+			GENSETk_16B(2, A)
+		#else
+			GENSETk_8B(2, A)
+		#endif
+		GENENABLECOMPkINTERRUPT(2, A)
+		GENDISABLECOMPkINTERRUPT(2, A)
+	#endif //if defined(OCIE2A) && TIMER2_USE_COMPA
+
+	#if (defined(OCIE2B))
+		GENISR_COMPk(2, B)
+		#ifdef OCR2BL
+			GENSETk_16B(2, B)
+		#else
+			GENSETk_8B(2, B)
+		#endif
+		GENENABLECOMPkINTERRUPT(2, B)
+		GENDISABLECOMPkINTERRUPT(2, B)
+	#endif //if defined(OCIE2B) && TIMER2_USE_COMPB
+
+	#if (defined(OCIE2C))
+		GENISR_COMPk(2, C)
+		#ifdef OCR2CL
+			GENSETk_16B(2, C)
+		#else
+			GENSETk_8B(2, C)
+		#endif
+		GENENABLECOMPkINTERRUPT(2, C)
+		GENDISABLECOMPkINTERRUPT(2, C)
+	#endif //if defined(OCIE2C) && TIMER2_USE_COMPC
+#endif	//ifdef TCCR2A
+
+
+#ifdef TCCR3A
+	GENINIT(3)
+	GENSETCLK(3)
+	GENFLUSH(3)
+	#ifdef OCIE3A
+		GENISR_COMPk(3, A)
+		#ifdef OCR3AL
+			GENSETk_16B(3, A)
+		#else
+			GENSETk_8B(3, A)
+		#endif
+		GENENABLECOMPkINTERRUPT(3, A)
+		GENDISABLECOMPkINTERRUPT(3, A)
+	#endif //if defined(OCIE3A) && TIMER3_USE_COMPA
+
+	#if (defined(OCIE3B))
+		GENISR_COMPk(3, B)
+		#ifdef OCR3BL
+			GENSETk_16B(3, B)
+		#else
+			GENSETk_8B(3, B)
+		#endif
+		GENENABLECOMPkINTERRUPT(3, B)
+		GENDISABLECOMPkINTERRUPT(3, B)
+	#endif //if defined(OCIE3B) && TIMER3_USE_COMPB
+
+	#if (defined(OCIE3C))
+		GENISR_COMPk(3, C)
+		#ifdef OCR3CL
+			GENSETk_16B(3, C)
+		#else
+			GENSETk_8B(3, C)
+		#endif
+		GENENABLECOMPkINTERRUPT(3, C)
+		GENDISABLECOMPkINTERRUPT(3, C)
+	#endif //if defined(OCIE3C) && TIMER3_USE_COMPC
+#endif	//ifdef TCCR3A
+
+
+
+#ifdef TCCR4A
+	GENINIT(4)
+	GENSETCLK(4)
+	GENFLUSH(4)
+	#if (defined(OCIE4A))
+		GENISR_COMPk(4, A)
+		#ifdef OCR4AL
+			GENSETk_16B(4, A)
+		#else
+			GENSETk_8B(4, A)
+		#endif
+		GENENABLECOMPkINTERRUPT(4, A)
+		GENDISABLECOMPkINTERRUPT(4, A)
+	#endif //if defined(OCIE4A) && TIMER4_USE_COMPA
+
+	#if (defined(OCIE4B))
+		GENISR_COMPk(4, B)
+		#ifdef OCR4BL
+			GENSETk_16B(4, B)
+		#else
+			GENSETk_8B(4, B)
+		#endif
+		GENENABLECOMPkINTERRUPT(4, B)
+		GENDISABLECOMPkINTERRUPT(4, B)
+	#endif //if defined(OCIE4B) && TIMER4_USE_COMPB
+
+	#if (defined(OCIE4C))
+		GENISR_COMPk(4, C)
+		#ifdef OCR4CL
+			GENSETk_16B(4, C)
+		#else
+			GENSETk_8B(4, C)
+		#endif
+		GENENABLECOMPkINTERRUPT(4, C)
+		GENDISABLECOMPkINTERRUPT(4, C)
+	#endif //if defined(OCIE4C) && TIMER4_USE_COMPC
+#endif	//ifdef TCCR4A
+
+
+#ifdef TCCR5A
+	GENINIT(5)
+	GENSETCLK(5)
+	GENFLUSH(5)
+	#if (defined(OCIE5A))
+		GENISR_COMPk(5, A)
+		#ifdef OCR5AL
+			GENSETk_16B(5, A)
+		#else
+			GENSETk_8B(5, A)
+		#endif
+		GENENABLECOMPkINTERRUPT(5, A)
+		GENDISABLECOMPkINTERRUPT(5, A)
+	#endif //if defined(OCIE5A) && TIMER5_USE_COMPA
+
+	#if (defined(OCIE5B))
+		GENISR_COMPk(5, B)
+		#ifdef OCR5BL
+			GENSETk_16B(5, B)
+		#else
+			GENSETk_8B(5, B)
+		#endif
+		GENENABLECOMPkINTERRUPT(5, B)
+		GENDISABLECOMPkINTERRUPT(5, B)
+	#endif //if defined(OCIE5B) && TIMER5_USE_COMPB
+
+	#if (defined(OCIE5C))
+		GENISR_COMPk(5, C)
+		#ifdef OCR5CL
+			GENSETk_16B(5, C)
+		#else
+			GENSETk_8B(5, C)
+		#endif
+		GENENABLECOMPkINTERRUPT(5, C)
+		GENDISABLECOMPkINTERRUPT(5, C)
+	#endif //if defined(OCIE5C) && TIMER5_USE_COMPC
+#endif	//ifdef TCCR5A
+
+
+
+#ifdef TCCR6A
+	GENINIT(6)
+	GENSETCLK(6)
+	GENFLUSH(6)
+	#if (defined(OCIE6A))
+		GENISR_COMPk(6, A)
+		#ifdef OCR6AL
+			GENSETk_16B(6, A)
+		#else
+			GENSETk_8B(6, A)
+		#endif
+		GENENABLECOMPkINTERRUPT(6, A)
+		GENDISABLECOMPkINTERRUPT(6, A)
+	#endif //if defined(OCIE6A) && TIMER6_USE_COMPA
+
+	#if (defined(OCIE6B))
+		GENISR_COMPk(6, B)
+		#ifdef OCR6BL
+			GENSETk_16B(6, B)
+		#else
+			GENSETk_8B(6, B)
+		#endif
+		GENENABLECOMPkINTERRUPT(6, B)
+		GENDISABLECOMPkINTERRUPT(6, B)
+	#endif //if defined(OCIE6B) && TIMER6_USE_COMPB
+
+	#if (defined(OCIE6C) && TIMER6_USE_COMPC == 1)
+		GENISR_COMPk(6, C)
+		#ifdef OCR6CL
+			GENSETk_16B(6, C)
+		#else
+			GENSETk_8B(6, C)
+		#endif
+		GENENABLECOMPkINTERRUPT(6, C)
+		GENDISABLECOMPkINTERRUPT(6, C)
+	#endif //if defined(OCIE6C) && TIMER6_USE_COMPC
+#endif	//ifdef TCCR6A
+
+
+
+#ifdef TCCR7A
+	GENINIT(7)
+	GENSETCLK(7)
+	GENFLUSH(7)
+	#if (defined(OCIE7A))
+		GENISR_COMPk(7, A)
+		#ifdef OCR7AL
+			GENSETk_16B(7, A)
+		#else
+			GENSETk_8B(7, A)
+		#endif
+		GENENABLECOMPkINTERRUPT(7, A)
+		GENDISABLECOMPkINTERRUPT(7, A)
+	#endif //if defined(OCIE7A) && TIMER7_USE_COMPA
+
+	#if (defined(OCIE7B) && TIMER7_USE_COMPB == 1)
+		GENISR_COMPk(7, B)
+		#ifdef OCR7BL
+			GENSETk_16B(7, B)
+		#else
+			GENSETk_8B(7, B)
+		#endif
+		GENENABLECOMPkINTERRUPT(7, B)
+		GENDISABLECOMPkINTERRUPT(7, B)
+	#endif //if defined(OCIE7B) && TIMER7_USE_COMPB
+
+	#if (defined(OCIE7C))
+		GENISR_COMPk(7, C)
+		#ifdef OCR7CL
+			GENSETk_16B(7, C)
+		#else
+			GENSETk_8B(7, C)
+		#endif
+		GENENABLECOMPkINTERRUPT(7, C)
+		GENDISABLECOMPkINTERRUPT(7, C)
+	#endif //if defined(OCIE7C) && TIMER7_USE_COMPC
+#endif	//ifdef TCCR7A
+
+
+
+#ifdef TCCR8A
+	GENINIT(8)
+	GENSETCLK(8)
+	GENFLUSH(8)
+	#if (defined(OCIE8A))
+		GENISR_COMPk(8, A)
+		#ifdef OCR8AL
+			GENSETk_16B(8, A)
+		#else
+			GENSETk_8B(8, A)
+		#endif
+		GENENABLECOMPkINTERRUPT(8, A)
+		GENDISABLECOMPkINTERRUPT(8, A)
+	#endif //if defined(OCIE8A) && TIMER8_USE_COMPA
+
+	#if (defined(OCIE8B))
+		GENISR_COMPk(8, B)
+		#ifdef OCR8BL
+			GENSETk_16B(8, B)
+		#else
+			GENSETk_8B(8, B)
+		#endif
+		GENENABLECOMPkINTERRUPT(8, B)
+		GENDISABLECOMPkINTERRUPT(8, B)
+	#endif //if defined(OCIE8B) && TIMER8_USE_COMPB
+
+	#if (defined(OCIE8C))
+		GENISR_COMPk(8, C)
+		#ifdef OCR8CL
+			GENSETk_16B(8, C)
+		#else
+			GENSETk_8B(8, C)
+		#endif
+		GENENABLECOMPkINTERRUPT(8, C)
+		GENDISABLECOMPkINTERRUPT(8, C)
+	#endif //if defined(OCIE8C) && TIMER8_USE_COMPC
+#endif	//ifdef TCCR8A
+
+
+
+
+
+
+
+#undef n
+#undef k
+#undef GENSETCLK
+#undef GENINIT
+#undef GENDISABLECOMPkINTERRUPT
+#undef GENENABLECOMPkINTERRUPT
+#undef GENISR_COMPk
+#undef GENSETk_8B
+#undef GENSETAk_16B
+
+
+
+
+void analogWrite(uint8_t _pin, uint16_t _num)
+{
+	uint8_t _timer = _pin / 3;
+	uint8_t _ch = _pin % 3;
+	analogWrite(_timer, _ch, _num);
+}
+
+void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
+{
+	switch(_timer)
+	{
+		#ifdef TCCR0A
+		case 0:
 		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				#pragma message "using func input protector"
-				if(!validateTimer0Mode(__mode))
+			switch(_ch)
+			{
+				#ifdef OCIE0A
+				case 0:
 				{
-					return;
+					TIMER0Init(TIMER0_COMA_FPWM_CM_ST, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1024);
+					TIMER0SetA(_num);
+					break;
 				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			TCCR0B = 0;
-			TIMSK0 = 0;//set param regs to zero
-			
-			TCCR0B |= __mode;//set mode
+				#endif
+				#ifdef OCIE0B
+				case 1:
+				{
+					TIMER0Init(TIMER0_COMB_FPWM_CM_ST, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1024);
+					TIMER0SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE0C
+				case 2:
+				{
+					TIMER0Init(TIMER0_COMC_FPWM_NORMAL, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1024);
+					TIMER0SetC(_num);
+					break;
+				}
+				#endif
+			}
+			break;
 		}
-		
-		/*
-		 * Function TIMER0SetCLK
-		 * Desc     set clock source of T/C0
-		 * Input    __source: what source of T/C0
-		 * Output   none
-		*/
-		void TIMER0SetCLK(uint8_t __source)
+		#endif
+		#ifdef TCCR1A
+		case 1:
 		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer0CLK(__source))
+			switch(_ch)
+			{
+				#ifdef OCIE1A
+				case 0:
 				{
-					return;
+					TIMER1Init(TIMER1_COMA_CM_ST, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1024);
+					TIMER1SetA(_num);
+					break;
 				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			
-			TCCR0B = (TCCR0B & ~__source) | __source;
+				#endif
+				#ifdef OCIE1B
+				case 1:
+				{
+					TIMER1Init(TIMER1_COMB_CM_ST, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1024);
+					TIMER1SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE1C
+				case 2:
+				{
+					TIMER1Init(TIMER1_COMC_CM_ST, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1024);
+					TIMER1SetC(_num);
+					break;
+				}
+				#endif
+			}
+			break;
 		}
-		
-		/*
-		 * Function TIMER0Init
-		 * Desc     init T/C0
-		 * Input    __mode: what mode init to
-		 * 			__source: what source set to
-		 * Output   none
-		*/
-		void TIMER0Init(uint8_t __mode, uint8_t __source)
+		#endif
+		#ifdef TCCR2A
+		case 2:
 		{
-			TIMER0Init(__mode);
-			TIMER0SetCLK(__source);
+			switch(_ch)
+			{
+				#ifdef OCIE2A
+				case 0:
+				{
+					TIMER2Init(TIMER2_COMA_CM_ST, TIMER2_WF_FPWM, TIMER2_CLK_SRC_1024);
+					TIMER2SetA(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE2B
+				case 1:
+				{
+					TIMER2Init(TIMER2_COMB_CM_ST, TIMER2_WF_FPWM, TIMER2_CLK_SRC_1024);
+					TIMER2SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE2C
+				case 2:
+				{
+					TIMER2Init(TIMER2_COMC_CM_ST, TIMER2_WF_FPWM, TIMER2_CLK_SRC_1024);
+					TIMER2SetC(_num);
+					break;
+				}
+				#endif
+			}
+			break;
 		}
-		
-
-		#if TIMER0_USE_COMPA == 1//if using interrupt on compare with A num
-			/*
-			 * Function ISR(TIMER0_COMPA_vect)
-			 * Desc     Interrupt handler for vector TIMER0COMPA
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER0_COMPA_vect)//COMPA interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC0_COMPA);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC0_COMPA
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC0_COMPA] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC0_COMPA]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR0AL
-				/*
-				 * Function TIMER0SetA
-				 * Desc     Set A num of T/C0
-				 * Input    __A: what num set to
-				 * Output   none
-				*/
-				void TIMER0SetA(uint16_t __A)
-				{
-					OCR0AH = (uint8_t)__A;		//set high registers of num
-					OCR0AL = (uint8_t)(__A >> 8);	//set low registers of num
-				}
-			#else //ifdef OCR0AL
-				/*
-				 * Function TIMER0SetA
-				 * Desc     set A num of T/C0
-				 * Input    __A: what num set to
-				 * Output   none
-				*/
-				void TIMER0SetA(uint8_t __A)
-				{
-					OCR0A = (uint8_t)__A;//set B num
-				}
-			#endif //ifndef OCR0AL
-
-
-			/*
-			 * Function TIMER0EnableCOMAInterrupt
-			 * Desc     enable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER0EnableCOMPAInterrupt(void)
-			{
-				TIMSK0 = (TIMSK0 & ~(1 << OCIE0A)) | (1 << OCIE0A);//enable interrupt on compare with A num
-			}
-
-			/*
-			 * Function TIMER0DisableCOMPAInterrupt
-			 * Desc     Disable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER0DisableCOMPAInterrupt(void)
-			{
-				TIMSK0 &= ~(1 << OCIE0A);//disable interrupt on compare with A num
-			}
-
-		#endif //if TIMER0_USE_COMPA == 1
-
-
-
-
-		#if TIMER0_USE_COMPB == 1//if using interrupt on compare with B num
-			/*
-			 * Function ISR(TIMER0_COMPB_vect)
-			 * Desc     Interrupt handler for vector TIMER0_COMPB_vect
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-		 	ISR(TIMER0_COMPB_vect)//COMPB interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC0_COMPB);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC0_COMPA
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC0_COMPB] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC0_COMPB]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR0BL
-				/*
-				 * Function TIMER0SetB
-				 * Desc     Set B num for T/C0
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER0SetB(uint16_t __B)
-				{
-					OCR0BH = (uint8_t)__B;		//set high registers of num
-					OCR0BL = (uint8_t)(__B >> 8);//set low registers of num
-				}
-			#else //ifdef OCR0BL
-				/*
-				 * Function TIMER0SetB
-				 * Desc     Set B num for T/C0
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER0SetB(uint8_t __B)
-				{
-					OCR0B = (uint8_t)__B;//set B num
-				}
-			#endif //ifndef OCR0BL
-
-
-			/*
-			 * Function TIMER0EnableCOMPBInterrupt
-			 * Desc     Enable interrupt on compare with B num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER0EnableCOMPBInterrupt(void)
-			{
-				TIMSK0 = (TIMSK0 & ~(1 << OCIE0B)) | (1<<OCIE0B);//enable interrupt on compare with B num
-			}
-
-			/*
-			 * Function TIMER0DisableCOMPBInterrupt
-			 * Desc     Disable interrupt on compare with B num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER0DisableCOMPBInterrupt(void)
-			{
-				TIMSK0 &= ~(1 << OCIE0B);//disable interrupt on compare with B num
-			}
-
-		#endif //if TIMER0_USE_COMPB == 1
-
-
-
-
-		#if TIMER0_USE_OVF == 1//if using interrupt on overflow
-			/*
-			 * Function ISR(TIMER0_OVF_vect)
-			 * Desc     Interrupt handler for vector TIMER0_OVF_vect
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER0_OVF_vect)//OVF interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC0_OVF);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC0_OVF
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC0_OVF] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC0_OVF]();//call custom function
-				#endif
-				*/
-			}
-			
-			/*
-			 * Function TIMER0EncbleOVFISR
-			 * Desc     Enable interrupt at overflow
-			 * Input    none
-			 * Output   none 
-			*/
-			inline void TIMER0EnableOVFISR(void)
-			{
-				TIMSK0 = (TIMSK0 & ~(1 << TOIE0)) | (1 << TOIE0);//enable interrupt on overflow
-			}
-			
-			/*
-			 * Function TIMER0DisableOVFISR
-			 * Desc     Disavle onterrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER0DisableOVFISR(void)
-			{
-				TIMSK0 &= ~(1 << TOIE0);
-			}
-			
-		#endif //if TIMER0_USE_OVF == 1
-	#endif //if defined(TCCR0A)
-	
-	
-	
-	#if defined(TCCR1A)//if mcu have TIMER1
-		#pragma message "TIMER1 found"
-		
-
-		/*
-		 * Function TIMER1SetMode
-		 * Desc     Set mode of T/C1
-		 * Input    __mode: what mode needed to set
-		 * Output   none
-		*/
-		void TIMER1SetMode(uint8_t __mode)
+		#endif
+		#ifdef TCCR3A
+		case 3:
 		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer1Mode(__mode))
+			switch(_ch)
+			{
+				#ifdef OCIE3A
+				case 0:
 				{
-					return;
+					TIMER3Init(TIMER3_COMA_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);
+					TIMER3SetA(_num);
+					break;
 				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			
-			TCCR1B |= __mode;//set mode
+				#endif
+				#ifdef OCIE3B
+				case 1:
+				{
+					TIMER3Init(TIMER3_COMB_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);
+					TIMER3SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE3C
+				case 2:
+				{
+					TIMER3Init(TIMER3_COMC_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);
+					TIMER3SetC(_num);
+					break;
+				}
+				#endif
+			}
+			break;
 		}
-		
-		/*
-		 * Function TIMER1SetCLK
-		 * Desc     Set clock source of T/C1
-		 * Input    __source: what source needed set to
-		 * Output   none
-		*/
-		inline void TIMER1SetCLK(uint8_t __source)
+		#endif
+		#ifdef TCCR4A
+		case 4:
 		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer1CLK(__source))
+			switch(_ch)
+			{
+				#ifdef OCIE4A
+				case 0:
 				{
-					return;
+					TIMER4Init(TIMER4_COMA_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
+					TIMER4SetA(_num);
+					break;
 				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			
-			TCCR1B = (TCCR1B & ~__source) | __source;
+				#endif
+				#ifdef OCIE4B
+				case 1:
+				{
+					TIMER4Init(TIMER4_COMB_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
+					TIMER4SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE4C
+				case 2:
+				{
+					TIMER4Init(TIMER4_COMC_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
+					TIMER4SetC(_num);
+					break;
+				}
+				#endif
+			}
+			break;
 		}
-				
-		/*
-		 * Function TIMER1Init
-		 * Desc     initialize T/C1
-		 * Input    __mode: what mode set to
-		 * 			__source: what source set to
-		 * Output   none
-		*/
-		void TIMER1Init(uint8_t __mode, uint8_t __source)
+		#endif
+		#ifdef TCCR5A
+		case 5:
 		{
-			TIMER1SetMode(__mode);
-			TIMER1SetCLK(__source);
+			switch(_ch)
+			{
+				#ifdef OCIE5A
+				case 0:
+				{
+					TIMER5Init(TIMER5_COMA_CM_ST, TIMER5_WF_FPWM_8B, TIMER5_CLK_SRC_1024);
+					TIMER5SetA(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE5B
+				case 1:
+				{
+					TIMER5Init(TIMER5_COMB_CM_ST, TIMER5_WF_FPWM_8B, TIMER5_CLK_SRC_1024);
+					TIMER5SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE5C
+				case 2:
+				{
+					TIMER5Init(TIMER5_COMC_CM_ST, TIMER5_WF_FPWM_8B, TIMER5_CLK_SRC_1024);
+					TIMER5SetC(_num);
+					break;
+				}
+				#endif
+			}
+			break;
 		}
-		
-
-		#if TIMER1_USE_COMPA == 1//if using interrupt on compare with A num
-			/*
-			 * Function ISR(TIMER1_COMPA_vect)
-			 * Desc     Interrupt handler for vector TIMER1_COMPA
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER1_COMPA_vect)//COMPA interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC1_COMPA);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC1_COMPA
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC1_COMPA] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC1_COMPA]();//call custom function
-				#endif
-				*/
-			}
-
-
-			#ifdef OCR1AL
-				/*
-				 * Function TIMER1SetA
-				 * Desc     Set A num of T/C1
-				 * Input    __A: what num set to
-				 * Output   none
-				*/
-				void TIMER1SetA(uint16_t __A)
-				{
-					OCR1AH = (uint8_t)__A;		//set high registers of num
-					OCR1AL = (uint8_t)(__A >> 8);	//set low registers of num
-				}
-			#else //ifdef OCR2AL
-				/*
-				 * Function TIMER1SetA
-				 * Desc     Set A num of T/C1
-				 * Input    __A: what num set to
-				 * Output   none
-				*/
-				void TIMER1SetA(uint8_t __A)
-				{
-					OCR1A = (uint8_t)__A;//set B num
-				}
-			#endif //ifndef OCR1AL
-
-
-			/*
-			 * Function TIMER1EnableCOMPAInterrupt
-			 * Desc     Enable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER1EnableCOMPAInterrupt(void)
-			{
-				TIMSK1 = (TIMSK1 & ~(1 << OCIE1A)) | (1 << OCIE1A);//enable interrupt on compare with A num
-			}
-
-			/*
-			 * Function TIMER1DisableCOMPAInterrupt
-			 * Desc     Disable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER1DisableCOMPAInterrupt(void)
-			{
-				TIMSK1 &= ~(1 << OCIE1A);//disable interrupt on compare with A num
-			}
-
-		#endif //if TIMER1_USE_COMPA == 1
-
-
-
-
-		#if TIMER1_USE_COMPB == 1//if using interrupt on compare with B num
-			/*
-			 * Function ISR(TIMER1_COMPB_vect)
-			 * Desc     Interrupt handler for vector TIMER1_COMPB
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-		 	ISR(TIMER1_COMPB_vect)//COMPB interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC1_COMPB);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC1_COMPB
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC1_COMPB] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC1_COMPB]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR1BL
-				/*
-				 * Function TIMER1SetB
-				 * Desc     Set B num of T/C1
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER1SetB(uint16_t __B)
-				{
-					OCR1BH = (uint8_t)__B;		//set high registers of num
-					OCR1BL = (uint8_t)(__B >> 8);//set low registers of num
-				}
-			#else //ifdef OCR1BL
-				/*
-				 * Function TIMER1SetB
-				 * Desc     Set B num of T/C1
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER1SetB(uint8_t __B)
-				{
-					OCR1B = (uint8_t)__B;//set B num
-				}
-			#endif //ifndef OCR1BL
-
-
-			/*
-			 * Function TIMER1EnableCOMPBInterrupt
-			 * Desc     enable interrupt on compare with B num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER1EnableCOMPBInterrupt(void)
-			{
-				TIMSK1 = (TIMSK1 & ~(1 << OCIE1B)) | (1<<OCIE1B);//enable interrupt on compare with B num
-			}
-
-			/*
-			 * Function TIMER1DisableCOMPBInterrupt
-			 * Desc     Disable interrupt on compare with B num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER1DisableCOMPBInterrupt(void)
-			{
-				TIMSK1 &= ~(1 << OCIE1B);//disable interrupt on compare with B num
-			}
-
-		#endif //if TIMER1_USE_COMPB == 1
-
-
-
-
-		#if TIMER1_USE_OVF == 1//if using interrupt on overflow
-			/*
-			 * Function ISR(TIMER1_OVF_vect)
-			 * Desc     Interrupt handler for vector TIMER1_OVF
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER1_OVF_vect)//OVF interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC1_OVF);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC1_OVF
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC1_OVF] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC1_OVF]();//call custom function
-				#endif
-				*/
-			}
-			
-			/*
-			 * Function TIMER1EnavleOVFISR
-			 * Desc     Enable interrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER1EnableOVFISR(void)
-			{
-				TIMSK1 = (TIMSK1 & ~(1 << TOIE1)) | (1 << TOIE1);//enable interrupt on overflow
-			}
-			
-			/*
-			 * Function TIMER1DisableOVFISR
-			 * Desc     Disable interrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER1DisableOVFISR(void)
-			{
-				TIMSK1 &= ~(1 << TOIE1);
-			}
-			
-		#endif //if TIMER1_USE_OVF == 1
-	#endif //if defined(TCCR1A)
-	
-	
-	
-	#if defined(TCCR2A)//if mcu have TIMER2
-		#pragma message "TIMER2 found"
-		
-
-		/*
-		 * Function TIMER2SetMode
-		 * Desc     set mode of T/C2
-		 * Input    __mode: what mode set to
-		 * Output   none
-		*/
-		void TIMER2SetMode(uint8_t __mode)
+		#endif
+		#ifdef TCCR6A
+		case 6:
 		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer2Mode(__mode))
+			switch(_ch)
+			{
+				#ifdef OCIE6A
+				case 0:
 				{
-					return;
+					TIMER6Init(TIMER6_COMA_CM_ST, TIMER6_WF_FPWM, TIMER6_CLK_SRC_1024);
+					TIMER6SetA(_num);
+					break;
 				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			
-			
-			TCCR2B |= __mode;//set mode
+				#endif
+				#ifdef OCIE6B
+				case 1:
+				{
+					TIMER6Init(TIMER6_COMB_CM_ST, TIMER6_WF_FPWM, TIMER6_CLK_SRC_1024);
+					TIMER6SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE6C
+				case 2:
+				{
+					TIMER6Init(TIMER6_COMC_CM_ST, TIMER6_WF_FPWM, TIMER6_CLK_SRC_1024);
+					TIMER6SetC(_num);
+					break;
+				}
+				#endif
+			}
+			break;
 		}
-				
-		/*
-		 * Function TIMER2SetCLK
-		 * Desc     Set clock source of T/C2
-		 * Input    __source: what source set to
-		 * Output   none
-		*/
-		inline void TIMER2SetCLK(uint8_t __source)
+		#endif
+		#ifdef TCCR7A
+		case 7:
 		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer2CLK(__source))
+			switch(_ch)
+			{
+				#ifdef OCIE7A
+				case 0:
 				{
-					return;
+					TIMER7Init(TIMER7_COMA_CM_ST, TIMER7_WF_FPWM, TIMER7_CLK_SRC_1024);
+					TIMER7SetA(_num);
+					break;
 				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			
-			TCCR2B = (TCCR2B & ~__source) | __source;
+				#endif
+				#ifdef OCIE7B
+				case 1:
+				{
+					TIMER7Init(TIMER7_COMB_CM_ST, TIMER7_WF_FPWM, TIMER7_CLK_SRC_1024);
+					TIMER7SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE7C
+				case 2:
+				{
+					TIMER7Init(TIMER7_COMC_CM_ST, TIMER7_WF_FPWM, TIMER7_CLK_SRC_1024);
+					TIMER7SetC(_num);
+					break;
+				}
+				#endif
+			}
+			break;
 		}
-		
-		/*
-		 * Function TIMER2Init
-		 * Desc     Initialize T/C2
-		 * Input    __mode: what mode set to
-		 * 			__source: what source set to
-		 * Output   none
-		*/
-		void TIMER2Init(uint8_t __mode, uint8_t __source)
+		#endif
+		#ifdef TCCR8A
+		case 8:
 		{
-			TIMER2SetMode(__mode);
-			TIMER2SetCLK(__source);
+			switch(_ch)
+			{
+				#ifdef OCIE8A
+				case 0:
+				{
+					TIMER8Init(TIMER8_COMA_CM_ST, TIMER8_WF_FPWM, TIMER8_CLK_SRC_1024);
+					TIMER8SetA(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE8B
+				case 1:
+				{
+					TIMER8Init(TIMER8_COMB_CM_ST, TIMER8_WF_FPWM, TIMER8_CLK_SRC_1024);
+					TIMER8SetB(_num);
+					break;
+				}
+				#endif
+				#ifdef OCIE8C
+				case 2:
+				{
+					TIMER8Init(TIMER8_COMC_CM_ST, TIMER8_WF_FPWM, TIMER8_CLK_SRC_1024);
+					TIMER8SetC(_num);
+					break;
+				}
+				#endif
+			}
+			break;
 		}
-		
-
-		#if TIMER2_USE_COMPA == 1//if using interrupt on compare with A num
-			/*
-			 * Function ISR(TIMER2_COMPA_vect)
-			 * Desc     interrupt handler for TIMER2_COMPA
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER2_COMPA_vect)//COMPA interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC2_COMPA);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC2_COMPA
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC2_COMPA] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC2_COMPA]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR2AL
-				/*
-				 * Function TIMER2SetA
-				 * Desc     Set A num for T/C2
-				 * Input    __A: what num set to
-				 * Output   none
-				*/
-				void TIMER2SetA(uint16_t __A)
-				{
-					OCR2AH = (uint8_t)__A;		//set high registers of num
-					OCR2AL = (uint8_t)(__A >> 8);	//set low registers of num
-				}
-			#else //ifdef OCR2AL
-			/*
-			 * Function TIMER2SetA
-			 * Desc     Set A num for T/C2
-			 * Input    __A: what num set to
-			 * Output   none
-			*/
-				void TIMER2SetA(uint8_t __A)
-				{
-					OCR2A = (uint8_t)__A;//set B num
-				}
-			#endif //ifndef OCR2AL
-
-
-			/*
-			 * Function TIMER2EnableCOMPAInterrupt
-			 * Desc     enable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER2EnableCOMPAInterrupt(void)
-			{
-				TIMSK2 = (TIMSK2 & ~(1 << OCIE2A)) | (1<<OCIE2A);//enable interrupt on compare with A num
-			}
-
-			/*
-			 * Function TIMER2DisableCOMPAInterrupt
-			 * Desc     disable interrupt on conpare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER2DisableCOMPAInterrupt(void)
-			{
-				TIMSK2 &= ~(1 << OCIE2A);//disable interrupt on compare with A num
-			}
-
-		#endif //if TIMER2_USE_COMPA == 1
-
-
-
-
-		#if TIMER2_USE_COMPB == 1//if using interrupt on compare with B num
-			/*
-			 * Function ISR(TIMER2_COMPB_vect)
-			 * Desc     Interrupt handler for vector TIMER2_COMPB
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-		 	ISR(TIMER2_COMPB_vect)//COMPB interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC2_COMPB);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC2_COMPB
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC2_COMPB] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC2_COMPB]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR2BL
-				/*
-				 * Function TIMER2SetB
-				 * Desc     Set B num for T/C2
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER2SetB(uint16_t __B)
-				{
-					OCR2BH = (uint8_t)__B;		//set high registers of num
-					OCR2BL = (uint8_t)(__B >> 8);//set low registers of num
-				}
-			#else //ifdef OCR2BL
-				/*
-				 * Function TIMER2SetB
-				 * Desc     Set B num for T/C2
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER2SetB(uint8_t __B)
-				{
-					OCR2B = (uint8_t)__B;//set B num
-				}
-			#endif //ifndef OCR2BL
-
-
-			/*
-			 * Function TIMER2EnableCOMPBInterrupt
-			 * Desc     Enable interrupt on compare with B num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER2EnableCOMPBInterrupt(void)
-			{
-				TIMSK2 = (TIMSK2 & ~(1 << OCIE2B)) | (1 << OCIE2B);//enable interrupt on compare with B num
-			}
-
-			/*
-			 * Function TIMER2DisableCOMPBInterrupt
-			 * Desc     Disable interrupt on compare with B num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER2DisableCOMPBInterrupt(void)
-			{
-				TIMSK2 &= ~(1 << OCIE2B);//disable interrupt on compare with B num
-			}
-
-		#endif //if TIMER2_USE_COMPB == 1
-
-
-
-
-		#if TIMER2_USE_OVF == 1//if using interrupt on overflow
-			/*
-			 * Function ISR(TIMER2_OVF_vect)
-			 * Desc     Interrupt handler for vector TIMER2_OVF
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER2_OVF_vect)//OVF interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC2_OVF);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC2_OVF
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC2_OVF] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC2_OVF]();//call custom function
-				#endif
-				*/
-			}
-						
-			/*
-			 * Function TIMER2EnableOVFISR
-			 * Desc     Enable interrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER2EnableOVFISR(void)
-			{
-				TIMSK2 = (TIMSK2 & ~(1 << TOIE2)) | (1 << TOIE2);//enable interrupt on overflow
-			}
-			
-			/*
-			 * Function TIMER2DisableOVFISR
-			 * Desc     Disable interrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER2DisableOVFISR(void)
-			{
-				TIMSK2 &= ~(1 << TOIE2);
-			}
-			
-		#endif //if TIMER2_USE_OVF == 1
-	#endif //if defined(TCCR2A)
-	
-	
-	
-	#if defined(TCCR3A)//if mcu have TIMER3
-		#pragma message "TIMER3 found"
-		
-
-		/*
-		 * Function TIMER3SetMode
-		 * Desc     Set mode for T/C3
-		 * Input    __mode: what mode set to
-		 * Output   none
-		*/
-		void TIMER3SetMode(uint8_t __mode)
-		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer3Mode(__mode))
-				{
-					return;
-				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			
-			TCCR3B = 0;
-			TIMSK3 = 0;//set param regs to zero
-			
-			TCCR3B |= __mode;//set mode
-		}
-		
-		/*
-		 * Function TIMER3SetCLK
-		 * Desc     Set clock source for T/C3
-		 * Input    __source: what source set to
-		 * Output   none
-		*/
-		inline void TIMER3SetCLK(uint8_t __source)
-		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer3CLK(__source))
-				{
-					return;
-				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			
-			TCCR3B = (TCCR3B & ~__source) | __source;
-		}
-		
-		/*
-		 * Function TIMER3Init
-		 * Desc     Initialize T/C3
-		 * Input    __mode: what mode set to
-		 * 			__source: what source set to
-		 * Output   none
-		*/
-		void TIMER3Init(uint8_t __mode, uint8_t __source)
-		{
-			TIMER3SetMode(__mode);
-			TIMER3SetCLK(__source);
-		}
-		
-
-		#if TIMER3_USE_COMPA == 1//if using interrupt on compare with A num
-			/*
-			 * Function ISR(TIMER3_COMPA_vect)
-			 * Desc     Interrupt handler for vector TIMER3_COMPA
-			 * Input    Iterrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER3_COMPA_vect)//COMPA interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC3_COMPA);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC3_COMPA
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC3_COMPA] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC3_COMPA]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR3AL
-			/*
-			 * Function TIMER3SetA
-			 * Desc     Set A num for T/C3
-			 * Input    __A: what num set to
-			 * Output   none
-			*/
-				void TIMER3SetA(uint16_t __A)
-				{
-					OCR3AH = (uint8_t)__A;		//set high registers of num
-					OCR3AL = (uint8_t)(__A >> 8);	//set low registers of num
-				}
-			#else //ifdef OCR3AL
-			/*
-			 * Function TIMER3SetA
-			 * Desc     Set A num for T/C3
-			 * Input    __A: what num set to
-			 * Output   none
-			*/
-				void TIMER3SetA(uint8_t __A)
-				{
-					OCR3A = (uint8_t)__A;//set B num
-				}
-			#endif //ifndef OCR3AL
-
-
-			/*
-			 * Function TIMER3EnableCOMPAInterrupt
-			 * Desc     Enable interrupt at compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER3EnableCOMPAInterrupt(void)
-			{
-				TIMSK3 = (TIMSK3 & ~(1 << OCIE3A)) | (1<<OCIE3A);//enable interrupt on compare with A num
-			}
-
-			/*
-			 * Function TIMER3DisableCOMPAInterrupt
-			 * Desc     Disable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER3DisableCOMPAInterrupt(void)
-			{
-				TIMSK3 &= ~(1 << OCIE3A);//disable interrupt on compare with A num
-			}
-
-		#endif //if TIMER3_USE_COMPA == 1
-
-
-
-
-		#if TIMER3_USE_COMPB == 1//if using interrupt on compare with B num
-			/*
-			 * Function ISR(TIMER3_COMPB_vect)
-			 * Desc     Interrupt handler for vector TIMER3_COMPB
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-		 	ISR(TIMER3_COMPB_vect)//COMPB interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC3_COMPB);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC3_COMPB
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC3_COMPB] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC3_COMPB]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR3BL
-				/*
-				 * Function TIMER3SetB
-				 * Desc     Set B num for T/C3
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER3SetB(uint16_t __B)
-				{
-					OCR3BH = (uint8_t)__B;		//set high registers of num
-					OCR3BL = (uint8_t)(__B >> 8);//set low registers of num
-				}
-			#else //ifdef OCR3BL
-				/*
-				 * Function TIMER3SetB
-				 * Desc     Set B num for T/C3
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER3SetB(uint8_t __B)
-				{
-					OCR3B = (uint8_t)__B;//set B num
-				}
-			#endif //ifndef OCR3BL
-
-
-			/*
-			 * Function TIMER3EnableCOMPBInterrupt
-			 * Desc     Enable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER3EnableCOMPBInterrupt(void)
-			{
-				TIMSK3 = (TIMSK3 & ~(1 << OCIE3B)) | (1 << OCIE3B);//enable interrupt on compare with B num
-			}
-
-			/*
-			 * Function TIMER3DisableCOMPBInterrupt
-			 * Desc     Disable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER3DisableCOMPBInterrupt(void)
-			{
-				TIMSK3 &= ~(1 << OCIE3B);//disable interrupt on compare with B num
-			}
-
-		#endif //if TIMER3_USE_COMPB == 1
-
-
-
-
-		#if TIMER3_USE_OVF == 1//if using interrupt on overflow
-			/*
-			 * Function ISR(TIMER3_OVF_vect)
-			 * Desc     Interrupt handler for vector TIMER3_OVf
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER3_OVF_vect)//OVF interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC3_OVF);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC3_OVF
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC3_OVF] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC3_OVF]();//call custom function
-				#endif
-				*/
-			}
-			
-			/*
-			 * Function TIMER3EnableOVFISR
-			 * Desc     Enable interrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER3EnableOVFISR(void)
-			{
-				TIMSK3 = (TIMSK3 & ~(1 << TOIE3)) | (1 << TOIE3);//enable interrupt on overflow
-			}
-			
-			/*
-			 * Function TIMER3DisableOVFISR
-			 * Desc     Disable interrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER3DisableOVFISR(void)
-			{
-				TIMSK3 &= ~(1 << TOIE3);
-			}
-			
-		#endif //if TIMER3_USE_OVF == 1
-	#endif //if defined(TCCR3A)
-	
-	
-	
-	#if defined(TCCR4A)//if mcu have TIMER4
-		#pragma message "TIMER4 found"
-		
-
-		/*
-		 * Function TIMER4SetMode
-		 * Desc     Set mode of T/C4
-		 * Input    __mode: what mode set to
-		 * Output   none
-		*/
-		void TIMER4SetMode(uint8_t __mode)
-		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer4Mode(__mode))
-				{
-					return;
-				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			
-			TCCR4B |= __mode;//set mode
-		}
-				
-		/*
-		 * Function TIMER4SetCLK
-		 * Desc     Ste clock source for T/C4
-		 * Input    __source: what source set to
-		 * Output   none
-		*/
-		inline void TIMER4SetCLK(uint8_t __source)
-		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer4CLK(__source))
-				{
-					return;
-				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			TCCR4B = (TCCR4B & ~__source) | __source;
-		}
-				
-		/*
-		 * Function TIMER4Init
-		 * Desc     Initialize T/C4
-		 * Input    __mode: what mode set to
-		 * 			__source: what source set to
-		 * Output   none
-		*/
-		void TIMER4Init(uint8_t __mode, uint8_t __source)
-		{
-			TIMER4SetMode(__mode);
-			TIMER4SetCLK(__source);
-		}
-		
-
-		#if TIMER4_USE_COMPA == 1//if using interrupt on compare with A num
-			/*
-			 * Function ISR(TIMER4_COMPA_vect)
-			 * Desc     Interrupt handler for vector TIMER4_COMPA
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER4_COMPA_vect)//COMPA interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC4_COMPA);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC4_COMPA
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC4_COMPA] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC4_COMPA]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR4AL
-				/*
-				 * Function TIMER4SetA
-				 * Desc     Set A num for T/C4
-				 * Input    __A: what num set to
-				 * Output   none
-				*/
-				void TIMER4SetA(uint16_t __A)
-				{
-					OCR4AH = (uint8_t)__A;		//set high registers of num
-					OCR4AL = (uint8_t)(__A >> 8);	//set low registers of num
-				}
-			#else //ifdef OCR4AL
-				/*
-				 * Function TIMER4SetA
-				 * Desc     Set A num for T/C4
-				 * Input    __A: what num set to
-				 * Output   none
-				*/
-				void TIMER4SetA(uint8_t __A)
-				{
-					OCR4A = (uint8_t)__A;//set B num
-				}
-			#endif //ifndef OCR4AL
-
-
-			/*
-			 * Function TIMER4EnableCOMPAInterrupt
-			 * Desc     Enable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER4EnableCOMPAInterrupt(void)
-			{
-				TIMSK4 = (TIMSK4 & ~(1 << OCIE4A)) | (1 << OCIE4A);//enable interrupt on compare with A num
-			}
-
-			/*
-			 * Function TIMER4DisableCOMPAInterrupt
-			 * Desc     Disable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER4DisableCOMPAInterrupt(void)
-			{
-				TIMSK4 &= ~(1 << OCIE4A);//disable interrupt on compare with A num
-			}
-
-		#endif //if TIMER4_USE_COMPA == 1
-
-
-
-
-		#if TIMER4_USE_COMPB == 1//if using interrupt on compare with B num
-			/*
-			 * Function ISR(TIMER4_COMPB_vect)
-			 * Desc     Interrupt handler for vector TIMER4_COMPB
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-		 	ISR(TIMER4_COMPB_vect)//COMPB interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC4_COMPB);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC4_COMPB
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC4_COMPB] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC4_COMPB]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR4BL
-				/*
-				 * Function TIMER4SetB
-				 * Desc     Set B num for T/C4
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER4SetB(uint16_t __B)
-				{
-					OCR4BH = (uint8_t)__B;		//set high registers of num
-					OCR4BL = (uint8_t)(__B >> 8);//set low registers of num
-				}
-			#else //ifdef OCR4BL
-				/*
-				 * Function TIMER4SetB
-				 * Desc     Set B num for T/C4
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER4SetB(uint8_t __B)
-				{
-					OCR4B = (uint8_t)__B;//set B num
-				}
-			#endif //ifndef OCR4BL
-
-
-			/*
-			 * Function TIMER4EnableOMPBInterrupt
-			 * Desc     Enable interrupt on compare with B num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER4EnableCOMPBInterrupt(void)
-			{
-				TIMSK4 = (TIMSK4 & ~(1 << OCIE4B)) | (1 << OCIE4B);//enable interrupt on compare with B num
-			}
-
-			/*
-			 * Function TIMER4DisableCOMPBInterrupt
-			 * Desc     Disable interrupt on compare with B num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER4DisableCOMPBInterrupt(void)
-			{
-				TIMSK4 &= ~(1 << OCIE4B);//disable interrupt on compare with B num
-			}
-
-		#endif //if TIMER4_USE_COMPB == 1
-
-
-
-
-		#if TIMER4_USE_OVF == 1//if using interrupt on overflow
-			/*
-			 * Function ISR(TIMER4_OVF_vect)
-			 * Desc     Interrupt handler for vector TIMER4_OVF
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER4_OVF_vect)//OVF interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC4_OVF);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC4_OVF
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC4_OVF] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC4_OVF]();//call custom function
-				#endif
-				*/
-			}
-			
-			/*
-			 * Function TIMER4EnableOVFISR
-			 * Desc     Enable interrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER4EnableOVFISR(void)
-			{
-				TIMSK4 = (TIMSK4 & ~(1 << TOIE4)) | (1 << TOIE4);//enable interrupt on overflow
-			}
-			
-			/*
-			 * Function TIMER4DisableOVFISR
-			 * Desc     Disable interrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER4DisableOVFISR(void)
-			{
-				TIMSK4 &= ~(1 << TOIE4);
-			}
-			
-		#endif //if TIMER4_USE_OVF == 1
-	#endif //if defined(TCCR4A)
-	
-	
-	
-	#if defined(TCCR5A)//if mcu have TIMER5
-		#pragma message "TIMER5 found"
-		
-
-		/*
-		 * Function TIMER5SetMode
-		 * Desc     Set mode for T/C5
-		 * Input    __mode: what mode set to
-		 * Output   none
-		*/
-		void TIMER5SetMode(uint8_t __mode)
-		{
-			
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer5Mode(__mode))
-				{
-					return;
-				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			TCCR5B = 0;
-			TIMSK5 = 0;//set param regs to zero
-			
-			TCCR5B |= __mode;//set mode
-		}
-		
-		/*
-		 * Function TIMER5SetCLK
-		 * Desc     Set clock source for T/C5
-		 * Input    __source: what source set to
-		 * Output   none
-		*/
-		inline void TIMER5SetCLK(uint8_t __source)
-		{
-			#if USE_FUNC_INPUT_PROTECTOR == 1
-				if(!validateTimer5CLK(__source))
-				{
-					return;
-				}
-			#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-			TCCR5B = (TCCR5B & ~__source) | __source;
-		}
-		
-		/*
-		 * Function TIMER5Init
-		 * Desc     Initialize T/C5
-		 * Input    __mode: what mode set to
-		 * 			__source: what clock source set to
-		 * Output   none
-		*/
-		void TIMER5Init(uint8_t __mode, uint8_t __source)
-		{
-			TIMER5SetMode(__mode);
-			TIMER5SetCLK(__source);
-		}
-		
-
-		#if TIMER5_USE_COMPA == 1//if using interrupt on compare with A num
-			/*
-			 * Function ISR(TIMER5_COMPA_vect)
-			 * Desc     Interrupt handler for vector TIMER5_COMPA
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-			ISR(TIMER5_COMPA_vect)//COMPA interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC5_COMPA);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC5_COMPA
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC5_COMPA] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC5_COMPA]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR5AL
-				/*
-				 * Function TIMER5SetA
-				 * Desc     Set A num for T/C5
-				 * Input    __A: what num set to
-				 * Output   none
-				*/
-				void TIMER5SetA(uint16_t __A)
-				{
-					OCR5AH = (uint8_t)__A;		//set high registers of num
-					OCR5AL = (uint8_t)(__A >> 8);	//set low registers of num
-				}
-			#else //ifdef OCR5AL
-				/*
-				 * Function TIMER5SetA
-				 * Desc     Set A num for T/C5
-				 * Input    __A: what num set to
-				 * Output   none
-				*/
-				void TIMER5SetA(uint8_t __A)
-				{
-					OCR5A = (uint8_t)__A;//set B num
-				}
-			#endif //ifndef OCR5AL
-
-
-			/*
-			 * Function TIMER5EnableCOMPAInterrupt
-			 * Desc     Enable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER5EnableCOMPAInterrupt(void)
-			{
-				TIMSK5 = (TIMSK5 & ~(1 << OCIE5A)) | (1 << OCIE5A);//enable interrupt on compare with A num
-			}
-
-			/*
-			 * Function TIMER5DisableCOMPAInterrupt
-			 * Desc     Disable interrupt on compare with A num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER5DisableCOMPAInterrupt(void)
-			{
-				TIMSK5 &= ~(1 << OCIE5A);//disable interrupt on compare with A num
-			}
-
-		#endif //if TIMER5_USE_COMPA == 1
-
-
-
-
-		#if TIMER5_USE_COMPB == 1//if using interrupt on compare with B num
-			/*
-			 * Function ISR(TIMER5_COMPB_vect)
-			 * Desc     Interrupt handler for vector TIMER5_COMPB
-			 * Input    Interrupt vector
-			 * Output   none
-			*/
-		 	ISR(TIMER5_COMPB_vect)//COMPB interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC5_COMPB);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC5_COMPB
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC5_COMPB] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC5_COMPB]();//call custom function
-				#endif
-				*/
-			}
-
-			#ifdef OCR5BL
-				/*
-				 * Function TIMER5SetB
-				 * Desc     Set B num for T/C5
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER5SetB(uint16_t __B)
-				{
-					OCR5BH = (uint8_t)__B;		//set high registers of num
-					OCR5BL = (uint8_t)(__B >> 8);//set low registers of num
-				}
-			#else //ifdef OCR5BL
-				/*
-				 * Function TIMER5SetB
-				 * Desc     Set B num for T/C5
-				 * Input    __B: what num set to
-				 * Output   none
-				*/
-				void TIMER5SetB(uint8_t __B)
-				{
-					OCR5B = (uint8_t)__B;//set B num
-				}
-			#endif //ifndef OCR5BL
-
-
-			/*
-			 * Function TIMER5EnableCOMPBInterrupt
-			 * Desc     Enable interrupt on compare with B num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER5EnableCOMPBInterrupt(void)
-			{
-				TIMSK5 = (TIMSK5 & ~(1 << OCIE5B)) | (1 << OCIE5B);//enable interrupt on compare with B num
-			}
-
-			/*
-			 * Function TIMER5DisableCOMPBInterrupt
-			 * Desc     Disable interrupt on compare with B num
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER5DisableCOMPBInterrupt(void)
-			{
-				TIMSK5 &= ~(1 << OCIE5B);//disable interrupt on compare with B num
-			}
-
-		#endif //if TIMER5_USE_COMPB == 1
-
-
-
-
-		#if TIMER5_USE_OVF == 1//if using interrupt on overflow
-			/*
-			 * Function ISR(TIMER5_OVF_vect)
-			 * Desc     Interrupt handler for vector TIMER5_OVF
-			 * Input    Interrupt vect
-			 * Output   none
-			*/
-			ISR(TIMER5_OVF_vect)//OVF interrupt handler
-			{
-				callCustomFunc(INTERRUPT_CUSTOMFUNC_TC5_OVF);
-				/*#ifdef INTERRUPT_CUSTOMFUNC_TC5_OVF
-					if(funcs[INTERRUPT_CUSTOMFUNC_TC5_OVF] != NULL)
-						funcs[INTERRUPT_CUSTOMFUNC_TC5_OVF]();//call custom function
-				#endif
-				*/
-			}
-			
-			/*
-			 * Function TIMER5EnableOVFISR
-			 * Desc     Enable interrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER5EnableOVFISR(void)
-			{
-				TIMSK5 = (TIMSK5 & ~(1 << TOIE5)) | (1 << TOIE5);//enable interrupt on overflow
-			}
-			
-			/*
-			 * Function TIMER5DisableOVFISR
-			 * Desc     Disable interrupt on overflow
-			 * Input    none
-			 * Output   none
-			*/
-			inline void TIMER5DisableOVFISR(void)
-			{
-				TIMSK5 &= ~(1 << TOIE5);
-			}
-			
-		#endif //if TIMER5_USE_OVF == 1
-	#endif //if defined(TCCR5A)
-	
-	
-#endif //if USE_TIMERS == 1
+		#endif
+	}
+}

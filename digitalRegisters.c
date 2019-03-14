@@ -1,20 +1,8 @@
-#if defined(PORTA)
-	#define START_PORT PORTA
-#elif defined(PORTB)
-	#define START_PORT PORTB
-#else
-	#error "can't find zero port"
-#endif
+#pragma once
 
+#include "base.h"
+#include "digitalRegisters.h"
 
-//--------MODES--------
-#define OUTPUT 0
-#define INPUT 1
-#define INPUT_PULLUP 2
-
-//--------STATES--------
-#define HIGH 1
-#define LOW 0
 
 /*
  * Function digitalWrite
@@ -43,8 +31,6 @@ int digitalRead(uint8_t __pin)
 	return (*(&START_PORT - 2 + __port * 3) >> __pin) & 1;
 }
 
-
-
 /*
  * Function pinMode
  * Desc     set mode of pin(I/O)
@@ -56,13 +42,10 @@ int digitalRead(uint8_t __pin)
 void pinMode(uint8_t __pin, uint8_t __state)
 {
 	uint8_t __port = __pin / 8;
-	if(__state != INPUT_PULLUP)
+	if(__state == INPUT_PULLUP)
 	{
-		*(&START_PORT - 1 + __port) = (*(&START_PORT - 1 + __port) & (~(__state << __pin))) | (__state << __pin);
+		digitalWrite(__pin, HIGH);
+		__state = HIGH;
 	}
-	else 								//if need PULLUP
-	{
-		digitalWrite(__pin, HIGH);		//enable internal resistors
-		pinMode(__pin, INPUT);			//set port to input
-	}
+	*(&START_PORT - 1 + __port) = (*(&START_PORT - 1 + __port) & (~(__state << __pin))) | (__state << __pin);
 }

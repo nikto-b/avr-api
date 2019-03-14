@@ -1,3 +1,5 @@
+#include "base.h"
+
 #define INTERRUPT_CUSTOMFUNC_RESET			0		//reset from ext pin, Power-On-Reset, Brown-out Reset, Watchdog reset, JTAG AVR Reset
 #define INTERRUPT_CUSTOMFUNC_INT0			1		//ext interrupt req 0
 #define INTERRUPT_CUSTOMFUNC_INT1			2		//ext interrupt req 1
@@ -58,6 +60,5 @@
 
 #define INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS	57		//num of origin custom functions
 
-void (*customFuncs[INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS])();
-
-#include "customFuncAddr.c"
+ void callCustomFunc(unsigned char __addr);
+ void setCustomFunc(uint8_t __addr, void(* __func)());

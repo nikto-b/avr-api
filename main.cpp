@@ -1,61 +1,47 @@
-#include <avr/io.h>			//include for base avr funcs
-#define F_CPU 16000000		//define with freq
-#include <util/delay.h> 	//include for delay func
-#include <avr/interrupt.h>	//include interrupt funcs
-#include <stdlib.h>
-
-#define NUM_OF_ANALOG_PINS 7
-#define ARDUINO_SUPPORT 0
-#define USE_FUNC_INPUT_PROTECTOR 0
-
-//-----------ADC-----------
-#define USE_ADC 1
-#define USE_ADC_8BIT 1
-#define ADC_MODE ADC_MODE_DEADLINE
-#define ADC_DEF_PRESCALLER ADC_PRESCALLER_128
-
-//---------TIMERS----------
-#define USE_TIMERS 1
-#define TIMER0_USE_COMPA 1
-#define TIMER5_USE_COMPA 1
-
-//---------USART----------
-#define EOL (char*)"\n\r"
-#define USE_USART 1
-#define USE_USART0 1
-#define USE_USART0_OUTPUT 1
-#define USE_USART0_INPUT 1
-#define USE_SERIAL_FASTBAUD 0
-
-//---------CUSTOM_INTERRUPTS----------
-#define USE_CUSTOM_INTERRUPTS 1
-
-
-#define USE_WATCHDOG 1
-
-#include "api.h"//custom lib for AVR
-#define DEBUG					1
-
-
-void wdt_handler(void)
-{
-	USART0Println("WDT!");
-	WDStop();
-}
+#include "base.h"
+#include "api.h"
 
 int main()
 {
-	DDRB = ((1 << PB0) | (1 << PB1) | (1 << PB7) | (1 << PB1));								//8, 9, 13 output
-	DDRC = ((1 << PC5) | (1 << PC4) | (1 << PC3));											//A0,1,2 output
-	DDRB |= ((1 << PB4) | (1 << PB5) | (1 << PB6));
+	DDRE = 255;
+	DDRG = 255;
+	DDRH = 255;
+	DDRF = 255;
+	DDRK = 255;
+	DDRB = 0xFF;
+	uint8_t i = 0;
+	const uint8_t del = 2;
+	const uint8_t ppin = 10;
+	const uint8_t max = 255;
+	const uint8_t min = 0;
 	USART0Begin(115200);
-	setCustomFunc(INTERRUPT_CUSTOMFUNC_WDT, wdt_handler);
-	//asm("wdr");
-	//WDTCSR |= (1 << WDCE) | (1 << WDE);
-	//WDTCSR = (1 << WDE) | ((1 << WDP3) | (1 << WDP0));
-	WDTStart(WD_TIME_4s);
 	sei();
-	USART0Print("s");
-	while(1);
+	//analogWrite(3, 1, 128);
+	//TIMER4Init(TIMER4_COMC_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
+	//TIMER4SetC(128);
+	//TIMER3Init(TIMER3_COMB_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);
+	//TIMER3SetB(128);
+	//while(1)
+	//	asm("NOP");
+	//analogWrite(10, 255);
+	while(1)
+	{
+		for(i = min; i < max; i++)
+		{
+			analogWrite(ppin, i);
+			//analogWrite(11, i);
+			USART0Println("A");
+			delay(del);
+		}
+		for(i = max; i > min; i--)
+		{
+			analogWrite(ppin, i);
+			USART0Println("B");
+			delay(del);
+		}		
+	}
+	loop:
+	asm("NOP");
+	goto loop;
 	return 0;
 }
