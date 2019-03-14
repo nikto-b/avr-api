@@ -17,6 +17,7 @@ arc:
 	avr-gcc-ar rcs core.a ADC.o
 	#avr-gcc-ar rcs core.a FuncsInputProtector.o
 	avr-gcc-ar rcs core.a watchdog.o
+	avr-gcc-ar rcs core.a TWI.o
 
 link: main arc lib
 	avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -ffunction-sections -fdata-sections -Wl,--gc-sections -mmcu=$(MCU) main.o core.a -o main.elf -lm
@@ -26,7 +27,7 @@ objcopy: link
 	avr-objcopy -O ihex -R .eeprom  "$(MAINFILENAME).elf" "$(MAINFILENAME).hex"
 
 lib: lib_ arc
-lib_: Usart.o Timers.o ADC.o FuncProtector.o DigitalRegisters.o StringFuncs.o WatchdogTimer.o CustomFuncs.o
+lib_: Usart.o Timers.o ADC.o FuncProtector.o DigitalRegisters.o StringFuncs.o WatchdogTimer.o CustomFuncs.o TWI.o
 
 
 Usart.o: 
@@ -53,6 +54,8 @@ DigitalRegisters.o:
 CustomFuncs.o:
 	avr-g++ $(CFLAGS) "customFuncAddr.c" -o "customFuncAddr.o"
 
+TWI.o:
+	avr-g++ $(CFLAGS) "TWI.c" -o "TWI.o"
 
 clean: 
 	rm -rf ./*.o ./*.d ./*.eep ./*.elf ./*.hex ./*.a
