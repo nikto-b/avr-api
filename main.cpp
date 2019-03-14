@@ -11,11 +11,12 @@ int main()
 	DDRB = 0xFF;
 	uint8_t i = 0;
 	const uint8_t del = 2;
-	const uint8_t ppin = 14;
+	const uint8_t ppin = 10;
 	const uint8_t max = 255;
 	const uint8_t min = 0;
 	USART0Begin(115200);
 	sei();
+	//analogWrite(3, 1, 128);
 	//TIMER4Init(TIMER4_COMC_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
 	//TIMER4SetC(128);
 	//TIMER3Init(TIMER3_COMB_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);

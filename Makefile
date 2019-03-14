@@ -8,7 +8,7 @@ all: objcopy
 main: lib
 	avr-g++ $(CFLAGS) "$(MAINFILENAME).cpp" -o "$(MAINFILENAME).o"
 
-arc: main
+arc: 
 	avr-gcc-ar rcs core.a digitalRegisters.o
 	avr-gcc-ar rcs core.a customFuncAddr.o
 	avr-gcc-ar rcs core.a stringFuncs.o
@@ -18,14 +18,15 @@ arc: main
 	#avr-gcc-ar rcs core.a FuncsInputProtector.o
 	avr-gcc-ar rcs core.a watchdog.o
 
-link: arc
+link: main arc lib
 	avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -ffunction-sections -fdata-sections -Wl,--gc-sections -mmcu=$(MCU) main.o core.a -o main.elf -lm
 
 objcopy: link
 	avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0  "$(MAINFILENAME).elf" "$(MAINFILENAME).eep"
 	avr-objcopy -O ihex -R .eeprom  "$(MAINFILENAME).elf" "$(MAINFILENAME).hex"
 
-lib: Usart.o Timers.o ADC.o FuncProtector.o DigitalRegisters.o StringFuncs.o WatchdogTimer.o CustomFuncs.o
+lib: lib_ arc
+lib_: Usart.o Timers.o ADC.o FuncProtector.o DigitalRegisters.o StringFuncs.o WatchdogTimer.o CustomFuncs.o
 
 
 Usart.o: 
