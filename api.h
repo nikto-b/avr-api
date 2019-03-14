@@ -88,8 +88,6 @@
 	#define ATOMIC_SMART ATOMIC_SMART_1		//prefer to use ROM instead of RAM
 #endif	//ifndef __OPTIMIZE_SIZE__
 
->>>>>>> master
-
 
 
 
