@@ -1,7 +1,5 @@
 #pragma once
 
-#define INT_ALOWED ((SREG >> 7) & 1)
-
 #include "settings.h"
 
 #include "customFuncAddr.h"

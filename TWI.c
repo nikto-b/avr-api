@@ -2,8 +2,9 @@
 #include "customFuncAddr.h"
 #define DEBUG 0
 #if DEBUG == 1
-#include "USART.h"
+	#include "USART.h"
 #endif //if DEBUG == 1
+#include "ATOMIC.h"
 
 uint16_t	_twi_out_len = 0;
 uint8_t		_twi_out_curr = 0;
@@ -101,26 +102,29 @@ void shiftRight(uint8_t* arr, uint32_t len, uint32_t el)
  */
 void twiAddPack(uint8_t addr, const uint8_t* data, uint8_t len, uint8_t mode)
 {
-	cli();										//block interrupts, must be atomic
-	addr <<= 1;
-	addr |= mode & 1;
+	ATOMIC_SMART
+	(
+		//cli();										//block interrupts, must be atomic
+		addr <<= 1;
+		addr |= mode & 1;
 
-	#if DEBUG == 1
-		//USART0Print("addr:");
-		//USART0Println(addr);
-	#endif //if DEBUG == 1	
-	_twi_usr_packs++;
-	_twi_usr_in_queue[_twi_usr_len++] = addr;	//add addr of slave device to queue
-	for(int i = 0; i < len; i++)				//iterate in data array and add all bytes in usr queue
-	{
 		#if DEBUG == 1
-			//USART0Print("CP:");
-			//USART0Println(data[i]);
-		#endif //if DEBUG == 1
-		_twi_usr_in_queue[_twi_usr_len++] = data[i];
-	}
-	_twi_usr_in_lens[_twi_usr_lens++] = len + 1;	//set num of bytes in pack
-	sei();										//allow interrupts, atomic block ended
+			//USART0Print("addr:");
+			//USART0Println(addr);
+		#endif //if DEBUG == 1	
+		_twi_usr_packs++;
+		_twi_usr_in_queue[_twi_usr_len++] = addr;	//add addr of slave device to queue
+		for(int i = 0; i < len; i++)				//iterate in data array and add all bytes in usr queue
+		{
+			#if DEBUG == 1
+				//USART0Print("CP:");
+				//USART0Println(data[i]);
+			#endif //if DEBUG == 1
+			_twi_usr_in_queue[_twi_usr_len++] = data[i];
+		}
+		_twi_usr_in_lens[_twi_usr_lens++] = len + 1;	//set num of bytes in pack
+		//sei();										//allow interrupts, atomic block ended
+	)
 }
 
 
@@ -140,12 +144,15 @@ void twiAddPack(uint8_t addr, uint8_t data, uint8_t mode)
 {
 	addr <<= 1;
 	addr |= mode & 1;
-	cli();										//block interrupts, must be atomic
-	_twi_usr_packs++;
-	_twi_usr_in_queue[_twi_usr_len++] = addr;	//add addr of slave device
-	_twi_usr_in_queue[_twi_usr_len++] = data;	//				,byte to send
-	_twi_usr_in_lens[_twi_usr_lens++] = 2;		//				and num of bytes in pack
-	sei();										//allow interrupts, atomic block ended
+	ATOMIC_SMART
+	(
+		//cli();										//block interrupts, must be atomic
+		_twi_usr_packs++;
+		_twi_usr_in_queue[_twi_usr_len++] = addr;	//add addr of slave device
+		_twi_usr_in_queue[_twi_usr_len++] = data;	//				,byte to send
+		_twi_usr_in_lens[_twi_usr_lens++] = 2;		//				and num of bytes in pack
+		//sei();										//allow interrupts, atomic block ended
+	)
 }
 
 
@@ -161,13 +168,16 @@ void twiAddPack(uint8_t addr, uint16_t data, uint8_t mode)
 {
 	addr <<= 1;
 	addr |= mode & 1;
-	cli();											//block interrupts, must be atomic
-	_twi_usr_packs++;
-	_twi_usr_in_queue[_twi_usr_len++] = addr;		//add addr of slave device
-	_twi_usr_in_queue[_twi_usr_len++] = data & 0xFF;//,byte to send
-	_twi_usr_in_queue[_twi_usr_len++] = (data >> 8) & 0xFF;
-	_twi_usr_in_lens[_twi_usr_lens++] = 2;			//				and num of bytes in pack
-	sei();											//allow interrupts, atomic block ended
+	ATOMIC_SMART
+	(
+		//cli();											//block interrupts, must be atomic
+		_twi_usr_packs++;
+		_twi_usr_in_queue[_twi_usr_len++] = addr;		//add addr of slave device
+		_twi_usr_in_queue[_twi_usr_len++] = data & 0xFF;//,byte to send
+		_twi_usr_in_queue[_twi_usr_len++] = (data >> 8) & 0xFF;
+		_twi_usr_in_lens[_twi_usr_lens++] = 2;			//				and num of bytes in pack
+		//sei();											//allow interrupts, atomic block ended
+	)
 }
 
 
@@ -284,40 +294,43 @@ inline void _twi_stop(void)
  */
 void twiStart(void)
 {
-	//cli();												//block interrupts, must be atomic
+	ATOMIC_SMART
+	(
+		//cli();												//block interrupts, must be atomic
 
-	if(_twi_status != I2C_READ
-		&& _twi_status != I2C_WRITE)
-	{
-		uint8_t bytes = _twi_usr_in_lens[0];				//get num of bytes to send
-		shiftLeft(_twi_usr_in_lens, _twi_usr_lens--, 1);	//shift array with lens of packs to left for 1 element
-		//cli();		//TODO: fix
-		for(uint8_t i = 0; i < bytes; i++)
-		{													//iterate "bytes" times and copy package
-			#if DEBUG == 1
-				USART0Print("CP:");
-				USART0Println(_twi_usr_in_queue[i]);
-			#endif //if DEBUG == 1
-			_twi_out_queue[i] = _twi_usr_in_queue[i];
+		if(_twi_status != I2C_READ
+			&& _twi_status != I2C_WRITE)
+		{
+			uint8_t bytes = _twi_usr_in_lens[0];				//get num of bytes to send
+			shiftLeft(_twi_usr_in_lens, _twi_usr_lens--, 1);	//shift array with lens of packs to left for 1 element
+			//cli();		//TODO: fix
+			for(uint8_t i = 0; i < bytes; i++)
+			{													//iterate "bytes" times and copy package
+				#if DEBUG == 1
+					USART0Print("CP:");
+					USART0Println(_twi_usr_in_queue[i]);
+				#endif //if DEBUG == 1
+				_twi_out_queue[i] = _twi_usr_in_queue[i];
+			}
+			shiftLeft(_twi_usr_in_queue, _twi_usr_len, bytes);//remove from user queue
+			//cli();		//TODO: fix
+
+			_twi_usr_len -= bytes;
+			_twi_out_len = bytes;
+			_twi_status = (_twi_out_queue[0] & 1)? I2C_READ : I2C_WRITE;//save status
+			_twi_usr_packs--;
+			_twi_start();										//kick the TWI machine
 		}
-		shiftLeft(_twi_usr_in_queue, _twi_usr_len, bytes);//remove from user queue
-		//cli();		//TODO: fix
-
-		_twi_usr_len -= bytes;
-		_twi_out_len = bytes;
-		_twi_status = (_twi_out_queue[0] & 1)? I2C_READ : I2C_WRITE;//save status
-		_twi_usr_packs--;
-		_twi_start();										//kick the TWI machine
-	}
-	else
-	{
-		#if DEBUG == 1
-			USART0Println("\t\t\t\t\t\t\t\ttrying to restart");
-			USART0Print("status:");
-			USART0Println(_twi_status);
-		#endif //if DEBUG == 1
-	}
-	//sei();												//allow interrupts, atomic block ended
+		else
+		{
+			#if DEBUG == 1
+				USART0Println("\t\t\t\t\t\t\t\ttrying to restart");
+				USART0Print("status:");
+				USART0Println(_twi_status);
+			#endif //if DEBUG == 1
+		}
+		//sei();												//allow interrupts, atomic block ended
+	)
 }
 
 
@@ -332,23 +345,26 @@ void twiStart(void)
  */
 void twiStop(void)
 {
-	//cli();							//block interrupts, must be atomic
+	ATOMIC_SMART
+	(
+		//cli();							//block interrupts, must be atomic
 
-	#if DEBUG == 1
-		USART0Println("to stb");
-	#endif //if DEBUG == 1
-	_twi_stop();					//go to standby
-	_twi_status = I2C_STANDBY;
-	_twi_out_len = 0;
-	if(_twi_usr_packs > 0)
-	{
 		#if DEBUG == 1
-			USART0Println("RESTART");
+			USART0Println("to stb");
 		#endif //if DEBUG == 1
-		twiStart();					//kick state machine for new start
-	}
+		_twi_stop();					//go to standby
+		_twi_status = I2C_STANDBY;
+		_twi_out_len = 0;
+		if(_twi_usr_packs > 0)
+		{
+			#if DEBUG == 1
+				USART0Println("RESTART");
+			#endif //if DEBUG == 1
+			twiStart();					//kick state machine for new start
+		}
 
-	//sei();							//allow interrupts, atomic block ended
+		//sei();							//allow interrupts, atomic block ended
+	)
 }
 
 
