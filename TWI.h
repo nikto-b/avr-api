@@ -66,6 +66,15 @@ void twiAddPack(uint8_t addr, const uint8_t* data, uint8_t len, uint8_t mode);
  *	Output:		none
  */
 void twiAddPack(uint8_t addr, uint8_t data, uint8_t mode);
+/*
+ *	Function:	twiAddPack
+ *	Desc:		Add package to user queue
+ *	Input:		uint8_t  addr:		what addr of slave set to
+ 				uint16_t data:		byte send to
+ 				uint8_t mode:		read or write mode use to
+ *	Output:		none
+ */
+void twiAddPack(uint8_t addr, uint16_t data, uint8_t mode);
 
 /*
  *	Function:	twiGetByte
@@ -74,6 +83,27 @@ void twiAddPack(uint8_t addr, uint8_t data, uint8_t mode);
  *	Output:		uint8_t: readed byte (0xFF if nothing to read)
  */
 uint8_t twiGetByte(void);
+
+/*
+ *	Function: 	twiWrite
+ *	Desc:		Write a byte to reg on slave device
+ *	Input:		uint8_t addr: slave device addr
+ 				uint8_t reg: what reg write to
+ 				uint8_t data: what write to
+ *	Output:		none
+ */
+void twiWrite(uint8_t addr, uint8_t reg, uint8_t data);
+
+
+/*
+ *	Function: 	twiReqRead
+ *	Desc:		Request a byte from reg on slave device
+ *	Input:		uint8_t addr: slave device addr
+ 				uint8_t reg: what reg read from
+ 				uint8_t len: len of data in bytes
+ *	Output:		none
+ */
+void twiReqRead(uint8_t addr, uint8_t reg, uint8_t len);
 
 
 /*

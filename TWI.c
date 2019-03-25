@@ -1,5 +1,6 @@
 #include "TWI.h"
 #include "customFuncAddr.h"
+#define DEBUG 0
 #if DEBUG == 1
 #include "USART.h"
 #endif //if DEBUG == 1
@@ -145,6 +146,28 @@ void twiAddPack(uint8_t addr, uint8_t data, uint8_t mode)
 	_twi_usr_in_queue[_twi_usr_len++] = data;	//				,byte to send
 	_twi_usr_in_lens[_twi_usr_lens++] = 2;		//				and num of bytes in pack
 	sei();										//allow interrupts, atomic block ended
+}
+
+
+/*
+ *	Function:	twiAddPack
+ *	Desc:		Add package to user queue
+ *	Input:		uint8_t  addr:		what addr of slave set to
+ 				uint16_t data:		byte send to
+ 				uint8_t mode:		read or write mode use to
+ *	Output:		none
+ */
+void twiAddPack(uint8_t addr, uint16_t data, uint8_t mode)
+{
+	addr <<= 1;
+	addr |= mode & 1;
+	cli();											//block interrupts, must be atomic
+	_twi_usr_packs++;
+	_twi_usr_in_queue[_twi_usr_len++] = addr;		//add addr of slave device
+	_twi_usr_in_queue[_twi_usr_len++] = data & 0xFF;//,byte to send
+	_twi_usr_in_queue[_twi_usr_len++] = (data >> 8) & 0xFF;
+	_twi_usr_in_lens[_twi_usr_lens++] = 2;			//				and num of bytes in pack
+	sei();											//allow interrupts, atomic block ended
 }
 
 
@@ -347,6 +370,42 @@ void twiStop(void)
 
 
 
+/*
+ *	Function: 	twiWrite
+ *	Desc:		Write a byte to reg on slave device
+ *	Input:		uint8_t addr: slave device addr
+ 				uint8_t reg: what reg write to
+ 				uint8_t data: what write to
+ *	Output:		none
+ */
+void twiWrite(uint8_t addr, uint8_t reg, uint8_t data)
+{
+	twiAddPack(addr, (uint16_t)((reg << 8) | data), I2C_WRITE);
+	twiStart();
+}
+
+
+/*
+ *	Function: 	twiReqRead
+ *	Desc:		Request a byte from reg on slave device
+ *	Input:		uint8_t addr: slave device addr
+ 				uint8_t reg: what reg read from
+ 				uint8_t len: len of data in bytes
+ *	Output:		none
+ */
+void twiReqRead(uint8_t addr, uint8_t reg, uint8_t len)
+{
+	twiAddPack(addr, reg, I2C_WRITE);
+	twiAddPack(addr, len, I2C_READ);
+	twiStart();
+}
+
+
+
+
+
+
+
 ISR(TWI_vect)
 {
 	switch(TWSR)
@@ -366,7 +425,7 @@ ISR(TWI_vect)
 				USART0Println("0x08");
 				USART0Println(_twi_out_queue[0]);
 				USART0Print("len:");
-				USART0Println(_twi_out_len);
+				//USART0Println((long)_twi_out_len);
 			#endif //if DEBUG == 1
 			_twi_out_curr = 0;
 			TWDR = _twi_out_queue[_twi_out_curr++];
@@ -379,7 +438,7 @@ ISR(TWI_vect)
 				USART0Println("0x10");
 				USART0Println(_twi_out_queue[0]);
 				USART0Print("len:");
-				USART0Println(_twi_out_len);
+				//USART0Println(( long)_twi_out_len);
 			#endif //if DEBUG == 1
 			_twi_out_curr = 0;
 			TWDR = _twi_out_queue[_twi_out_curr++];
@@ -433,12 +492,7 @@ ISR(TWI_vect)
 			#if DEBUG == 1
 				USART0Println("0x20");
 				USART0Println("\t\t\tFAIL");
-				for(uint8_t i = 0; i < NUM_OF_TOFS; i++)
-				{
-					USART0Print(i);
-					USART0Print("\t");
-					USART0Println(addrs[i]);
-				}
+
 			#endif //if DEBUG == 1
 				//handling of error
 			if(_twi_status == I2C_READ) //TODO: TEST IT!

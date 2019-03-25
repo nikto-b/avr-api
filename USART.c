@@ -70,6 +70,30 @@ void USART0Print(int __data)
 	USART0Print(__arr);
 	free(__arr);
 }
+/*
+ * Function USART0Print
+ * Desc     Convert to char array and send dec num to USART0
+ * Input    __data: dec num
+ * Output   none
+*/
+void USART0Print(signed long __data)
+{
+	char* __arr = long2str(__data);
+	USART0Print(__arr);
+	free(__arr);
+}
+/*
+ * Function USART0Print
+ * Desc     Convert to char array and send dec num to USART0
+ * Input    __data: dec num
+ * Output   none
+*/
+void USART0Print(unsigned long __data)
+{
+	char* __arr = long2str(__data);
+	USART0Print(__arr);
+	free(__arr);
+}
 
 /*
  * Function USART0Print
@@ -84,7 +108,7 @@ void USART0Print(uint64_t __data, byte __mode)
 	{
 		case DEC:
 		{
-			USART0Print(__data);
+			USART0Print((unsigned long)__data);
 			break;
 		}
 		case BIN:
@@ -97,7 +121,7 @@ void USART0Print(uint64_t __data, byte __mode)
 		}
 		default:
 		{
-			USART0Print(__data);
+			USART0Print((unsigned long)__data);
 			break;
 		}
 	}
@@ -114,6 +138,17 @@ void USART0Print(uint64_t __data, byte __mode)
 	USART0Print(__data);
 	USART0Print(EOL);
 }
+/*
+ * Function USART0Println
+ * Desc     Send to USART0 converted to char array num and EndOfLine
+ * Input    __data: Num to send
+ * Output   none
+*/
+ void USART0Println(long __data)
+{
+	USART0Print(__data);
+	USART0Print(EOL);
+}
 
 /*
  * Function USART0Println
@@ -125,6 +160,29 @@ void USART0Print(uint64_t __data, byte __mode)
 void USART0Println(int __data, byte __mode)
 {
 	USART0Print(__data, __mode);
+	USART0Println();
+}
+/*
+ * Function USART0Println
+ * Desc     Send num and EndOfLine to USART0 with mode
+ * Input    __data: num to send
+ * 			__mode: mode to send
+ * Output   none
+*/
+void USART0Println(long __data, byte __mode)
+{
+	USART0Print((uint64_t)__data, __mode);
+	USART0Println();
+}/*
+ * Function USART0Println
+ * Desc     Send num and EndOfLine to USART0 with mode
+ * Input    __data: num to send
+ * 			__mode: mode to send
+ * Output   none
+*/
+void USART0Println(unsigned long __data, byte __mode)
+{
+	USART0Print((uint64_t)__data, __mode);
 	USART0Println();
 }
 

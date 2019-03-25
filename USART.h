@@ -37,12 +37,16 @@ void USART0Send(unsigned char);
 //send char array function
 void USART0Print(const char* __data);
 void USART0Print(int);
+void USART0Print(long);
+void USART0Print(unsigned long);
 void USART0Print(int, int);
 void USART0Print(int, byte);
 
 void USART0Println();
 void USART0Println(const char* __data);
 void USART0Println(int);
+void USART0Println(long);
+void USART0Println(unsigned long);
 void USART0Println(int data, int mode);
 
 

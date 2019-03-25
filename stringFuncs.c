@@ -1,5 +1,5 @@
 #pragma once
-
+#include "USART.h"
 #include "stringFuncs.h"
 
 /*
@@ -28,6 +28,23 @@ byte getCountsOfDigits(int __number) //get count of digits for int
 byte getCountsOfDigits(long __number) //get count of digits for long
 {
 	int __count = __number == 0;
+	while (__number != 0) 
+	{
+		__count++;
+		__number /= 10;
+	}
+	return __count;
+}
+
+/*
+ * Function getCountsOfDigits
+ * Desc     Return num of digits
+ * Input    __number: num for counting digits
+ * Output   num of digits
+*/
+byte getCountsOfDigits(unsigned long __number) //get count of digits for long
+{
+	unsigned int __count = __number == 0;
 	while (__number != 0) 
 	{
 		__count++;
@@ -218,6 +235,38 @@ char* int2str(int __in)//convert int var to char array
  * Output   ptr to char array with num
 */
 char* long2str(long __in)//convert long var to char array
+{
+	uint8_t __len = getCountsOfDigits(__in);
+	bool a = false;
+	if(__in < 0)
+	{
+		__in = ~__in;
+		__in++;
+		__len++;
+		a = true;
+	}
+	char* __ret = (char*)malloc(__len + 1);//WARNING! memory leak!
+	__ret[__len] = 0x00;
+	while(__len)
+	{
+		__len--;
+		__ret[__len] = (__in % 10) + '0';
+		__in /= 10;
+	}
+	if(a)
+	{
+		__ret[0] = '-';
+	}
+	return __ret;
+}
+/*
+ * Function ulong2str
+ * Desc     convert int var to C-string
+ * 			WARNING! Function is allocating memory!
+ * Input    __in: num for converting
+ * Output   ptr to char array with num
+*/
+char* ulong2str(unsigned long __in)//convert long var to char array
 {
 	uint8_t __len = getCountsOfDigits(__in);
 	char* __ret = (char*)malloc(__len + 1);//WARNING! memory leak!
