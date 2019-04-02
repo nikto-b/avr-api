@@ -1,14 +1,14 @@
 MAINFILENAME=main
 MCU=atmega2560
-CFLAGS=-c -O1 -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL) 
+CFLAGS=-c -O1 -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL)
 
 
 all: objcopy
-	
+
 main: lib
 	avr-g++ $(CFLAGS) "$(MAINFILENAME).cpp" -o "$(MAINFILENAME).o"
 
-arc: 
+arc:
 	avr-gcc-ar rcs core.a digitalRegisters.o
 	avr-gcc-ar rcs core.a customFuncAddr.o
 	avr-gcc-ar rcs core.a stringFuncs.o
@@ -18,6 +18,7 @@ arc:
 	#avr-gcc-ar rcs core.a FuncsInputProtector.o
 	avr-gcc-ar rcs core.a watchdog.o
 	avr-gcc-ar rcs core.a TWI.o
+	avr-gcc-ar rcs core.a numFuncs.o
 
 link: main arc lib
 	avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -ffunction-sections -fdata-sections -Wl,--gc-sections -mmcu=$(MCU) main.o core.a -o main.elf -lm
@@ -27,10 +28,10 @@ objcopy: link
 	avr-objcopy -O ihex -R .eeprom  "$(MAINFILENAME).elf" "$(MAINFILENAME).hex"
 
 lib: lib_ arc
-lib_: Usart.o Timers.o ADC.o FuncProtector.o DigitalRegisters.o StringFuncs.o WatchdogTimer.o CustomFuncs.o TWI.o
+lib_: Usart.o Timers.o ADC.o FuncProtector.o DigitalRegisters.o StringFuncs.o WatchdogTimer.o CustomFuncs.o TWI.o numFuncs.o
 
 
-Usart.o: 
+Usart.o:
 	avr-g++ $(CFLAGS) "USART.c" -o "USART.o"
 
 Timers.o:
@@ -57,7 +58,10 @@ CustomFuncs.o:
 TWI.o:
 	avr-g++ $(CFLAGS) "TWI.c" -o "TWI.o"
 
-clean: 
+numFuncs.o:
+	avr-g++ $(CFLAGS) "numFuncs.cpp" -o "numFuncs.o"
+
+clean:
 	rm -rf ./*.o ./*.d ./*.eep ./*.elf ./*.hex ./*.a
 
 size:

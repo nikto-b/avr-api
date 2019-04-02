@@ -13,6 +13,7 @@
 #define I2C_DISABLED			0xFF
 
 extern uint16_t	_twi_in_len;
+extern uint16_t _twi_out_len;
 
 
 /*

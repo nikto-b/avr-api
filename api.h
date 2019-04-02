@@ -11,7 +11,7 @@
 #include "watchdog.h"
 #include "TWI.h"
 #include "ATOMIC.h"
-
+#include "numFuncs.h"
 
 
 

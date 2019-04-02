@@ -28,7 +28,7 @@ int main()
 	const uint8_t del = 10;
 	const uint8_t ppin = 5;
 	const uint8_t max = 255;
-	const uint8_t min = 128;
+	const uint8_t min = 0;
 	USART0Begin(115200);
 	I2C_SetFreq(0x40);
 	uint8_t* p = (uint8_t*)malloc(2 * sizeof(uint8_t));
@@ -36,10 +36,11 @@ int main()
 	p[1] = 1;
 	twiAddPack(0x0D, p, 2, I2C_WRITE);
 	twiStart();
-	p[0] = 0;
-	twiAddPack(0x0D, p, 1, I2C_WRITE);
-	p[0] = 6;
-	twiAddPack(0x0D, p, 1, I2C_READ);
+	uint64_t w = constrain(100, 10, 50);
+	// p[0] = 0;
+	// twiAddPack(0x0D, p, 1, I2C_WRITE);
+	// p[0] = 6;
+	// twiAddPack(0x0D, p, 1, I2C_READ);
 	//p[0] = COMPASS_MODE;
 	//p[1] = 1;
 	//twiAddPack(0x0D, p, 2, I2C_WRITE);
@@ -50,31 +51,34 @@ int main()
 	//twiAddPack(0x0D, p, 1, I2C_WRITE);
 	//p[0] = 1;
 	//twiAddPack(0x0D, p, 1, I2C_READ);
-	twiStart();
-	while(!twiHadRead()){asm("NOP");}
-	delay(50);
-	//USART0Println(twiGetByte());
-	while(twiHadRead())
-	{
-		USART0Println((int)twiGetByte());
-	}
+	// twiStart();
+	// while(!twiHadRead()){asm("NOP");}
+	// delay(50);
+	// //USART0Println(twiGetByte());
+	// while(twiHadRead())
+	// {
+	// 	USART0Println((int)twiGetByte());
+	// }
 
 
 	while(1)
 	{
 		for(i = min; i < max; i++)
 		{
-			analogWrite(ppin, i);
+			ATOMIC_SMART
+			(
+				analogWrite(ppin, i);
+			)
 			//analogWrite(11, i);
-			//USART0Println("A");
+			USART0Println("A");
 			delay(del);
 		}
 		for(i = max; i > min; i--)
 		{
 			analogWrite(ppin, i);
-			//USART0Println("B");
+			USART0Println("B");
 			delay(del);
-		}		
+		}
 	}
 	loop:
 	asm("NOP");

@@ -2,7 +2,7 @@
 
 #include "base.h"
 #include "ADC.h"
-#define NUM_OF_ANALOG_PINS 10
+#define NUM_OF_ANALOG_PINS 15
 #include "customFuncAddr.h"
 
 #if defined(ADCL)
@@ -12,7 +12,7 @@
 	uint8_t _analogRef;
 	volatile uint16_t _analogPins[NUM_OF_ANALOG_PINS];
 	volatile uint8_t _currPin = 0;
-	
+
 	/*
 	 * Function _ADCSetAnalogChanged
 	 * Desc     Set state of "isNewMeasure"
@@ -24,7 +24,7 @@
 	{
 		_analogPins[__pin] = (_analogPins[__pin] & ~ADC_CHANGED_MASK) | (__state * ADC_CHANGED_MASK);
 	}
-	
+
 	/*
 	 * Function ADCGetAnalogChanged
 	 * Desc     Return state of "isNewMeasure"
@@ -35,9 +35,9 @@
 	{
 		return (_analogPins[__pin] & ADC_CHANGED_MASK) != 0;
 	}
-	
-	
-	
+
+
+
 	/*
 	 * Function ADCSendControl
 	 * Desc     Set control signal to ADC
@@ -52,10 +52,10 @@
 				return;
 			}
 		#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-		
+
 		ADCSRA |= __contr;
 	}
-	
+
 	/*
 	 * Function ADCSetRef
 	 * Desc     Set analog reference source
@@ -70,11 +70,11 @@
 				return;
 			}
 		#endif //if USE_FUNC_INPUT_PROTECTOR == 1
-		
+
 		ADMUX |= __ref;
 		_analogRef = __ref;
 	}
-	
+
 	/*
 	 * Function ADCSetPrescaller
 	 * Desc     Set ADC prescaller
@@ -91,7 +91,7 @@
 		#endif //if USE_FUNC_INPUT_PROTECTOR == 1
 		ADCSRA = (ADCSRA & ~ADC_PRESCALLER_MASK) | __prescaller;
 	}
-	
+
 	/*
 	 * Function ADCSetAnalogAutotriggerSCR
 	 * Desc     Set source for autotrigger
@@ -119,7 +119,7 @@
 	{
 		DIDR0 = __mask;
 	}
-	
+
 	/*
 	 * Function ADCDisableDigitalInput8to15
 	 * Desc     Disable digital input for pins 8 to 15
@@ -130,7 +130,7 @@
 	{
 		DIDR2 = __mask;
 	}
-	
+
 	/*
 	 * Function ADCEnable
 	 * Desc     Start ADC
@@ -141,7 +141,7 @@
 	{
 		ADCSendControl(ADC_CONTROL_ENABLE);
 	}
-	
+
 	/*
 	 * Function ADCDisable
 	 * Desc     Stop ADC
@@ -152,7 +152,7 @@
 	{
 		ADCSRA = (ADCSRA & ~ADC_CONTROL_ENABLE);
 	}
-	
+
 	/*
 	 * Function ADCStartConvert
 	 * Desc     Start converting
@@ -163,7 +163,7 @@
 	{
 		ADCSendControl(ADC_CONTROL_START_CONVERTION);
 	}
-	
+
 	/*
 	 * Function ADCStopConvert
 	 * Desc     Stop converting
@@ -174,7 +174,7 @@
 	{
 		ADCSRA = (ADCSRA & ~ADC_CONTROL_START_CONVERTION);
 	}
-	
+
 	/*
 	 * Function ADCFlush
 	 * Desc     Clear registers
@@ -188,8 +188,8 @@
 		DIDR2  = 0;
 		DIDR0  = 0;
 	}
-	
-	
+
+
 	/*
 	 * Function ADCInit
 	 * Desc     Initialize ADC
@@ -243,12 +243,12 @@
 		if(_currPin >= NUM_OF_ANALOG_PINS)
 		{
 			_currPin = 0;
-		}		
+		}
 		ADMUX = _analogRef | (_currPin & NUM_OF_ANALOG_PINS);
 		callCustomFunc(INTERRUPT_CUSTOMFUNC_ADC);
 	}
-	
-	
+
+
 	/*
 	 * Function analogRead
 	 * Desc     Return measurment of pin
