@@ -109,6 +109,7 @@
 		ADCSRB = (ADCSRB & ~ADC_ADTS_MASK) | __src;
 	}
 
+#ifdef DIDR0
 	/*
 	 * Function ADCDisableDigitalInput0to7
 	 * Desc     Disable digital input for pins 0 to 7
@@ -119,7 +120,9 @@
 	{
 		DIDR0 = __mask;
 	}
+#endif //ifdef DIDR0
 
+#ifdef DIDR2
 	/*
 	 * Function ADCDisableDigitalInput8to15
 	 * Desc     Disable digital input for pins 8 to 15
@@ -128,8 +131,9 @@
 	*/
 	  void ADCDisableDigitalInput8to15(uint8_t __mask)
 	{
-		DIDR2 = __mask;
+		//DIDR2 = __mask;
 	}
+#endif //ifdef DIDR2
 
 	/*
 	 * Function ADCEnable
@@ -181,12 +185,16 @@
 	 * Input    none
 	 * Output   none
 	*/
-	  void ADCFlush(void)
+  void ADCFlush(void)
 	{
 		ADCSRA = 0;
 		ADCSRB = 0;
-		DIDR2  = 0;
+		#ifdef DIDR2
+		//DIDR2  = 0;
+		#endif //ifdef DIDR2
+		#ifdef DIDR0
 		DIDR0  = 0;
+		#endif
 	}
 
 

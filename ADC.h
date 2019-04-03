@@ -2,7 +2,7 @@
 
 #ifndef ADC_H_
 	#define ADC_H_
-#endif 
+#endif
 
 #ifndef _ADC_MODES
 	#pragma error "No ADC modes table found!"
@@ -14,7 +14,9 @@ bool ADCGetAnalogChanged(uint8_t __pin);
   void ADCSetPrescaller(uint8_t __prescaller);
 void ADCSetAutotriggerSRC(uint8_t __src);
   void ADCDisableDigitalInput0to7(uint8_t __mask);
+#ifdef DIDR2
   void ADCDisableDigitalInput8to15(uint8_t __mask);
+#endif
   void ADCEnable(void);
   void ADCDisable(void);
   void ADCStartConvert(void);
