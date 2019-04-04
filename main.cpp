@@ -1,23 +1,252 @@
 #include "base.h"
 #include "api.h"
 
+#define SCH_MAX_LEN			2047
 
-#define COMPASS_CONFA		00
-#define COMPASS_CONFB		01
-#define COMPASS_MODE		02
-#define COMPASS_DO_MSB_X	03
-#define COMPASS_DO_LSB_X	04
-#define COMPASS_DO_MSB_Z	05
-#define COMPASS_DO_LSB_Z	06
-#define COMPASS_DO_MSB_Y	07
-#define COMPASS_DO_LSB_Y	08
-#define COMPASS_STATUS		09
-#define COMPASS_ID_A		10
-#define COMPASS_ID_B		11
-#define COMPASS_ID_C		12
+
+void (*scheduleQueue[SCH_MAX_LEN])();
+
+volatile uint16_t scheduleCounter = 0;
+volatile uint16_t scheduleQueueLen = 0;
+
+
+
+/*
+ *	Function:	scheduleGetFuncIndex
+ *	Desc:		Get index of function in sch queue
+ *	Input:		void* func: ptr to func
+ *	Output:		index of func
+ */
+uint16_t scheduleGetFuncIndex(void(*func))
+{
+	for(uint16_t i = 0; i < scheduleQueueLen; i++)
+	{
+		if(scheduleQueue[i] == func)
+		{
+			return i;
+		}
+	}
+	return 0x00;
+}
+
+
+/*
+ *	Function:	scheduleAddFunc
+ *	Desc:		Add func to repeat by schedule (adding instead of idle)
+ *	Input:		void* func: ptr to func
+ *	Output:		index of added func
+ */
+void scheduleAddFunc(void(* func)())
+{
+	for(uint16_t i = 0; i < scheduleQueueLen; i++)
+	{
+		if(scheduleQueue[i] == 0)
+		{
+			ATOMIC_FORCED
+			(
+				scheduleQueue[i] = func;
+				// return i;
+			)
+			return;
+		}
+	}
+	// ATOMIC_FORCED
+	// (
+		USART0Println("ADD");
+		scheduleQueue[scheduleQueueLen++] = func;
+		// return scheduleQueueLen - 1;
+	// )
+}
+
+
+/*
+ *	Function:	scheduleAddFunc
+ *	Desc:		Add func to repeat by schedule (adding instead of idle)
+ *	Input:		void* func: ptr to func
+ *				uint8_t del: min index of added task
+ *	Output:		index of added func
+ */
+void scheduleAddFunc(void(* func)(), uint16_t del)
+{
+	for(uint16_t i = del; i < scheduleQueueLen; i++)
+	{
+		if(scheduleQueue[i] == 0)
+		{
+			ATOMIC_FORCED
+			(
+				scheduleQueue[i] = func;
+				// return i;
+			)
+			return;
+		}
+	}
+	ATOMIC_FORCED
+	(
+		while(scheduleQueueLen < del)
+		{
+			scheduleQueueLen++;
+		}
+		scheduleQueue[scheduleQueueLen++] = func;
+		// return scheduleQueueLen - 1;
+	)
+}
+
+
+/*
+ *	Function:	scheduleAddFunc
+ *	Desc:		Add func to repeat by schedule (adding instead of idle)
+ *	Input:		void* func: ptr to func
+ *				uint8_t stfunc: index of func from starting counting del
+ *				uint8_t del: min index of added task
+ *	Output:		index of added func
+ */
+void scheduleAddFunc(void(* func)(), uint16_t stfunc, uint16_t del)
+{
+	del += stfunc;
+	 scheduleAddFunc(func, del);
+}
+
+
+/*
+ *	Function:	scheduleAddFunc
+ *	Desc:		Add func to repeat by schedule (adding instead of idle)
+ *	Input:		void* func: ptr to func
+ *				void* stfunc: func from starting counting del
+ *				uint8_t del: min index of added task
+ *	Output:		index of added func
+ */
+void scheduleAddFunc(void(* func)(), void(* stfunc)(), uint16_t del)
+{
+	del = scheduleGetFuncIndex(stfunc);
+	 scheduleAddFunc(func, del);
+}
+
+
+/*
+ *	Function:	scheduleRemoveFunc
+ *	Desc:		Remove func fom schedule task queue
+ *	Input:		uint8_t func: index of ptr to func
+ *	Output:		none
+ */
+void scheduleRemoveFunc(uint16_t func)
+{
+	ATOMIC_FORCED
+	(
+		scheduleQueue[func] = 0;
+	)
+}
+
+/*
+ *	Function:	scheduleRemoveFunc
+ *	Desc:		Remove func fom schedule task queue
+ *	Input:		void* func: ptr to func
+ *	Output:		none
+ */
+void scheduleRemoveFunc(void(* func)())
+{
+	ATOMIC_SMART
+	(
+		for(uint8_t i = 0; i < scheduleQueueLen; i++)
+		{
+			if(scheduleQueue[i] == func)
+			{
+				scheduleRemoveFunc(i);
+				//break;
+			}
+		}
+	)
+}
+
+
+char usartInBuf[512];
+volatile uint16_t usartInBufCounter = 0;
+
+
+// void parseInputCmds(void)
+// {
+// 	if (contains(usartInBuf, usartInBufCounter, '(') && contains(usartInBuf, usartInBufCounter, ')'))
+// 	{
+// 		char* _arr = strSplit(usartInBuf, usartInBufCounter + 1, '(', ')');
+// 		usartInBufCounter = 0;
+// 		//sei();
+//
+// 		if(_arr != 0)
+// 		{
+// 			USART0Println(_arr);
+// 			// runControlCmd(_arr);
+// 			free(_arr);
+// 		}
+// 	}
+// 	else if (contains(usartInBuf, usartInBufCounter, '{'))
+// 	{
+// 		//setVar(_arr);
+// 	}
+// 	else if (contains(usartInBuf, usartInBufCounter, '['))
+// 	{
+// 		//setArr(_arr);
+// 	}
+// }
+
+
+/*
+ *	Function:	schedule
+ *	Desc:		If have new bytes to read return 1(t), else 0(f)
+ *	Input:		none
+ *	Output:		none
+ */
+void schedule(void)
+{
+	// sei();
+	PORTB |= 1 << 5;//enable in-fg
+	// if(scheduleQueue[scheduleCounter] != 0)
+	// {
+		// USART0Println((long)scheduleQueue[scheduleCounter]);
+		// USART0Println((long)&scheduleQueue[scheduleCounter]);
+		// scheduleQueue[scheduleCounter]();
+	// }
+	scheduleCounter++;
+
+	if(scheduleCounter >= scheduleQueueLen)
+		scheduleCounter = 0;
+	PORTB &= ~(1 << 5);//disable in-fg
+}
+
+void recvUsart()
+{
+	//digitalWrite(15, 0);
+	//char c = USART0Read();
+	usartInBuf[usartInBufCounter++] = USART0Read();
+	//usartInBuf[usartInBufCounter++] = c;
+	//USART0Println("A");
+}
+
 
 int main()
 {
+	DDRB = 255;
+	USART0Begin(115200);
+	for(uint16_t i = 0; i < SCH_MAX_LEN; i++)
+	{
+		scheduleQueue[i] = 0;
+	}
+	// sei();
+	USART0Println("FUCK");
+	setCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_RX, recvUsart);
+
+	// scheduleAddFunc(parseInputCmds);
+	cli();
+	setCustomFunc(INTERRUPT_CUSTOMFUNC_TC0_COMPA, schedule);
+	TIMER0Init(TIMER0_COMA_NPWM_NORMAL, TIMER0_WF_CTC, TIMER0_CLK_SRC_1024);
+
+	TIMER0EnableCOMPAInterrupt();
+	TIMER0SetA(255);
+	sei();
+	USART0Println((long)scheduleQueue[0]);
+
+
+	loop:
+	asm("NOP");
+	goto loop;
 	// DDRE = 255;
 	// DDRG = 255;
 	// DDRH = 255;
@@ -80,8 +309,5 @@ int main()
 	// 		delay(del);
 	// 	}
 	// }
-	loop:
-	asm("NOP");
-	goto loop;
 	return 0;
 }

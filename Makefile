@@ -1,10 +1,10 @@
 MAINFILENAME=main
 #MCU=atmega2560
-MCU=atmega328p
-CFLAGS=-c -O1 -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL)
+MCU=atmega328
+CFLAGS=-c -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL)
+LFLAGS=-Os -Wall -Wextra -flto -fuse-linker-plugin -ffunction-sections -fdata-sections -Wl,--gc-sections -mmcu=$(MCU) -lm
 
-
-all: objcopy
+all: size
 
 main: lib
 	avr-g++ $(CFLAGS) "$(MAINFILENAME).cpp" -o "$(MAINFILENAME).o"
@@ -22,7 +22,7 @@ arc:
 	avr-gcc-ar rcs core.a numFuncs.o
 
 link: main arc lib
-	avr-gcc -Wall -Wextra -Os -g -flto -fuse-linker-plugin -ffunction-sections -fdata-sections -Wl,--gc-sections -mmcu=$(MCU) main.o core.a -o main.elf -lm
+	avr-gcc $(LFLAGS) main.o core.a -o main.elf
 
 objcopy: link
 	avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0  "$(MAINFILENAME).elf" "$(MAINFILENAME).eep"
@@ -65,5 +65,5 @@ numFuncs.o:
 clean:
 	rm -rf ./*.o ./*.d ./*.eep ./*.elf ./*.hex ./*.a
 
-size:
-	avr-size $(MAINFILENAME).elf -A --mcu=$(MCU) -d -h
+size: objcopy
+	avr-size $(MAINFILENAME).elf -C --mcu=$(MCU)

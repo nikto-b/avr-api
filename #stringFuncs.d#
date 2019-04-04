@@ -1,0 +1,3 @@
+:q
+stringFuncs.o: stringFuncs.c USART.h settings.h stringFuncs.h base.h \
+ USARTModes.h customFuncAddr.h

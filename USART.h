@@ -2,6 +2,8 @@
 
 #include "settings.h"
 
+#define USART_TX_BUF_LEN 100
+
 #ifndef DEC
 	#define DEC 0
 #endif //ifndef DEC
@@ -52,7 +54,7 @@ void USART0Println(int data, int mode);
 
 
 #pragma message "using USART input"
-	
+
 //get recieved data
 char USART0Read(void);
 //get is any data recieved

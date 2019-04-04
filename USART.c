@@ -2,13 +2,47 @@
 
 #include "USART.h"
 
+// #ifndef UCSR0A
+// #define UCSR0A UCSRA
+// #endif
+// #ifndef UBRR0L
+// #define UBRR0L UBRRL
+// #endif
+// #ifndef UCSR0B
+// #define UCSR0B UCSRB
+// #endif
+// #ifndef UBRR0H
+// #define UBRR0H UBRRH
+// #endif
+// #ifndef UCSR0C
+// #define UCSR0C UCSRC
+// #endif
+// #ifndef RXEN0
+// #define RXEN0 RXEN
+// #endif
+// #ifndef RXCIE0
+// #define RXCIE0 RXCIE
+// #endif
+// #ifndef TXEN0
+// #define TXEN0 TXEN
+// #endif
+// #ifndef TXCIE0
+// #define TXCIE0 TXCIE
+// #endif
+// #ifndef UCSZ00
+// #define UCSZ00 UCSZ0
+// #endif
+// #ifndef UCSZ01
+// #define UCSZ01 UCSZ1
+// #endif
 
-#define USART_TX_BUF_LEN 200
+
+
 char _usart0_txbuf [USART_TX_BUF_LEN];
 uint16_t _usart0_txbuf_len_start = 0;
 uint16_t _usart0_txbuf_len_end = 0;
 
-/* 
+/*
  * Function USART0Send
  * Desc     Send byte to USART0
  * Input    _data: byte to send
@@ -16,8 +50,14 @@ uint16_t _usart0_txbuf_len_end = 0;
 */
 void USART0Send(unsigned char __data)			//send 1 byte to USART0
 {
+	// #ifdef UDR0
 	while(!(UCSR0A & (1 << UDRE0))){}//TODO: send to buf and get with interrupt
 	UDR0 = __data;
+	// #else
+	// while(!(UCSRA & (1 << UDRE))){}//TODO: send to buf and get with interrupt
+	// UDR = __data;
+	// // UDR = __data;
+	// #endif
 	// if(!(UCSR0A & (1 << UDRE0)) || _usart0_txbuf_len_end != 0)
 	// 	_usart0_txbuf[_usart0_txbuf_len_end++] = __data;
 	// else
@@ -29,7 +69,7 @@ void USART0Send(unsigned char __data)			//send 1 byte to USART0
 	 */
 }
 
-/* 
+/*
  * Function USART0Print
  * Desc     Send byte array to USART0
  * Input    __data: byte array to send
@@ -47,7 +87,7 @@ void USART0Print(const char* __data)	//send C-string to USART0
 	}
 }
 
-/* 
+/*
  * Function USART0Println
  * Desc     Send EndOfLine to USART0
  * Input    none
@@ -204,7 +244,11 @@ void USART0Println(unsigned long __data, byte __mode)
  * Input    interrupt vector
  * Output   none
 */
+#ifdef USART0_TX_vect
 ISR(USART0_TX_vect)//interrupt handler called aftar transmitting data
+#else
+ISR(USART_TX_vect)//interrupt handler called aftar transmitting data
+#endif
 {
 	// if(_usart0_txbuf_len_start != _usart0_txbuf_len_end)
 	// {
@@ -238,7 +282,11 @@ volatile uint8_t _inputBufEmpty_ = true;
  * Input    interrupt vector
  * Output   none
 */
+#ifdef USART0_RX_vect
 ISR(USART0_RX_vect)		   //interrupt handler called after recieving data
+#else
+ISR(USART_RX_vect)		   //interrupt handler called after recieving data
+#endif
 {
 	if(_inputBufCounterInput_ >= _MAX_BUF_SIZE_	//check that counters are in borders of buf size
 			|| _inputBufEmpty_)					//or buf empty
@@ -254,7 +302,7 @@ ISR(USART0_RX_vect)		   //interrupt handler called after recieving data
 		_inputBufCounterInput_++;				//go next index for writing
 	}
 
-	
+
 	callCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_RX);
 }
 
@@ -395,4 +443,3 @@ void USART0Begin(uint64_t __baud)
 	 * 111 9-bit
 	 */
 }
-
