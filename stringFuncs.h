@@ -18,14 +18,14 @@ byte getCountsOfDigits(long __number); //get count of digits for long
 byte getCountsOfDigits(byte __number); //get count of digits for byte
 
 int getCountsOfBits(uint64_t __in);//get count if digits for int
-    
+
 char* dec2bin(uint64_t __in);//convert dec num to bin C-string
 
 int bin2dec(char* __in);//convert bin num to dec int
 
-int str2int(char* __in);//convert C-string to int
-long str2long(char* __in);//convert C-string to long
-byte str2byte(char* __in);//convert C-string to byte
+int str2int(const char* __in);//convert C-string to int
+long str2long(const char* __in);//convert C-string to long
+byte str2byte(const char* __in);//convert C-string to byte
 
 char* int2str(int __in);//convert int var to char array
 char* long2str(long __in);//convert long var to char array

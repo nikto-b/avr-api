@@ -1,16 +1,16 @@
 #include "base.h"
 
-#define _TWI_ACK				1
-#define _TWI_NACK				0
-#define _TWI_OUT_BUF_LEN		0xFF
-#define _TWI_IN_BUF_LEN			0xFF
-#define _TWI_USR_IN_BUF_LEN		0xFF
-#define I2C_WRITE				0x00
-#define I2C_READ				0x01
-#define I2C_STANDBY				0x02
-#define I2C_FAIL				0x03
-#define I2C_RESTART_FAIL		0x04
-#define I2C_DISABLED			0xFF
+#define _TWI_ACK							1
+#define _TWI_NACK							0
+#define _TWI_OUT_BUF_LEN			40
+#define _TWI_IN_BUF_LEN				60
+#define _TWI_USR_IN_BUF_LEN		40
+#define I2C_WRITE							0x00
+#define I2C_READ							0x01
+#define I2C_STANDBY						0x02
+#define I2C_FAIL							0x03
+#define I2C_RESTART_FAIL			0x04
+#define I2C_DISABLED					0xFF
 
 extern uint16_t	_twi_in_len;
 extern uint16_t _twi_out_len;

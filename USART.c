@@ -51,7 +51,7 @@ uint16_t _usart0_txbuf_len_end = 0;
 void USART0Send(unsigned char __data)			//send 1 byte to USART0
 {
 	// #ifdef UDR0
-	while(!(UCSR0A & (1 << UDRE0))){}//TODO: send to buf and get with interrupt
+	while(!(UCSR0A & (1 << UDRE0))){asm("NOP");}//TODO: send to buf and get with interrupt
 	UDR0 = __data;
 	// #else
 	// while(!(UCSRA & (1 << UDRE))){}//TODO: send to buf and get with interrupt

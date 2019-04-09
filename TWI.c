@@ -6,18 +6,21 @@
 #endif //if DEBUG == 1
 #include "ATOMIC.h"
 
-uint16_t	_twi_out_len = 0;
-uint8_t		_twi_out_curr = 0;
-uint16_t	_twi_in_len = 0;
-uint16_t	_twi_usr_len = 0;
-uint8_t		_twi_usr_packs = 0;
-uint8_t		_twi_usr_lens = 0;
-uint8_t 	_twi_out_queue[_TWI_OUT_BUF_LEN];
-uint8_t 	_twi_in_queue[_TWI_IN_BUF_LEN];
-uint8_t 	_twi_usr_in_queue[_TWI_USR_IN_BUF_LEN];
-uint8_t		_twi_usr_in_lens[_TWI_USR_IN_BUF_LEN];
+uint16_t	_twi_out_len = 0;															//2 bytes
+uint8_t		_twi_out_curr = 0;														//1 byte
+uint16_t	_twi_in_len = 0;															//2 bytes
+uint16_t	_twi_usr_len = 0;															//2 bytes
+uint8_t		_twi_usr_packs = 0;														//1 byte
+uint8_t		_twi_usr_lens = 0;														//1 byte
+uint8_t 	_twi_out_queue[_TWI_OUT_BUF_LEN];							//_TWI_OUT_BUF_LEN bytes
+uint8_t 	_twi_in_queue[_TWI_IN_BUF_LEN];								//_TWI_IN_BUF_LEN bytes
+uint8_t 	_twi_usr_in_queue[_TWI_USR_IN_BUF_LEN];				//_TWI_USR_IN_BUF_LEN bytes
+uint8_t		_twi_usr_in_lens[_TWI_USR_IN_BUF_LEN];				//_TWI_USR_IN_BUF_LEN bytes
 
-uint8_t		_twi_status = 0xFF;
+uint8_t		_twi_status = 0xFF;														//1 byte
+//--------------------------------------------------------------------------------------------
+//																											10 + _TWI_OUT_BUF_LEN + _TWI_IN_BUF_LEN + 2*_TWI_USR_IN_BUF_LEN bytes
+//																											190 here
 
 
 
@@ -111,7 +114,7 @@ void twiAddPack(uint8_t addr, const uint8_t* data, uint8_t len, uint8_t mode)
 		#if DEBUG == 1
 			//USART0Print("addr:");
 			//USART0Println(addr);
-		#endif //if DEBUG == 1	
+		#endif //if DEBUG == 1
 		_twi_usr_packs++;
 		_twi_usr_in_queue[_twi_usr_len++] = addr;	//add addr of slave device to queue
 		for(int i = 0; i < len; i++)				//iterate in data array and add all bytes in usr queue
@@ -243,10 +246,10 @@ void _twi_reply(uint8_t _ack)
 
 
 /*
- *	Function:	
- *	Desc:		
- *	Input:		
- *	Output:		
+ *	Function:
+ *	Desc:
+ *	Input:
+ *	Output:
  */
 /*
  *	Function:	_twi_start
@@ -358,7 +361,7 @@ void twiStop(void)
 		if(_twi_usr_packs > 0)
 		{
 			#if DEBUG == 1
-				USART0Println("RESTART");
+				USART0Println("R_ESTART");
 			#endif //if DEBUG == 1
 			twiStart();					//kick state machine for new start
 		}
@@ -429,7 +432,7 @@ ISR(TWI_vect)
 		case 0x00:												//bus fail
 		{
 			#if DEBUG == 1
-				USART0Println("0x00");
+				USART0Println("_0x00");
 			#endif //if DEBUG == 1
 			_twi_status = I2C_FAIL;
 			twiStop();

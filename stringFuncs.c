@@ -11,7 +11,7 @@
 byte getCountsOfDigits(int __number) //get count of digits for int
 {
 	int __count = __number == 0;
-	while (__number != 0) 
+	while (__number != 0)
 	{
 		__count++;
 		__number /= 10;
@@ -28,7 +28,7 @@ byte getCountsOfDigits(int __number) //get count of digits for int
 byte getCountsOfDigits(long __number) //get count of digits for long
 {
 	int __count = __number == 0;
-	while (__number != 0) 
+	while (__number != 0)
 	{
 		__count++;
 		__number /= 10;
@@ -45,7 +45,7 @@ byte getCountsOfDigits(long __number) //get count of digits for long
 byte getCountsOfDigits(unsigned long __number) //get count of digits for long
 {
 	unsigned int __count = __number == 0;
-	while (__number != 0) 
+	while (__number != 0)
 	{
 		__count++;
 		__number /= 10;
@@ -62,7 +62,7 @@ byte getCountsOfDigits(unsigned long __number) //get count of digits for long
 byte getCountsOfDigits(byte __number) //get count of digits for byte
 {
 	byte __count = __number == 0;
-	while (__number != 0) 
+	while (__number != 0)
 	{
 		__count++;
 		__number /= 10;
@@ -79,7 +79,7 @@ byte getCountsOfDigits(byte __number) //get count of digits for byte
 byte getCountsOfDigits(uint16_t __number) //get count of digits for byte
 {
 	int __count = __number == 0;
-	while (__number != 0) 
+	while (__number != 0)
 	{
 		__count++;
 		__number /= 10;
@@ -113,7 +113,7 @@ int getCountsOfBits(uint64_t __in)//get count if digits for int
 */
 char* dec2bin(uint64_t __in)
 {
-	
+
 	byte __len = getCountsOfBits(__in);
 	if(__in == 0)
 	{
@@ -121,7 +121,7 @@ char* dec2bin(uint64_t __in)
 	}
 	char *__res = (char*)malloc(__len + 1);
 	__res[__len] = '\0';
-	while(__len)	
+	while(__len)
 	{
 		__len--;
 		__res[__len] = ((__in & 1) == 1)? '1' : '0';// + '0';
@@ -139,7 +139,7 @@ char* dec2bin(uint64_t __in)
 int bin2dec(const char* __in)//convert bin num to dec int
 {
 	int __ret = 0;			//unsafe func! check for "none-numeric input
-	while(*__in >= '0' 
+	while(*__in >= '0'
 	&& *__in <= '9'
 	&& *__in != 0x00)//WARNING! test this part
 	{
@@ -159,7 +159,7 @@ int bin2dec(const char* __in)//convert bin num to dec int
 int str2int(const char* __in)//convert C-string to int
 {
 	int __ret = 0;			//unsafe func! check for "none-numeric input
-	while(*__in >= '0' 
+	while(*__in >= '0'
 	&& *__in <= '9'
 	&& *__in != 0x00)//WARNING! test this part
 	{
@@ -175,10 +175,10 @@ int str2int(const char* __in)//convert C-string to int
  * Input    __in: ptr to char array with dec num
  * Output   dec num
 */
-long str2long(char* __in)//convert C-string to long
+long str2long(const char* __in)//convert C-string to long
 {
 	long __ret = 0;			//unsafe func! check for "none-numeric input
-	while(*__in >= '0' 
+	while(*__in >= '0'
 	&& *__in <= '9'
 	&& *__in != 0x00)//WARNING! test this part
 	{
@@ -197,7 +197,7 @@ long str2long(char* __in)//convert C-string to long
 byte str2byte(char* __in)//convert C-string to byte
 {
 	byte __ret = 0;			//unsafe func! check for "none-numeric input"
-	while(*__in >= '0' 
+	while(*__in >= '0'
 	&& *__in <= '9'
 	&& *__in != 0x00)//WARNING! test this part
 	{
@@ -404,14 +404,14 @@ char* strCut(const char* _in, uint16_t start, uint16_t end)
 {
 	if(end >= start)
 	{
-		char* _arr = malloc(sizeof(char) * (end - start + 2));
+		char* _arr = malloc(sizeof(char) * (end - start + 1));
 		uint16_t i = 1;
 		while(i <= end - start)
 		{
 			_arr[i - 1] = _in[start + i];
 			i++;
 		}
-		_arr[end - start + 1] = 0;
+		_arr[end - start] = 0;
 		return _arr;
 	}
 	else
@@ -419,7 +419,7 @@ char* strCut(const char* _in, uint16_t start, uint16_t end)
 }
 /*
  *	Function:	strSplit
- *	Desc:		Cut substr from start char to end char 
+ *	Desc:		Cut substr from start char to end char
  				Example:	callling strSplit("qwerty(abc)uiop", '(', ')') will return "abc"
  *	Input:		const char* _in: cstr
  				char _opening: opening char
@@ -430,9 +430,11 @@ char* strSplit(const char* _in, char _opening, char _closing)
 {
 	uint16_t	opening = indexOf(_in, _opening),
 				closing = indexOf(_in, _closing);
+	// USART0Println((long)opening);
+	// USART0Println((long)closing);
 	if(closing - opening > 1)
 	{
-		char* _arr = strCut(_in, opening + 1, closing - 1);
+		char* _arr = strCut(_in, opening, closing - 1);
 		return _arr;
 	}
 	else
@@ -440,7 +442,7 @@ char* strSplit(const char* _in, char _opening, char _closing)
 }
 /*
  *	Function:	strSplit
- *	Desc:		Cut substr from start char to end char 
+ *	Desc:		Cut substr from start char to end char
  				Example:	callling strSplit("qwerty(abc)uiop", strlen("qwerty(abc)uiop"), '(', ')') will return "abc"
  *	Input:		const char* _in: cstr
  				uint16_t _len: len of input cstr
@@ -454,10 +456,9 @@ char* strSplit(const char* _in, uint16_t _len, char _opening, char _closing)
 	uint16_t closing = indexOf(_in, _len, _closing);
 	if(closing - opening > 1)
 	{
-		char* _arr = strCut(_in, opening + 1, closing - 1);
+		char* _arr = strCut(_in, opening, closing - 1);
 		return _arr;
 	}
 	else
 		return 0;
 }
-
