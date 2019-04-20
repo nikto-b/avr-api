@@ -393,7 +393,7 @@ uint16_t indexOf(const char* _in, uint16_t _len, char _c)
 	return 0xFFFF;
 }
 /*
- *	Function:	strcut
+ *	Function:	strCut
  *	Desc:		Cut substr from start index to end index
  *	Input:		const char* _in: cstr
  				uint16_t start: index of start
