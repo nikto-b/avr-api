@@ -11,18 +11,15 @@ USBPORT=$(ls /dev/tty*)
 if [[ $(echo $USBPORT | rg ACM) != "" ]]; then
 #echo "A"
 USBPORT=$(ls /dev/tty* | rg ACM);
-else 
-	if [[ $(echo $USBPORT | rg USB) != "" ]]; then
-		#echo "B"
-		USBPORT=$(ls /dev/tty* | rg USB);
-	else
+else
+        if [[ $(echo $USBPORT | rg USB) != "" ]]; then
+                #echo "B"
+                USBPORT=$(ls /dev/tty* | rg USB);
+	else        
 		echo "No ARDUINO found!"
 		exit
 	fi
 fi
-
 BAUDRATE=115200
 
-#make all 
-#echo $USBPORT
-avrdude -C/etc/avrdude.conf -v -p$MCUNAME -P$USBPORT -c$PROGRAMMER -b$BAUDRATE -D -U flash:w:./$FILENAME.hex:i
+picocom $USBPORT -b $BAUDRATE
