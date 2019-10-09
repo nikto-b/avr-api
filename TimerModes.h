@@ -9,7 +9,7 @@
 #define TIMER0_MODE_PWM_PHC_TOPOCRA ((1 << WGM02) | (1 << WGM00))
 #define TIMER0_MODE_FASTPWM_TOPOCRA ((1 << WGM02) | (1 << WGM01) | (1 << WGM00))
 //								TIMER1
-#define TIMER1_MODE_NORMAL 0		
+#define TIMER1_MODE_NORMAL 0
 #define TIMER1_MODE_PWM_PHC_8B (1 << WGM10)														//PWM PHASE CORRECT
 #define TIMER1_MODE_PWM_PHC_9B (1 << WGM11)
 #define TIMER1_MODE_PWM_PHC_10B ((1 << WGM10) | (1 << WGM11))
@@ -33,7 +33,7 @@
 #define TIMER2_MODE_FASTPWM_TOPOCRA ((1 << WGM22) | (1 << WGM21) | (1 << WGM20))
 
 //----------------TIMER DIVIDERS--------------------
-//								TIMER0	
+//								TIMER0
 #define TIMER0_CLOCK_NONE 0														//T/C STOPPED
 #define TIMER0_CLOCK_1 (1 << CS00)												//NO PRESCALING
 #define TIMER0_CLOCK_8 (1 << CS01)												//FROM PRESCALER
@@ -54,11 +54,11 @@
 //								TIMER2
 #define TIMER2_CLOCK_NONE 0														//T/C STOPPED
 #define TIMER2_CLOCK_1	(1 << CS20)												//NO PRESCALING
-#define TIMER2_CLOCK_8 (1 << CA21)												//FROM PRESCALER
+#define TIMER2_CLOCK_8 (1 << CS21)												//FROM PRESCALER
 #define TIMER2_CLOCK_32 ((1 << CS20) | (1 << CA21))								//FROM PRESCALER
-#define TIMER2_CLOCK_64 (1 << CA22)												//FROM PRESCALER
-#define TIMER2_CLOCK_128 ((1 << CS20) | (1 << CA22))							//FROM PRESCALER
-#define TIMER2_CLOCK_256 ((1 << CA21) | 1 << CA22))								//FROM PRESCALER
-#define TIMER2_CLOCK_1024 ((1 << CA22) | (1 << CA21) | (1 << CS20))				//FROM PRESCALER
-//If external pin modes are used for the Timer/Counter0, transitions on the T0 pin 
+#define TIMER2_CLOCK_64 (1 << CS22)												//FROM PRESCALER
+#define TIMER2_CLOCK_128 ((1 << CS20) | (1 << CS22))							//FROM PRESCALER
+#define TIMER2_CLOCK_256 ((1 << CS21) | 1 << CS22))								//FROM PRESCALER
+#define TIMER2_CLOCK_1024 ((1 << CS22) | (1 << CS21) | (1 << CS20))				//FROM PRESCALER
+//If external pin modes are used for the Timer/Counter0, transitions on the T0 pin
 //will clock the counter even if the pin is configured as an output. This feature allows software control of the counting

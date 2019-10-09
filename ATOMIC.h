@@ -2,7 +2,7 @@
 #define INT_ALOWED ((SREG >> 7) & 1)
 
 
-//block interrupts for running user's code, 
+//block interrupts for running user's code,
 //will allow interrupts after running user's code
 #define ATOMIC_FORCED(...)  								\
 {															\
