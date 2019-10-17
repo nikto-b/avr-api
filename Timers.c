@@ -13,10 +13,13 @@
 /* Output   none	 										*/	\
 /**/															\
 void TIMER ## n ## Init(uint8_t _com ,uint8_t _wfmode, uint8_t _clk)\
-{																\
-	TCCR ## n ## A = (TCCR ## n ## A & ~(_wfmode | _com)) | (_wfmode | _com);\
-	TCCR ## n ## B = _clk & TIMER ## n ## _CLK_SRC_MASK;		\
+{						/*Sorry for this, but i need 16bit timers*/	\
+	TCCR ## n ## A = (TCCR ## n ## A & ~((_wfmode & ((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1))) | _com)) \
+	| ((_wfmode & ((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1))) | _com);\
+	TCCR ## n ## B = (_clk & TIMER ## n ## _CLK_SRC_MASK) | (_wfmode & ~((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1)));		\
 }
+
+
 
 
 #define GENSETCLK(n)											\
@@ -53,15 +56,15 @@ ISR(TIMER ## n ## _COMP ## k ## _vect)							\
 /**/															\
 void TIMER ## n ## Set ## k (uint16_t __k)						\
 {																\
-	OCR ## n ## k ## L = (uint8_t)__k;		/*set high registers of num*/\
-	OCR ## n ## k ## H = (uint8_t)(__k >> 8);	/*set low registers of num*/\
+	OCR ## n ## k ## L = (uint8_t)__k & 0xFF;		/*set high registers of num*/\
+	OCR ## n ## k ## H = (uint8_t)(__k >> 8);		/*set low registers of num*/\
 }
 
 #define GENSETk_8B(n, k)										\
 /*															*/	\
 /* Function TIMERnSetk 										*/	\
 /* Desc     set k num of T/Cn 								*/	\
-/* Input    __k: what num set to 							*/	\
+/* Input    __k: what num seIt to 							*/	\
 /* Output   none 											*/	\
 /**/ 															\
 void TIMER ## n ## Set ## k(uint8_t __k)						\
@@ -76,7 +79,7 @@ void TIMER ## n ## Set ## k(uint8_t __k)						\
 /* Input    none											*/	\
 /* Output   none											*/	\
 /**/															\
-void TIMER ## n ## EnableCOMP ## k ## Interrupt(void)	\
+void TIMER ## n ## EnableCOMP ## k ## Interrupt(void)			\
 {																\
 	TIMSK ## n = (TIMSK ## n & ~(1 << OCIE ## n ## k )) | (1 << OCIE ## n ## k );/*enable interrupt on compare with k num*/\
 }
@@ -88,7 +91,7 @@ void TIMER ## n ## EnableCOMP ## k ## Interrupt(void)	\
 /* Input    none										*/		\
 /* Output   none										*/		\
 /**/															\
-void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)	\
+void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)			\
 {																\
 	TIMSK ## n &= ~(1 << OCIE ## n ## k );/*disable interrupt on compare with k num*/\
 }

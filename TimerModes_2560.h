@@ -279,19 +279,19 @@
 
 			//TIMER1
 #define TIMER1_COMA_NORMAL		((0 << COM1A1) | (0 << COM1A0))
-#define TIMER1_COMA_TOGGLE		((0 << COM1A1) | (0 << COM1A0))
+#define TIMER1_COMA_TOGGLE		((0 << COM1A1) | (1 << COM1A0))
 #define TIMER1_COMA_CLEAR		((1 << COM1A1) | (0 << COM1A0))
 #define TIMER1_COMA_SET			((1 << COM1A1) | (1 << COM1A0))
 #define TIMER1_COMA_MASK		((1 << COM1A1) | (1 << COM1A0))
 
 #define TIMER1_COMB_NORMAL		((0 << COM1B1) | (0 << COM1B0))
-#define TIMER1_COMB_TOGGLE		((0 << COM1B1) | (0 << COM1B0))
+#define TIMER1_COMB_TOGGLE		((0 << COM1B1) | (1 << COM1B0))
 #define TIMER1_COMB_CLEAR		((1 << COM1B1) | (0 << COM1B0))
 #define TIMER1_COMB_SET			((1 << COM1B1) | (1 << COM1B0))
 #define TIMER1_COMB_MASK		((1 << COM1B1) | (1 << COM1B0))
 
 #define TIMER1_COMC_NORMAL		((0 << COM1C1) | (0 << COM1C0))
-#define TIMER1_COMC_TOGGLE		((0 << COM1C1) | (0 << COM1C0))
+#define TIMER1_COMC_TOGGLE		((0 << COM1C1) | (1 << COM1C0))
 #define TIMER1_COMC_CLEAR		((1 << COM1C1) | (0 << COM1C0))
 #define TIMER1_COMC_SET			((1 << COM1C1) | (1 << COM1C0))
 #define TIMER1_COMC_MASK		((1 << COM1C1) | (1 << COM1C0))
@@ -639,15 +639,15 @@
  *	0		1		1			EXT src on Tn pin, rising edge
  */
 									//TIMER1
-#define TIMER1_CLK_SRC_NO				((1 << CS12) | (0 << CS11) | (0 << CS10))
-#define TIMER1_CLK_SRC_1				((1 << CS12) | (0 << CS11) | (1 << CS10))
-#define TIMER1_CLK_SRC_8				((1 << CS12) | (1 << CS11) | (0 << CS10))
-#define TIMER1_CLK_SRC_64				((1 << CS12) | (1 << CS11) | (1 << CS10))
-#define TIMER1_CLK_SRC_256				((0 << CS12) | (0 << CS11) | (0 << CS10))
-#define TIMER1_CLK_SRC_1024				((0 << CS12) | (0 << CS11) | (1 << CS10))
-#define TIMER1_CLK_SRC_EXT_FALLING		((0 << CS12) | (1 << CS11) | (0 << CS10))
-#define TIMER1_CLK_SRC_EXT_RISING		((0 << CS12) | (1 << CS11) | (1 << CS10))
-#define TIMER1_CLK_SRC_MASK					((1 << CS12) | (1 << CS11) | (1 << CS10))
+#define TIMER1_CLK_SRC_NO				((0 << CS12) | (0 << CS11) | (0 << CS10))
+#define TIMER1_CLK_SRC_1				((0 << CS12) | (0 << CS11) | (1 << CS10))
+#define TIMER1_CLK_SRC_8				((0 << CS12) | (1 << CS11) | (0 << CS10))
+#define TIMER1_CLK_SRC_64				((0 << CS12) | (1 << CS11) | (1 << CS10))
+#define TIMER1_CLK_SRC_256				((1 << CS12) | (0 << CS11) | (0 << CS10))
+#define TIMER1_CLK_SRC_1024				((1 << CS12) | (0 << CS11) | (1 << CS10))
+#define TIMER1_CLK_SRC_EXT_FALLING		((1 << CS12) | (1 << CS11) | (0 << CS10))
+#define TIMER1_CLK_SRC_EXT_RISING		((1 << CS12) | (1 << CS11) | (1 << CS10))
+#define TIMER1_CLK_SRC_MASK				((1 << CS12) | (1 << CS11) | (1 << CS10))
 
 									//TIMER3
 #define TIMER3_CLK_SRC_NO				((1 << CS32) | (0 << CS31) | (0 << CS30))
@@ -658,7 +658,7 @@
 #define TIMER3_CLK_SRC_1024				((0 << CS32) | (0 << CS31) | (1 << CS30))
 #define TIMER3_CLK_SRC_EXT_FALLING		((0 << CS32) | (1 << CS31) | (0 << CS30))
 #define TIMER3_CLK_SRC_EXT_RISING		((0 << CS32) | (1 << CS31) | (1 << CS30))
-#define TIMER3_CLK_SRC_MASK					((1 << CS32) | (1 << CS31) | (1 << CS30))
+#define TIMER3_CLK_SRC_MASK				((1 << CS32) | (1 << CS31) | (1 << CS30))
 
 									//TIMER4
 #define TIMER4_CLK_SRC_NO				((1 << CS42) | (0 << CS41) | (0 << CS40))
@@ -669,7 +669,7 @@
 #define TIMER4_CLK_SRC_1024				((0 << CS42) | (0 << CS41) | (1 << CS40))
 #define TIMER4_CLK_SRC_EXT_FALLING		((0 << CS42) | (1 << CS41) | (0 << CS40))
 #define TIMER4_CLK_SRC_EXT_RISING		((0 << CS42) | (1 << CS41) | (1 << CS40))
-#define TIMER4_CLK_SRC_MASK					((1 << CS42) | (1 << CS41) | (1 << CS40))
+#define TIMER4_CLK_SRC_MASK				((1 << CS42) | (1 << CS41) | (1 << CS40))
 
 									//TIMER5
 #define TIMER5_CLK_SRC_NO				((1 << CS52) | (0 << CS51) | (0 << CS50))
@@ -680,5 +680,5 @@
 #define TIMER5_CLK_SRC_1024				((0 << CS52) | (0 << CS51) | (1 << CS50))
 #define TIMER5_CLK_SRC_EXT_FALLING		((0 << CS52) | (1 << CS51) | (0 << CS50))
 #define TIMER5_CLK_SRC_EXT_RISING		((0 << CS52) | (1 << CS51) | (1 << CS50))
-#define TIMER5_CLK_SRC_MASK					((1 << CS52) | (1 << CS51) | (1 << CS50))
+#define TIMER5_CLK_SRC_MASK				((1 << CS52) | (1 << CS51) | (1 << CS50))
 
