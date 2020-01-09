@@ -1,10 +1,11 @@
 #include "TWI.hpp"
 #include "customFuncAddr.hpp"
+#include <util/atomic.h>
 #define DEBUG 0
 #if DEBUG == 1
 	#include "USART.hpp"
 #endif //if DEBUG == 1
-#include "ATOMIC.hpp"
+
 
 uint16_t	_twi_out_len = 0;															//2 bytes
 uint8_t		_twi_out_curr = 0;														//1 byte
@@ -105,8 +106,8 @@ void shiftRight(uint8_t* arr, uint32_t len, uint32_t el)
  */
 void twiAddPack(uint8_t addr, const uint8_t* data, uint8_t len, uint8_t mode)
 {
-	ATOMIC_SMART
-	(
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+	{
 		//cli();										//block interrupts, must be atomic
 		addr <<= 1;
 		addr |= mode & 1;
@@ -127,7 +128,7 @@ void twiAddPack(uint8_t addr, const uint8_t* data, uint8_t len, uint8_t mode)
 		}
 		_twi_usr_in_lens[_twi_usr_lens++] = len + 1;	//set num of bytes in pack
 		//sei();										//allow interrupts, atomic block ended
-	)
+	}
 }
 
 
@@ -147,15 +148,15 @@ void twiAddPack(uint8_t addr, uint8_t data, uint8_t mode)
 {
 	addr <<= 1;
 	addr |= mode & 1;
-	ATOMIC_SMART
-	(
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+	{
 		//cli();										//block interrupts, must be atomic
 		_twi_usr_packs++;
 		_twi_usr_in_queue[_twi_usr_len++] = addr;	//add addr of slave device
 		_twi_usr_in_queue[_twi_usr_len++] = data;	//				,byte to send
 		_twi_usr_in_lens[_twi_usr_lens++] = 2;		//				and num of bytes in pack
 		//sei();										//allow interrupts, atomic block ended
-	)
+	}
 }
 
 
@@ -171,8 +172,8 @@ void twiAddPack(uint8_t addr, uint16_t data, uint8_t mode)
 {
 	addr <<= 1;
 	addr |= mode & 1;
-	ATOMIC_SMART
-	(
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+	{
 		//cli();											//block interrupts, must be atomic
 		_twi_usr_packs++;
 		_twi_usr_in_queue[_twi_usr_len++] = addr;		//add addr of slave device
@@ -180,7 +181,7 @@ void twiAddPack(uint8_t addr, uint16_t data, uint8_t mode)
 		_twi_usr_in_queue[_twi_usr_len++] = (data >> 8) & 0xFF;
 		_twi_usr_in_lens[_twi_usr_lens++] = 2;			//				and num of bytes in pack
 		//sei();											//allow interrupts, atomic block ended
-	)
+	}
 }
 
 
@@ -297,8 +298,8 @@ inline void _twi_stop(void)
  */
 void twiStart(void)
 {
-	ATOMIC_SMART
-	(
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+	{
 		//cli();												//block interrupts, must be atomic
 
 		if(_twi_status != I2C_READ
@@ -333,7 +334,7 @@ void twiStart(void)
 			#endif //if DEBUG == 1
 		}
 		//sei();												//allow interrupts, atomic block ended
-	)
+	}
 }
 
 
@@ -348,8 +349,8 @@ void twiStart(void)
  */
 void twiStop(void)
 {
-	ATOMIC_SMART
-	(
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+	{
 		//cli();							//block interrupts, must be atomic
 
 		#if DEBUG == 1
@@ -367,7 +368,7 @@ void twiStop(void)
 		}
 
 		//sei();							//allow interrupts, atomic block ended
-	)
+	}
 }
 
 

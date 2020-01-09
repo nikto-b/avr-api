@@ -42,11 +42,11 @@ void scheduleAddFunc(void(* func)())
 	{
 		if(scheduleQueue[i] == 0)
 		{
-			ATOMIC_FORCED
-			(
+			ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+			{
 				scheduleQueue[i] = func;
 				// return i;
-			)
+			}
 			return;
 		}
 	}
@@ -72,23 +72,23 @@ void scheduleAddFunc(void(* func)(), uint16_t del)
 	{
 		if(scheduleQueue[i] == 0)
 		{
-			ATOMIC_FORCED
-			(
+			ATOMIC_BLOCK(ATOMIC_FORCEON)
+			{
 				scheduleQueue[i] = func;
 				// return i;
-			)
+			}
 			return;
 		}
 	}
-	ATOMIC_FORCED
-	(
+	ATOMIC_BLOCK(ATOMIC_FORCEON)
+	{
 		while(scheduleQueueLen < del)
 		{
 			scheduleQueueLen++;
 		}
 		scheduleQueue[scheduleQueueLen++] = func;
 		// return scheduleQueueLen - 1;
-	)
+	}
 }
 
 
@@ -130,10 +130,10 @@ void scheduleAddFunc(void(* func)(), void(* stfunc)(), uint16_t del)
  */
 void scheduleRemoveFunc(uint16_t func)
 {
-	ATOMIC_FORCED
-	(
+	ATOMIC_BLOCK(ATOMIC_FORCEON)
+	{
 		scheduleQueue[func] = 0;
-	)
+	}
 }
 
 /*
@@ -144,8 +144,8 @@ void scheduleRemoveFunc(uint16_t func)
  */
 void scheduleRemoveFunc(void(* func)())
 {
-	ATOMIC_SMART
-	(
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+	{
 		for(uint8_t i = 0; i < scheduleQueueLen; i++)
 		{
 			if(scheduleQueue[i] == func)
@@ -154,7 +154,7 @@ void scheduleRemoveFunc(void(* func)())
 				//break;
 			}
 		}
-	)
+	}
 }
 
 

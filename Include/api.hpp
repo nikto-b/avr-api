@@ -10,7 +10,6 @@
 #include "ADC.hpp"
 #include "watchdog.hpp"
 #include "TWI.hpp"
-#include "ATOMIC.hpp"
 #include "numFuncs.hpp"
 
 
