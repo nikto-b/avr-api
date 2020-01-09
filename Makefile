@@ -18,7 +18,6 @@ Build/core.a:
 	avr-gcc-ar rcs Build/core.a Build/Usart.o
 	avr-gcc-ar rcs Build/core.a Build/Timers.o
 	avr-gcc-ar rcs Build/core.a Build/ADC.o
-	#avr-gcc-ar rcs Build/core.a Build/FuncsInputProtector.o
 	avr-gcc-ar rcs Build/core.a Build/WatchdogTimer.o
 	avr-gcc-ar rcs Build/core.a Build/TWI.o
 	avr-gcc-ar rcs Build/core.a Build/NumFuncs.o
@@ -31,7 +30,7 @@ objcopy: link
 	avr-objcopy -O ihex -R .eeprom  "Build/$(MAINFILENAME).elf" "Build/$(MAINFILENAME).hex"
 
 lib: _lib Build/core.a
-_lib: Build/Usart.o Build/Timers.o Build/ADC.o Build/FuncsInputProtector.o Build/DigitalRegisters.o Build/StringFuncs.o Build/WatchdogTimer.o Build/CustomFuncs.o Build/TWI.o Build/NumFuncs.o
+_lib: Build/Usart.o Build/Timers.o Build/ADC.o Build/DigitalRegisters.o Build/StringFuncs.o Build/WatchdogTimer.o Build/CustomFuncs.o Build/TWI.o Build/NumFuncs.o
 
 
 Build/Usart.o: Build
@@ -42,9 +41,6 @@ Build/Timers.o: Build
 
 Build/ADC.o: Build
 	avr-g++ $(CFLAGS) "Src/ADC.cpp" -o "Build/ADC.o"
-
-Build/FuncsInputProtector.o: Build
-	avr-g++ $(CFLAGS) "Src/FuncsInputProtector.cpp" -o "Build/FuncsInputProtector.o"
 
 Build/StringFuncs.o: Build
 	avr-g++ $(CFLAGS) "Src/stringFuncs.cpp" -o "Build/StringFuncs.o"
