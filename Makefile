@@ -34,40 +34,42 @@ lib: _lib Build/core.a
 _lib: Build/Usart.o Build/Timers.o Build/ADC.o Build/FuncsInputProtector.o Build/DigitalRegisters.o Build/StringFuncs.o Build/WatchdogTimer.o Build/CustomFuncs.o Build/TWI.o Build/NumFuncs.o
 
 
-Build/Usart.o:
+Build/Usart.o: Build
 	avr-g++ $(CFLAGS) "Src/USART.cpp" -o "Build/Usart.o"
 
-Build/Timers.o:
+Build/Timers.o: Build
 	avr-g++ $(CFLAGS) "Src/Timers.cpp" -o "Build/Timers.o"
 
-Build/ADC.o:
+Build/ADC.o: Build
 	avr-g++ $(CFLAGS) "Src/ADC.cpp" -o "Build/ADC.o"
 
-Build/FuncsInputProtector.o:
+Build/FuncsInputProtector.o: Build
 	avr-g++ $(CFLAGS) "Src/FuncsInputProtector.cpp" -o "Build/FuncsInputProtector.o"
 
-Build/StringFuncs.o:
+Build/StringFuncs.o: Build
 	avr-g++ $(CFLAGS) "Src/stringFuncs.cpp" -o "Build/StringFuncs.o"
 
-Build/WatchdogTimer.o:
+Build/WatchdogTimer.o: Build
 	avr-g++ $(CFLAGS) "Src/watchdog.cpp" -o "Build/WatchdogTimer.o"
 
-Build/DigitalRegisters.o:
+Build/DigitalRegisters.o: Build
 	avr-g++ $(CFLAGS) "Src/digitalRegisters.cpp" -o "Build/DigitalRegisters.o"
 
-Build/CustomFuncs.o:
+Build/CustomFuncs.o: Build
 	avr-g++ $(CFLAGS) "Src/customFuncAddr.cpp" -o "Build/CustomFuncs.o"
 
-Build/TWI.o:
+Build/TWI.o: Build
 	avr-g++ $(CFLAGS) "Src/TWI.cpp" -o "Build/TWI.o"
 
-Build/NumFuncs.o:
+Build/NumFuncs.o: Build
 	avr-g++ $(CFLAGS) "Src/numFuncs.cpp" -o "Build/NumFuncs.o"
 
 clean:
-	rm -rf Build/*
+	rm -rf Build
 
 size: objcopy
 	avr-size Build/$(MAINFILENAME).elf -C --mcu=$(MCU)
 
 
+Build:
+	mkdir -p Build
