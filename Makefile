@@ -35,31 +35,31 @@ _lib: Build/Usart.o Build/Timers.o Build/ADC.o Build/FuncsInputProtector.o Build
 
 
 Build/Usart.o:
-	avr-g++ $(CFLAGS) "Src/USART.c" -o "Build/Usart.o"
+	avr-g++ $(CFLAGS) "Src/USART.cpp" -o "Build/Usart.o"
 
 Build/Timers.o:
-	avr-g++ $(CFLAGS) "Src/Timers.c" -o "Build/Timers.o"
+	avr-g++ $(CFLAGS) "Src/Timers.cpp" -o "Build/Timers.o"
 
 Build/ADC.o:
-	avr-g++ $(CFLAGS) "Src/ADC.c" -o "Build/ADC.o"
+	avr-g++ $(CFLAGS) "Src/ADC.cpp" -o "Build/ADC.o"
 
 Build/FuncsInputProtector.o:
-	avr-g++ $(CFLAGS) "Src/FuncsInputProtector.c" -o "Build/FuncsInputProtector.o"
+	avr-g++ $(CFLAGS) "Src/FuncsInputProtector.cpp" -o "Build/FuncsInputProtector.o"
 
 Build/StringFuncs.o:
-	avr-g++ $(CFLAGS) "Src/stringFuncs.c" -o "Build/StringFuncs.o"
+	avr-g++ $(CFLAGS) "Src/stringFuncs.cpp" -o "Build/StringFuncs.o"
 
 Build/WatchdogTimer.o:
-	avr-g++ $(CFLAGS) "Src/watchdog.c" -o "Build/WatchdogTimer.o"
+	avr-g++ $(CFLAGS) "Src/watchdog.cpp" -o "Build/WatchdogTimer.o"
 
 Build/DigitalRegisters.o:
-	avr-g++ $(CFLAGS) "Src/digitalRegisters.c" -o "Build/DigitalRegisters.o"
+	avr-g++ $(CFLAGS) "Src/digitalRegisters.cpp" -o "Build/DigitalRegisters.o"
 
 Build/CustomFuncs.o:
-	avr-g++ $(CFLAGS) "Src/customFuncAddr.c" -o "Build/CustomFuncs.o"
+	avr-g++ $(CFLAGS) "Src/customFuncAddr.cpp" -o "Build/CustomFuncs.o"
 
 Build/TWI.o:
-	avr-g++ $(CFLAGS) "Src/TWI.c" -o "Build/TWI.o"
+	avr-g++ $(CFLAGS) "Src/TWI.cpp" -o "Build/TWI.o"
 
 Build/NumFuncs.o:
 	avr-g++ $(CFLAGS) "Src/numFuncs.cpp" -o "Build/NumFuncs.o"
