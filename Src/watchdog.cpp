@@ -1,5 +1,3 @@
-#pragma once
-
 #include "watchdog.hpp"
 
 #define WDSetTime(x) WDSetCycles(x)

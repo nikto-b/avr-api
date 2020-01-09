@@ -1,5 +1,3 @@
-#pragma once
-
 #include "USART.hpp"
 
 // #ifndef UCSR0A

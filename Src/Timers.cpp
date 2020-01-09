@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Timers.hpp"
 #include "customFuncAddr.hpp"
 
@@ -183,11 +181,7 @@ void TIMER ## n ## Flush()										\
 		#else
 			GENSETk_8B(1, C)
 		#endif
-		//void TIMER1SetC (uint16_t __k)						\
-		//{																\
-		//	OCR1CH = (uint8_t)__k;		/*set high registers of num*/\
-		//	OCR1CL = (uint8_t)(__k >> 8);	/*set low registers of num*/\
-		//}
+
 
 		GENENABLECOMPkINTERRUPT(1, C)
 		GENDISABLECOMPkINTERRUPT(1, C)

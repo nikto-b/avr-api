@@ -17,7 +17,7 @@ volatile uint16_t scheduleQueueLen = 0;
  *	Input:		void* func: ptr to func
  *	Output:		index of func
  */
-uint16_t scheduleGetFuncIndex(void(*func))
+uint16_t scheduleGetFuncIndex(void(*func)())
 {
 	for(uint16_t i = 0; i < scheduleQueueLen; i++)
 	{

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "base.hpp"
 #include "ADC.hpp"
 #define NUM_OF_ANALOG_PINS 15

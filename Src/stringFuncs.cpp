@@ -1,4 +1,3 @@
-#pragma once
 #include "USART.hpp"
 #include "stringFuncs.hpp"
 
@@ -383,8 +382,6 @@ uint16_t indexOf(const char* _in, char _c)
  */
 uint16_t indexOf(const char* _in, uint16_t _len, char _c)
 {
-	uint16_t _ret = 0;
-
 	while(--_len)
 	{
 		if(_in[_len] == _c)
@@ -404,7 +401,7 @@ char* strCut(const char* _in, uint16_t start, uint16_t end)
 {
 	if(end >= start)
 	{
-		char* _arr = malloc(sizeof(char) * (end - start + 1));
+		char* _arr = (char*)malloc(sizeof(char) * (end - start + 1));
 		uint16_t i = 1;
 		while(i <= end - start)
 		{

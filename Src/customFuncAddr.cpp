@@ -1,5 +1,3 @@
-#pragma once
-
 #include "customFuncAddr.hpp"
 #include "USART.hpp"
 

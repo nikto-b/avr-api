@@ -3,7 +3,7 @@ MAINFILENAME=main
 MCU=atmega328p
 OPTIMIZE=-Os
 XTAL=16000000
-CFLAGS=-c $(OPTIMIZE) -IInclude -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL)
+CFLAGS=-c $(OPTIMIZE) -Werror -IInclude -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL)
 LFLAGS=$(OPTIMIZE) -Wall -Wextra -flto -fuse-linker-plugin -ffunction-sections -fdata-sections -Wl,--gc-sections -mmcu=$(MCU) -lm
 
 all: size
