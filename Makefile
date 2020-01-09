@@ -2,69 +2,71 @@ MAINFILENAME=main
 #MCU=atmega2560
 MCU=atmega328p
 OPTIMIZE=-Os
-CFLAGS=-c $(OPTIMIZE) -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL)
+CFLAGS=-c $(OPTIMIZE) -IInclude -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -MMD -flto -fno-devirtualize -fno-use-cxa-atexit -mmcu=$(MCU) -DF_CPU=$(XTAL)
 LFLAGS=$(OPTIMIZE) -Wall -Wextra -flto -fuse-linker-plugin -ffunction-sections -fdata-sections -Wl,--gc-sections -mmcu=$(MCU) -lm
 
 all: size
 
-main: lib
-	avr-g++ $(CFLAGS) "$(MAINFILENAME).cpp" -o "$(MAINFILENAME).o"
+Build/main: lib
+	avr-g++ $(CFLAGS) "Src/$(MAINFILENAME).cpp" -o "Build/$(MAINFILENAME).o"
 
-core.a:
-	avr-gcc-ar rcs core.a DigitalRegisters.o
-	avr-gcc-ar rcs core.a CustomFuncs.o
-	avr-gcc-ar rcs core.a StringFuncs.o
-	avr-gcc-ar rcs core.a Usart.o
-	avr-gcc-ar rcs core.a Timers.o
-	avr-gcc-ar rcs core.a ADC.o
-	#avr-gcc-ar rcs core.a FuncsInputProtector.o
-	avr-gcc-ar rcs core.a WatchdogTimer.o
-	avr-gcc-ar rcs core.a TWI.o
-	avr-gcc-ar rcs core.a NumFuncs.o
+Build/core.a:
+	avr-gcc-ar rcs Build/core.a Build/DigitalRegisters.o
+	avr-gcc-ar rcs Build/core.a Build/CustomFuncs.o
+	avr-gcc-ar rcs Build/core.a Build/StringFuncs.o
+	avr-gcc-ar rcs Build/core.a Build/Usart.o
+	avr-gcc-ar rcs Build/core.a Build/Timers.o
+	avr-gcc-ar rcs Build/core.a Build/ADC.o
+	#avr-gcc-ar rcs Build/core.a Build/FuncsInputProtector.o
+	avr-gcc-ar rcs Build/core.a Build/WatchdogTimer.o
+	avr-gcc-ar rcs Build/core.a Build/TWI.o
+	avr-gcc-ar rcs Build/core.a Build/NumFuncs.o
 
-link: main core.a lib
-	avr-gcc $(LFLAGS) main.o core.a -o main.elf
+link: Build/main Build/core.a lib
+	avr-gcc $(LFLAGS) Build/main.o Build/core.a -o Build/main.elf
 
 objcopy: link
-	avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0  "$(MAINFILENAME).elf" "$(MAINFILENAME).eep"
-	avr-objcopy -O ihex -R .eeprom  "$(MAINFILENAME).elf" "$(MAINFILENAME).hex"
+	avr-objcopy -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0  "Build/$(MAINFILENAME).elf" "Build/$(MAINFILENAME).eep"
+	avr-objcopy -O ihex -R .eeprom  "Build/$(MAINFILENAME).elf" "Build/$(MAINFILENAME).hex"
 
-lib: _lib core.a
-_lib: Usart.o Timers.o ADC.o FuncsInputProtector.o DigitalRegisters.o StringFuncs.o WatchdogTimer.o CustomFuncs.o TWI.o NumFuncs.o
+lib: _lib Build/core.a
+_lib: Build/Usart.o Build/Timers.o Build/ADC.o Build/FuncsInputProtector.o Build/DigitalRegisters.o Build/StringFuncs.o Build/WatchdogTimer.o Build/CustomFuncs.o Build/TWI.o Build/NumFuncs.o
 
 
-Usart.o:
-	avr-g++ $(CFLAGS) "USART.c" -o "Usart.o"
+Build/Usart.o:
+	avr-g++ $(CFLAGS) "Src/USART.c" -o "Build/Usart.o"
 
-Timers.o:
-	avr-g++ $(CFLAGS) "Timers.c" -o "Timers.o"
+Build/Timers.o:
+	avr-g++ $(CFLAGS) "Src/Timers.c" -o "Build/Timers.o"
 
-ADC.o:
-	avr-g++ $(CFLAGS) "ADC.c" -o "ADC.o"
+Build/ADC.o:
+	avr-g++ $(CFLAGS) "Src/ADC.c" -o "Build/ADC.o"
 
-FuncsInputProtector.o:
-	avr-g++ $(CFLAGS) "FuncsInputProtector.c" -o "FuncsInputProtector.o"
+Build/FuncsInputProtector.o:
+	avr-g++ $(CFLAGS) "Src/FuncsInputProtector.c" -o "Build/FuncsInputProtector.o"
 
-StringFuncs.o:
-	avr-g++ $(CFLAGS) "stringFuncs.c" -o "StringFuncs.o"
+Build/StringFuncs.o:
+	avr-g++ $(CFLAGS) "Src/stringFuncs.c" -o "Build/StringFuncs.o"
 
-WatchdogTimer.o:
-	avr-g++ $(CFLAGS) "watchdog.c" -o "WatchdogTimer.o"
+Build/WatchdogTimer.o:
+	avr-g++ $(CFLAGS) "Src/watchdog.c" -o "Build/WatchdogTimer.o"
 
-DigitalRegisters.o:
-	avr-g++ $(CFLAGS) "digitalRegisters.c" -o "DigitalRegisters.o"
+Build/DigitalRegisters.o:
+	avr-g++ $(CFLAGS) "Src/digitalRegisters.c" -o "Build/DigitalRegisters.o"
 
-CustomFuncs.o:
-	avr-g++ $(CFLAGS) "customFuncAddr.c" -o "CustomFuncs.o"
+Build/CustomFuncs.o:
+	avr-g++ $(CFLAGS) "Src/customFuncAddr.c" -o "Build/CustomFuncs.o"
 
-TWI.o:
-	avr-g++ $(CFLAGS) "TWI.c" -o "TWI.o"
+Build/TWI.o:
+	avr-g++ $(CFLAGS) "Src/TWI.c" -o "Build/TWI.o"
 
-NumFuncs.o:
-	avr-g++ $(CFLAGS) "numFuncs.cpp" -o "NumFuncs.o"
+Build/NumFuncs.o:
+	avr-g++ $(CFLAGS) "Src/numFuncs.cpp" -o "Build/NumFuncs.o"
 
 clean:
-	rm -rf ./*.o ./*.d ./*.eep ./*.elf ./*.hex ./*.a
+	rm -rf Build/*
 
 size: objcopy
-	avr-size $(MAINFILENAME).elf -C --mcu=$(MCU)
+	avr-size Build/$(MAINFILENAME).elf -C --mcu=$(MCU)
+
+
