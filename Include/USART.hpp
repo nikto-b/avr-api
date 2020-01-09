@@ -1,6 +1,6 @@
 #pragma once
 
-#include "settings.h"
+#include "settings.hpp"
 
 #define USART_TX_BUF_LEN 100
 
@@ -17,10 +17,10 @@
 	#define EOL 0
 #endif
 
-#include "stringFuncs.h"
-#include "USARTModes.h"
-#include "customFuncAddr.h"
-#include "base.h"
+#include "stringFuncs.hpp"
+#include "USARTModes.hpp"
+#include "customFuncAddr.hpp"
+#include "base.hpp"
 
 
 

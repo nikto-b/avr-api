@@ -1,4 +1,4 @@
-#include "base.h"
+#include "base.hpp"
 
 uint64_t constrain(uint64_t x, uint64_t a, uint64_t b);
 int64_t constrain(int64_t x, int64_t a, int64_t b);

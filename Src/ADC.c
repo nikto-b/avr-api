@@ -1,9 +1,9 @@
 #pragma once
 
-#include "base.h"
-#include "ADC.h"
+#include "base.hpp"
+#include "ADC.hpp"
 #define NUM_OF_ANALOG_PINS 15
-#include "customFuncAddr.h"
+#include "customFuncAddr.hpp"
 
 #if defined(ADCL)
 	#pragma message "ADC found"

@@ -1,6 +1,6 @@
 #pragma once
-#include "USART.h"
-#include "stringFuncs.h"
+#include "USART.hpp"
+#include "stringFuncs.hpp"
 
 /*
  * Function getCountsOfDigits

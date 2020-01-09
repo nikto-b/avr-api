@@ -1,4 +1,4 @@
-#include "base.h"
+#include "base.hpp"
 
 #define INTERRUPT_CUSTOMFUNC_RESET			0		//reset from ext pin, Power-On-Reset, Brown-out Reset, Watchdog reset, JTAG AVR Reset
 #define INTERRUPT_CUSTOMFUNC_INT0			1		//ext interrupt req 0

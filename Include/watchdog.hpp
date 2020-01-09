@@ -1,9 +1,9 @@
 #pragma once
 
-#include "base.h"
+#include "base.hpp"
 
-#include "watchdogModes.h"
-#include "customFuncAddr.h"
+#include "watchdogModes.hpp"
+#include "customFuncAddr.hpp"
 #ifndef _WD_MODES
 	#error "No watchdog timer modes included!"
 #endif //ifndef _WD_MODES

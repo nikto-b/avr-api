@@ -1,10 +1,10 @@
-#include "TWI.h"
-#include "customFuncAddr.h"
+#include "TWI.hpp"
+#include "customFuncAddr.hpp"
 #define DEBUG 0
 #if DEBUG == 1
-	#include "USART.h"
+	#include "USART.hpp"
 #endif //if DEBUG == 1
-#include "ATOMIC.h"
+#include "ATOMIC.hpp"
 
 uint16_t	_twi_out_len = 0;															//2 bytes
 uint8_t		_twi_out_curr = 0;														//1 byte

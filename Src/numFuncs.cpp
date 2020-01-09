@@ -1,4 +1,4 @@
-#include "numFuncs.h"
+#include "numFuncs.hpp"
 
 /*
  *  Function:constrain

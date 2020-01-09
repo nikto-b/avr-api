@@ -1,7 +1,7 @@
 #pragma once
 
-#include "customFuncAddr.h"
-#include "USART.h"
+#include "customFuncAddr.hpp"
+#include "USART.hpp"
 
 void (*customFuncs[INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS])();
 

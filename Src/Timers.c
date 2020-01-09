@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Timers.h"
-#include "customFuncAddr.h"
+#include "Timers.hpp"
+#include "customFuncAddr.hpp"
 
 #define GENINIT(n)												\
 /*															*/	\

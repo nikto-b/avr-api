@@ -1,7 +1,7 @@
 #pragma once
 
-#include "base.h"
-#include "TimerModes_2560.h"
+#include "base.hpp"
+#include "TimerModes.hpp"
 
 
 void analogWrite(uint8_t _pin, uint16_t _num);

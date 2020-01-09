@@ -1,17 +1,17 @@
 #pragma once
 
-#include "settings.h"
+#include "settings.hpp"
 
-#include "customFuncAddr.h"
+#include "customFuncAddr.hpp"
 
-#include "digitalRegisters.h"
-#include "Timers.h"
-#include "USART.h"
-#include "ADC.h"
-#include "watchdog.h"
-#include "TWI.h"
-#include "ATOMIC.h"
-#include "numFuncs.h"
+#include "digitalRegisters.hpp"
+#include "Timers.hpp"
+#include "USART.hpp"
+#include "ADC.hpp"
+#include "watchdog.hpp"
+#include "TWI.hpp"
+#include "ATOMIC.hpp"
+#include "numFuncs.hpp"
 
 
 
