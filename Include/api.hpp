@@ -2,8 +2,10 @@
 
 
 
-#define byte uint8_t		//define for 8 bit var
-#define bool uint8_t		//define for bool var because C has not bool or boolean variable
+// #define byte uint8_t		//define for 8 bit var
+// #define bool uint8_t		//define for bool var because C has not bool or boolean variable
+typedef uint8_t byte;
+// typedef uint8_t bool;
 
 #define cbi(_sfr, _bit) (_SFR_BYTE(_sfr) &= ~_BV(_bit))
 #define sbi(_sfr, _bit) (_SFR_BYTE(_sfr) |= _BV(_bit))

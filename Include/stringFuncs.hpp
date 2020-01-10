@@ -4,13 +4,13 @@
 
 //#define bool uint8_t		//define for bool var because C has not bool or boolean variable
 //#define byte uint8_t		//define for 8 bit var
-#ifndef byte
-	#define byte uint8_t		//define for 8 bit var
-#endif //ifndef byte
+// #ifndef byte
+// 	#define byte uint8_t		//define for 8 bit var
+// #endif //ifndef byte
 
-#ifndef bool
-	#define bool uint8_t		//define for bool var because C has not bool or boolean variable
-#endif //ifndef bool
+// #ifndef bool
+// 	#define bool uint8_t		//define for bool var because C has not bool or boolean variable
+// #endif //ifndef bool
 
 
 byte getCountsOfDigits(int __number); //get count of digits for int
