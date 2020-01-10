@@ -23,8 +23,8 @@ namespace io
 	 * 			pin:	pin to set mode (example: PD4)
 	 * 			mode:	mode of pin		(example: INPUT)
 	 * Output   none
-	*/
-	void setMode(uint8_t *port, uint8_t pin, Mode mode) 
+	 */
+    void setMode(uint8_t *port, uint8_t pin, Mode mode) 
     {
         uint8_t *dir = DirReg(port);
 
@@ -55,7 +55,7 @@ namespace io
 	 * 			pin:	pin to set state(example: PD4)
 	 * 			state:	state of pin	(example: LOW)
 	 * Output	none
-	*/
+	 */
 	void setState(uint8_t *port, uint8_t pin, State state)
     {
         *port = (*(port) & ~(1 << pin)) | (state << pin);
@@ -67,7 +67,7 @@ namespace io
 	 * Input    port: 	port of pin 	(example: PORTD)
 	 * 			pin:	pin to set state(example: PD4)
 	 * Output	state of pin
-	*/
+	 */
 	State getState(uint8_t *port, uint8_t pin)
     {
         uint8_t *pinreg = PinReg(port);
