@@ -2,57 +2,71 @@
 
 #include "settings.hpp"
 
-#define USART_TX_BUF_LEN 100
-
-#ifndef DEC
-	#define DEC 0
-#endif //ifndef DEC
-
-#ifndef BIN
-	#define BIN 1
-#endif //ifndef DEC
-
 #ifndef EOL
 	#pragma message The EOL not defined! Using NULL
 	#define EOL 0
 #endif
 
+namespace usart
+{
 	
 
+	const uint8_t TX_BUF_LEN = 100;
+	const uint8_t MAX_BUF_SIZE = 254;
 
-//set bit settings of USART, mode on input
-void USART0SetBitSettings(uint8_t __bitness);
-//init function, baudrate on input
-void USART0Begin(uint64_t __baud);
-
-
-#pragma message "using USART output"
-
-//send one char function
-void USART0Send(unsigned char __data);
-
-//send char array function
-void USART0Print(const char* __data);
-void USART0Print(int);
-void USART0Print(long);
-void USART0Print(unsigned long);
-void USART0Print(int, int);
-void USART0Println(int __data, byte __mode);
-
-void USART0Println();
-void USART0Println(const char* __data);
-void USART0Println(int);
-void USART0Println(long);
-void USART0Println(unsigned long);
-void USART0Println(int data, int mode);
+	extern char txbuf [TX_BUF_LEN];
+	extern uint16_t txbuf_len_start;
+	extern uint16_t txbuf_len_end;
 
 
 
-#pragma message "using USART input"
+	extern volatile char _inputBuf_[];
+	extern volatile uint8_t _inputBufCounterInput_;
+	extern volatile uint8_t _inputBufCounterOutput_;
+	extern volatile uint8_t _inputBufEmpty_;
 
-//get recieved data
-char USART0Read(void);
-//get is any data recieved
-bool USART0Available(void);
-//remove all recieved data
-void USART0Flush(void);
+
+	enum NumSys { DEC, BIN, OCT, HEX };
+
+	enum Modes
+	{
+		CHAR_5B = 0,
+		CHAR_6B = (1 << UCSZ00),
+		CHAR_7B = (1 << UCSZ01),
+		CHAR_8B = ((1 << UCSZ00) | (1 << UCSZ01)),
+		CHAR_9B = ((1 << UCSZ00) | (1 << UCSZ01) | (1 << UCSZ02))
+	};
+
+
+	//set bit settings of USART, mode on input
+	void setBitSettings(Modes bitness);
+	//init function, baudrate on input
+	void begin(uint64_t __baud);
+
+	//send one char function
+	void send(unsigned char __data);
+
+	//send char array function
+	void print(const char* __data);
+	void print(int num);
+	void print(long num);
+	void print(unsigned long num);
+	void println(int num, NumSys sys);
+
+	void println();
+	void println(const char* __data);
+	void println(int num);
+	void println(long num);
+	void println(unsigned long num);
+	void println(int data, NumSys sys);
+
+
+
+	//get recieved data
+	char read();
+	//get is any data recieved
+	bool available();
+	//remove all recieved data
+	void flush();
+
+} // namespace usart
