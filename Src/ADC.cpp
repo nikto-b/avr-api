@@ -220,5 +220,5 @@ ISR(ADC_vect)
 		adc::_currPin = 0;
 	}
 	ADMUX = adc::_analogRef | (adc::_currPin & adc::NUM_OF_ANALOG_PINS);
-	callCustomFunc(INTERRUPT_CUSTOMFUNC_ADC);
+	interrupt::call(interrupt::ADC);
 }

@@ -68,6 +68,6 @@ void WDTStart(uint8_t __time)
 */
 ISR(WDT_vect)
 {
-	callCustomFunc(INTERRUPT_CUSTOMFUNC_WDT);
+	interrupt::call(interrupt::WDT);
 }
 

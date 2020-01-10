@@ -17,24 +17,19 @@
 	#define EOL 0
 #endif
 
-#include "stringFuncs.hpp"
-#include "USARTModes.hpp"
-#include "customFuncAddr.hpp"
-#include "base.hpp"
-
-
+	
 
 
 //set bit settings of USART, mode on input
-void USART0SetBitSettings(uint8_t);
+void USART0SetBitSettings(uint8_t __bitness);
 //init function, baudrate on input
-void USART0Begin(uint64_t);
+void USART0Begin(uint64_t __baud);
 
 
 #pragma message "using USART output"
 
 //send one char function
-void USART0Send(unsigned char);
+void USART0Send(unsigned char __data);
 
 //send char array function
 void USART0Print(const char* __data);
@@ -42,7 +37,7 @@ void USART0Print(int);
 void USART0Print(long);
 void USART0Print(unsigned long);
 void USART0Print(int, int);
-void USART0Print(int, byte);
+void USART0Println(int __data, byte __mode);
 
 void USART0Println();
 void USART0Println(const char* __data);

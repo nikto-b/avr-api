@@ -1,4 +1,5 @@
-	#ifndef _USART_MODES
+#pragma once
+#ifndef _USART_MODES
 	#define _USART_MODES
 
 	#if USE_USART0 == 1

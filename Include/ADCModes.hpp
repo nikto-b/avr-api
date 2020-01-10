@@ -1,3 +1,4 @@
+#pragma once
 //				ANALOG  REFERENCE
 const uint8_t ADC_REF_AREF                  = 0;
 const uint8_t ADC_REF_AVCC                  = (1 << REFS0);					//external capacitor at AREF pin

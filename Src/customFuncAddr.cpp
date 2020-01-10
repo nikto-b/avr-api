@@ -1,36 +1,33 @@
 #include "customFuncAddr.hpp"
-#include "USART.hpp"
 
-void (*customFuncs[INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS])();
-
-/*
- * Function callCustomFunc
- * Desc     Call user's func by addr
- * Input    __addr: addr for calling func
- * Output   none
-*/
-void callCustomFunc(unsigned char __addr)
+namespace interrupt
 {
-	if(customFuncs[__addr] != NULL)
-	{
-		//USART0Println("CALL");
-		customFuncs[__addr]();
-	}
-}
+	void (*customFuncs[NUM_OF_UNITS])();
 
-/*
- * Function setCustomFunc
- * Desc     set user's func for calling by system
- * Input    __addr: addr to set
- * 			__func: ptr to user's func for setting
- * Output   none
-*/
-void setCustomFunc(uint8_t __addr, void(* __func)())
-{
-	if(__addr < INTERRUPT_CUSTOMFUNC_NUM_OF_UNITS)
+	/*
+	* Function call
+	* Desc     Call user's func by addr
+	* Input    addr: addr for calling func
+	* Output   none
+	*/
+	void call(const Addr addr)
 	{
-		//USART0Print("ADD");
-		//USART0Println(__addr);
-		customFuncs[__addr] = __func;
+		if(customFuncs[addr] != NULL)
+		{
+			customFuncs[addr]();
+		}
 	}
-}
+
+	/*
+	* Function 	set
+	* Desc     	set user's func for calling by system
+	* Input    	addr: addr to set
+	* 			func: ptr to user's func for setting
+	* Output   	none
+	*/
+	void set(const Addr addr, void(* __func)())
+	{
+		customFuncs[addr] = __func;
+	}
+	
+} // namespace interrupt

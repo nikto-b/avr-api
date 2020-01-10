@@ -1,3 +1,8 @@
+#include "base.hpp"
+#include "api.hpp"
+#include "stringFuncs.hpp"
+#include "USARTModes.hpp"
+#include "customFuncAddr.hpp"
 #include "USART.hpp"
 
 // #ifndef UCSR0A
@@ -197,7 +202,7 @@ void USART0Print(uint64_t __data, byte __mode)
 */
 void USART0Println(int __data, byte __mode)
 {
-	USART0Print(__data, __mode);
+	USART0Print((uint64_t)__data, __mode);
 	USART0Println();
 }
 /*
@@ -257,7 +262,7 @@ ISR(USART_TX_vect)//interrupt handler called aftar transmitting data
 	// 	_usart0_txbuf_len_start = 0;
 	// 	_usart0_txbuf_len_end = 0;
 	// }
-	callCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_TX);
+	interrupt::call(interrupt::USART0_TX);
 	/*#ifdef INTERRUPT_CUSTOMFUNC_USART0_TX
 		if(funcs[INTERRUPT_CUSTOMFUNC_USART0_TX] != NULL)
 			funcs[INTERRUPT_CUSTOMFUNC_USART0_TX]();		//call custom function
@@ -301,7 +306,7 @@ ISR(USART_RX_vect)		   //interrupt handler called after recieving data
 	}
 
 
-	callCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_RX);
+	interrupt::call(interrupt::USART0_RX);
 }
 
 /*

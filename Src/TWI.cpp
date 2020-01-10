@@ -614,7 +614,7 @@ namespace twi
 				stop();
 			}
 		}
-		callCustomFunc(INTERRUPT_CUSTOMFUNC_TWI);
+		interrupt::call(interrupt::TWI);
 	}
 
 	

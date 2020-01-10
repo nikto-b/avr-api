@@ -230,12 +230,11 @@ int main()
 		scheduleQueue[i] = 0;
 	}
 	// sei();
-	USART0Println("FUCK");
-	setCustomFunc(INTERRUPT_CUSTOMFUNC_USART0_RX, recvUsart);
+	interrupt::set(interrupt::USART0_RX, recvUsart);
 
 	// scheduleAddFunc(parseInputCmds);
 	cli();
-	setCustomFunc(INTERRUPT_CUSTOMFUNC_TC0_COMPA, schedule);
+	interrupt::set(interrupt::TC0_COMPA, schedule);
 	TIMER0Init(TIMER0_COMA_NPWM_NORMAL, TIMER0_WF_CTC, TIMER0_CLK_SRC_1024);
 
 	TIMER0EnableCOMPAInterrupt();

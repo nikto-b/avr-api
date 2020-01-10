@@ -1,3 +1,4 @@
+#pragma once
 #include "base.hpp"
 
 uint64_t constrain(uint64_t x, uint64_t a, uint64_t b);

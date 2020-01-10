@@ -42,7 +42,7 @@ void TIMER ## n ## SetCLK(uint8_t _clk)							\
 /**/															\
 ISR(TIMER ## n ## _COMP ## k ## _vect)							\
 {																\
-	callCustomFunc(INTERRUPT_CUSTOMFUNC_TC ## n ## _COMP ## k);	\
+	interrupt::call(interrupt::TC ## n ## _COMP ## k);	\
 }
 
 #define GENSETk_16B(n, k)										\

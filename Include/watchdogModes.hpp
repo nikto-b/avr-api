@@ -1,3 +1,4 @@
+#pragma once
 #define _WD_MODES
 
 //-----------------MODES-----------------

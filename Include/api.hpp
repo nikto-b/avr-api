@@ -1,17 +1,5 @@
 #pragma once
 
-#include "settings.hpp"
-
-#include "customFuncAddr.hpp"
-
-#include "digitalRegisters.hpp"
-#include "Timers.hpp"
-#include "USART.hpp"
-#include "ADC.hpp"
-#include "watchdog.hpp"
-#include "TWI.hpp"
-#include "numFuncs.hpp"
-
 
 
 #define byte uint8_t		//define for 8 bit var
@@ -23,6 +11,18 @@
 
 #define delay(x) _delay_ms(x)
 
+
+#include "settings.hpp"
+
+#include "customFuncAddr.hpp"
+
+#include "digitalRegisters.hpp"
+#include "Timers.hpp"
+#include "USART.hpp"
+#include "ADC.hpp"
+#include "watchdog.hpp"
+#include "TWI.hpp"
+#include "numFuncs.hpp"
 
 
 //#include "FuncsInputProtector.c"

@@ -1,5 +1,7 @@
-#include "USART.hpp"
+#include "base.hpp"
+#include "api.hpp"
 #include "stringFuncs.hpp"
+#include "USART.hpp"
 
 /*
  * Function getCountsOfDigits
