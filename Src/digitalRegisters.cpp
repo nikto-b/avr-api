@@ -2,7 +2,7 @@
 #include "digitalRegisters.hpp"
 
 
-namespace io
+namespace gpio
 {
         //get dir register of port whitch PORTn register given
     inline uint8_t* DirReg(uint8_t* port)

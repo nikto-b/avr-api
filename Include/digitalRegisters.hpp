@@ -1,7 +1,7 @@
 #pragma once
 #include "base.hpp"
 
-namespace io
+namespace gpio
 {
 	enum Mode 	{ OUTPUT, INPUT, INPUT_PULLUP };
 	enum State	{ HIGH = 1, LOW = 0 };
