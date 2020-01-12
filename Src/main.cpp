@@ -1,6 +1,10 @@
 #include "base.hpp"
 #include "api.hpp"
 
+using gpio::HIGH;
+using gpio::LOW;
+
+
 #define SCH_MAX_LEN			2047
 
 
@@ -233,19 +237,38 @@ int main()
 	interrupt::set(interrupt::USART0_RX, recvUsart);
 
 	// scheduleAddFunc(parseInputCmds);
+	// gpio::getState<0>(PORTD, PD2);
 	cli();
-	interrupt::set(interrupt::TC0_COMPA, schedule);
-	TIMER0Init(TIMER0_COMA_NPWM_NORMAL, TIMER0_WF_CTC, TIMER0_CLK_SRC_1024);
-
-	TIMER0EnableCOMPAInterrupt();
-	TIMER0SetA(255);
-	sei();
-	usart::println((long)scheduleQueue[0]);
 
 
-	loop:
-	asm("NOP");
-	goto loop;
+	gpio::setStates<2>(PORTD, { {PD3, HIGH}, {PD4, LOW} });
+
+
+
+	// gpio::setState(PORTD, {PD3, gpio::HIGH});
+
+	// gpio::setState(PORTD, {{PD3, }});
+
+
+
+
+
+	// gpio::setState(PORTD, PD3, gpio::HIGH);
+
+	// interrupt::set(interrupt::TC0_COMPA, schedule);
+	// TIMER0Init(TIMER0_COMA_NPWM_NORMAL, TIMER0_WF_CTC, TIMER0_CLK_SRC_1024);
+
+	// TIMER0EnableCOMPAInterrupt();
+	// TIMER0SetA(255);
+	// sei();
+	// usart::println((long)scheduleQueue[0]);
+
+
+	// loop:
+	// asm("NOP");
+	// goto loop;
+	while(1)
+		asm("NOP");
 	// DDRE = 255;
 	// DDRG = 255;
 	// DDRH = 255;

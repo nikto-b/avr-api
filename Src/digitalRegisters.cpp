@@ -5,12 +5,12 @@
 namespace gpio
 {
         //get dir register of port whitch PORTn register given
-    inline uint8_t* DirReg(uint8_t* port)
+    inline volatile uint8_t* DirReg(volatile uint8_t* port)
     {
         return port - 1;
     }
         //get pin register of port whitch PORTn register given
-    inline uint8_t* PinReg(uint8_t* port)
+    inline volatile uint8_t* PinReg(volatile uint8_t* port)
     {
         return port - 2;
     }
@@ -24,9 +24,9 @@ namespace gpio
 	 * 			mode:	mode of pin		(example: INPUT)
 	 * Output   none
 	 */
-    void setMode(uint8_t *port, uint8_t pin, Mode mode) 
+    void setMode(volatile uint8_t *port, const uint8_t pin, const Mode mode) 
     {
-        uint8_t *dir = DirReg(port);
+        volatile uint8_t *dir = DirReg(port);
 
         switch (mode)
         {
@@ -56,9 +56,22 @@ namespace gpio
 	 * 			state:	state of pin	(example: LOW)
 	 * Output	none
 	 */
-	void setState(uint8_t *port, uint8_t pin, State state)
+	void setState(volatile uint8_t *port, const uint8_t pin, const State state)
     {
         *port = (*(port) & ~(1 << pin)) | (state << pin);
+    }
+
+
+	/*
+	 * Function setState
+	 * Desc     set pin to some state (LOW/HIGH) if it's output
+	 * Input    port: 	port of pin 	(example: PORTD)
+	 * 			status:	status of pin	(example: {PD2, HIGH})
+	 * Output	none
+	*/
+	void setState(volatile uint8_t *port, const PinState status)
+    {
+        *port = (*(port) & ~(1 << status.pin)) | (status.state << status.pin);
     }
 		
 	/*
@@ -68,10 +81,15 @@ namespace gpio
 	 * 			pin:	pin to set state(example: PD4)
 	 * Output	state of pin
 	 */
-	State getState(uint8_t *port, uint8_t pin)
+	State getState(volatile uint8_t *port, const uint8_t pin)
     {
-        uint8_t *pinreg = PinReg(port);
+        const volatile uint8_t *pinreg = PinReg(port);
         return static_cast<State>(((*(pinreg)) >> pin) & 1);
     }
+
+
+
+
+	PinState::PinState(const uint8_t _pin, const State _state) : pin(_pin), state(_state) {}
     
-} // namespace io
+} // namespace gpio
