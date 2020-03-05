@@ -4,7 +4,7 @@
 MCUNAME=atmega328p
 #PROGRAMMER=wiring
 PROGRAMMER=arduino
-FILENAME=main
+FILENAME=Build/main
 #USBPORT=/dev/ttyACM0
 USBPORT=$(ls /dev/tty*)
 

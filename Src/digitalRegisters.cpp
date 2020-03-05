@@ -32,17 +32,17 @@ namespace gpio
         {
             case OUTPUT:
             {
-                *dir = (*dir) & ~(1 << pin);    //set pin bit to 0 - set it to OUTPUT
+                *dir = ((*dir) & ~(1 << pin)) | (1 << pin);    //set pin bit to 1 - set it to OUTPUT
                 break;
             }
             case INPUT_PULLUP:
             {
                 setState(port, pin, HIGH);
-                __attribute__((fallthrough));
+                [[fallthrough]];
             }
             case INPUT:
             {
-                *dir = ((*dir) & ~(1 << pin)) | (1 << pin);    //set pin bit to 0 - set it to INPUT
+                *dir = ((*dir) & ~(1 << pin));    //set pin bit to 0 - set it to INPUT
                 break;
             }
         }
@@ -58,7 +58,7 @@ namespace gpio
 	 */
 	void setState(volatile uint8_t *port, const uint8_t pin, const State state)
     {
-        *port = (*(port) & ~(1 << pin)) | (state << pin);
+        *port = ((*port) & ~(1 << pin)) | (state << pin);
     }
 
 

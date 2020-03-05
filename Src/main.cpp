@@ -227,21 +227,28 @@ void recvUsart()
 
 int main()
 {
-	DDRB = 255;
 	usart::begin(115200);
 	for(uint16_t i = 0; i < SCH_MAX_LEN; i++)
 	{
 		scheduleQueue[i] = 0;
 	}
-	// sei();
 	interrupt::set(interrupt::USART0_RX, recvUsart);
 
-	// scheduleAddFunc(parseInputCmds);
-	// gpio::getState<0>(PORTD, PD2);
-	cli();
+	gpio::setMode(&PORTB, PB5, gpio::OUTPUT);
 
+	sei();
 
-	gpio::setStates<2>(PORTD, { {PD3, HIGH}, {PD4, LOW} });
+	while(1)
+	{
+		// PORTB = (PORTB & ~(1 << PB5)) | (1 << PB5);
+		gpio::setStates<1>(&PORTB, { {PB5, HIGH} });
+		// gpio::setState(&PORTB, PB5, HIGH);
+		delay(500);
+		// PORTB = PORTB & ~(1 << PB5);
+		// gpio::setState(&PORTB, PB5, LOW);
+		gpio::setStates<1>(&PORTB, { {PB5, LOW} });
+		delay(500);
+	}
 
 
 
