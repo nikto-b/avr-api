@@ -51,7 +51,7 @@ namespace usart
 	void print(int num);
 	void print(long num);
 	void print(unsigned long num);
-	void println(int num, NumSys sys);
+	void print(int num, NumSys sys);
 
 	void println();
 	void println(const char* __data);

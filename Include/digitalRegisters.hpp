@@ -33,7 +33,7 @@ namespace gpio
 	*/
 	inline void setState(volatile uint8_t *port, const uint8_t pin, const State state)
 	{
-		*port = ((*port) & ~(1 << pin)) | (state << pin);
+		*port = static_cast<uint8_t>(((*port) & ~(1 << pin)) | (state << pin));
 	}
 
 		
@@ -53,7 +53,7 @@ namespace gpio
         {
             case OUTPUT:
             {
-                *dir = ((*dir) & ~(1 << pin)) | (1 << pin);    //set pin bit to 1 - set it to OUTPUT
+                *dir = static_cast<uint8_t>(((*dir) & ~(1 << pin)) | (1 << pin));    //set pin bit to 1 - set it to OUTPUT
                 break;
             }
             case INPUT_PULLUP:
@@ -63,7 +63,7 @@ namespace gpio
             }
             case INPUT:
             {
-                *dir = ((*dir) & ~(1 << pin));    //set pin bit to 0 - set it to INPUT
+                *dir = static_cast<uint8_t>((*dir) & ~(1 << pin));    //set pin bit to 0 - set it to INPUT
                 break;
             }
         }
@@ -78,7 +78,7 @@ namespace gpio
 	*/
 	inline void setState(volatile uint8_t *port, const PinState status)
 	{
-		*port = (*(port) & ~(1 << status.pin)) | (status.state << status.pin);
+		*port = static_cast<uint8_t>((*(port) & ~(1 << status.pin)) | (status.state << status.pin));
 	}
 
 	template <const size_t N>
@@ -87,7 +87,7 @@ namespace gpio
 		uint8_t mask = 0;
 		for(uint8_t i = 0; i < N; i++)
         {
-            mask |= 1 << statuses[i].pin;
+            mask = static_cast<uint8_t>(mask | (1 << statuses[i].pin));
         }
 		return mask;
 	}
@@ -99,9 +99,9 @@ namespace gpio
 		for(uint8_t i = 0; i < N; i++)
         {
             if(statuses[i].state != TOGGLE)
-				mask |= statuses[i].state << statuses[i].pin;
+				mask = static_cast<uint8_t>(mask | (statuses[i].state << statuses[i].pin));
 			else
-				mask |= ~portState & (1 << statuses[i].pin);
+				mask = static_cast<uint8_t>(mask | (~portState & (1 << statuses[i].pin)));
         }
 		return mask;
 	}
@@ -116,7 +116,7 @@ namespace gpio
 	template <const size_t N>
 	inline void setStates(volatile uint8_t *port, const PinState (&statuses) [N])
     {
-        *port = (*port & ~_genDisableMask<N>(statuses)) | _genEnableMask<N>(*port, statuses);
+        *port = static_cast<uint8_t>((*port & ~_genDisableMask<N>(statuses)) | _genEnableMask<N>(*port, statuses));
     }
 
 	/*

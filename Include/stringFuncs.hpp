@@ -17,7 +17,7 @@ byte getCountsOfDigits(int __number); //get count of digits for int
 byte getCountsOfDigits(long __number); //get count of digits for long
 byte getCountsOfDigits(byte __number); //get count of digits for byte
 
-int getCountsOfBits(uint64_t __in);//get count if digits for int
+byte getCountsOfBits(uint64_t __in);//get count if digits for int
 
 char* dec2bin(uint64_t __in);//convert dec num to bin C-string
 
@@ -29,6 +29,7 @@ byte str2byte(const char* __in);//convert C-string to byte
 
 char* int2str(int __in);//convert int var to char array
 char* long2str(long __in);//convert long var to char array
+char* long2str(unsigned long __in);//convert unsigned long var to char array
 char* byte2str(byte __in);//convert byte var to char array
 char* bool2str(bool __in);//convert bool var to char array
 

@@ -212,7 +212,7 @@ void schedule(void)
 
 	if(scheduleCounter >= scheduleQueueLen)
 		scheduleCounter = 0;
-	PORTB &= ~(1 << 5);//disable in-fg
+	PORTB = static_cast<uint8_t>(PORTB & ~(1 << 5));//disable in-fg
 }
 
 void recvUsart()

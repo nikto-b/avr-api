@@ -11,7 +11,7 @@
 */
 byte getCountsOfDigits(int __number) //get count of digits for int
 {
-	int __count = __number == 0;
+	byte __count = __number == 0;
 	while (__number != 0)
 	{
 		__count++;
@@ -28,7 +28,7 @@ byte getCountsOfDigits(int __number) //get count of digits for int
 */
 byte getCountsOfDigits(long __number) //get count of digits for long
 {
-	int __count = __number == 0;
+	byte __count = __number == 0;
 	while (__number != 0)
 	{
 		__count++;
@@ -45,7 +45,7 @@ byte getCountsOfDigits(long __number) //get count of digits for long
 */
 byte getCountsOfDigits(unsigned long __number) //get count of digits for long
 {
-	unsigned int __count = __number == 0;
+	byte __count = __number == 0;
 	while (__number != 0)
 	{
 		__count++;
@@ -79,7 +79,7 @@ byte getCountsOfDigits(byte __number) //get count of digits for byte
 */
 byte getCountsOfDigits(uint16_t __number) //get count of digits for byte
 {
-	int __count = __number == 0;
+	byte __count = __number == 0;
 	while (__number != 0)
 	{
 		__count++;
@@ -94,7 +94,7 @@ byte getCountsOfDigits(uint16_t __number) //get count of digits for byte
  * Input    __in: num for counting
  * Output   num of bits
 */
-int getCountsOfBits(uint64_t __in)//get count if digits for int
+byte getCountsOfBits(uint64_t __in)//get count if digits for int
 {
 	byte __counter = 0;
 	while(__in)
@@ -120,7 +120,7 @@ char* dec2bin(uint64_t __in)
 	{
 		__len = 1;
 	}
-	char *__res = (char*)malloc(__len + 1);
+	char *__res = static_cast<char*>(malloc(static_cast<size_t>(__len + 1)));
 	__res[__len] = '\0';
 	while(__len)
 	{
@@ -139,10 +139,10 @@ char* dec2bin(uint64_t __in)
 */
 int bin2dec(const char* __in)//convert bin num to dec int
 {
-	int __ret = 0;			//unsafe func! check for "none-numeric input
+	int __ret = 0;			//!unsafe func! check for "none-numeric input
 	while(*__in >= '0'
 	&& *__in <= '9'
-	&& *__in != 0x00)//WARNING! test this part
+	&& *__in != 0x00)//!WARNING! test this part
 	{
 		__ret <<= 1;
 		__ret |= ((*__in)) - '0';
@@ -159,10 +159,10 @@ int bin2dec(const char* __in)//convert bin num to dec int
 */
 int str2int(const char* __in)//convert C-string to int
 {
-	int __ret = 0;			//unsafe func! check for "none-numeric input
+	int __ret = 0;			//!unsafe func! check for "none-numeric input
 	while(*__in >= '0'
 	&& *__in <= '9'
-	&& *__in != 0x00)//WARNING! test this part
+	&& *__in != 0x00)//!WARNING! test this part
 	{
 		__ret *= 10;
 		__ret += (*__in) - '0';
@@ -178,10 +178,10 @@ int str2int(const char* __in)//convert C-string to int
 */
 long str2long(const char* __in)//convert C-string to long
 {
-	long __ret = 0;			//unsafe func! check for "none-numeric input
+	long __ret = 0;			//!unsafe func! check for "none-numeric input
 	while(*__in >= '0'
 	&& *__in <= '9'
-	&& *__in != 0x00)//WARNING! test this part
+	&& *__in != 0x00)//!WARNING! test this part
 	{
 		__ret *= 10;
 		__ret += (*__in) - '0';
@@ -197,13 +197,13 @@ long str2long(const char* __in)//convert C-string to long
 */
 byte str2byte(char* __in)//convert C-string to byte
 {
-	byte __ret = 0;			//unsafe func! check for "none-numeric input"
+	byte __ret = 0;			//!unsafe func! check for "none-numeric input"
 	while(*__in >= '0'
 	&& *__in <= '9'
-	&& *__in != 0x00)//WARNING! test this part
+	&& *__in != 0x00)//!WARNING! test this part
 	{
-		__ret *= 10;
-		__ret += (*__in) - '0';
+		__ret = static_cast<byte>(__ret * 10);
+		__ret = static_cast<byte>(__ret + ((*__in) - '0'));
 		__in++;
 	}
 	return __ret;
@@ -218,12 +218,12 @@ byte str2byte(char* __in)//convert C-string to byte
 char* int2str(int __in)//convert int var to char array
 {
 	uint8_t __len = getCountsOfDigits(__in);
-	char* __ret = (char*)malloc(__len + 1);//WARNING! memory leak!
+	char* __ret = static_cast<char*>(malloc(static_cast<size_t>(__len + 1)));//!WARNING! memory leak!
 	__ret[__len] = 0x00;
 	while(__len)
 	{
 		__len--;
-		__ret[__len] = (__in % 10) + '0';
+		__ret[__len] = static_cast<char>((__in % 10) + '0');
 		__in /= 10;
 	}
 	return __ret;
@@ -246,12 +246,12 @@ char* long2str(long __in)//convert long var to char array
 		__len++;
 		a = true;
 	}
-	char* __ret = (char*)malloc(__len + 1);//WARNING! memory leak!
+	char* __ret = static_cast<char*>(malloc(static_cast<size_t>(__len + 1)));//!WARNING! memory leak!
 	__ret[__len] = 0x00;
 	while(__len)
 	{
 		__len--;
-		__ret[__len] = (__in % 10) + '0';
+		__ret[__len] = static_cast<char>((__in % 10) + '0');
 		__in /= 10;
 	}
 	if(a)
@@ -270,12 +270,12 @@ char* long2str(long __in)//convert long var to char array
 char* ulong2str(unsigned long __in)//convert long var to char array
 {
 	uint8_t __len = getCountsOfDigits(__in);
-	char* __ret = (char*)malloc(__len + 1);//WARNING! memory leak!
+	char* __ret = static_cast<char*>(malloc(static_cast<size_t>(__len + 1)));//!WARNING! memory leak!
 	__ret[__len] = 0x00;
 	while(__len)
 	{
 		__len--;
-		__ret[__len] = (__in % 10) + '0';
+		__ret[__len] = static_cast<char>((__in % 10) + '0');
 		__in /= 10;
 	}
 	return __ret;
@@ -290,11 +290,11 @@ char* ulong2str(unsigned long __in)//convert long var to char array
 char* byte2str(byte __in)//convert byte var to char array
 {
 	uint8_t __len = getCountsOfDigits(__in);
-	char* __ret = (char*)malloc(__len);//WARNING! memory leak!
+	char* __ret = static_cast<char*>(malloc(__len));//!WARNING! memory leak!
 	while(__len)
 	{
 		__len--;
-		__ret[__len] = (__in % 10) + '0';
+		__ret[__len] = static_cast<char>((__in % 10) + '0');
 		__in /= 10;
 	}
 	return __ret;
@@ -308,13 +308,9 @@ char* byte2str(byte __in)//convert byte var to char array
 char* bool2str(bool __in)//convert bool var to char array
 {
 	if(__in)
-	{
-		return (char*)"true";
-	}
+		return static_cast<char*>("true");
 	else
-	{
-		return (char*)"false";
-	}
+		return static_cast<char*>("false");
 }
 
 /*
@@ -403,7 +399,7 @@ char* strCut(const char* _in, uint16_t start, uint16_t end)
 {
 	if(end >= start)
 	{
-		char* _arr = (char*)malloc(sizeof(char) * (end - start + 1));
+		char* _arr = static_cast<char*>(malloc(sizeof(char) * (end - start + 1)));
 		uint16_t i = 1;
 		while(i <= end - start)
 		{
@@ -429,8 +425,6 @@ char* strSplit(const char* _in, char _opening, char _closing)
 {
 	uint16_t	opening = indexOf(_in, _opening),
 				closing = indexOf(_in, _closing);
-	// USART0Println((long)opening);
-	// USART0Println((long)closing);
 	if(closing - opening > 1)
 	{
 		char* _arr = strCut(_in, opening, closing - 1);

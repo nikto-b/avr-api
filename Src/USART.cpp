@@ -41,7 +41,7 @@ namespace usart
 	{
 		while(*__data != 0x00)
 		{
-			send(*(__data));
+			send(static_cast<uint8_t>(*(__data)));
 			__data++;
 		}
 	}
@@ -107,20 +107,20 @@ namespace usart
 		{
 			case DEC:
 			{
-				print((unsigned long)__data);
+				print(static_cast<unsigned long>(__data));
 				break;
 			}
 			case BIN:
 			{
 				char * ___arr;
-				___arr = (char*)dec2bin(__data);
+				___arr = static_cast<char*>(dec2bin(__data));
 				print(___arr);
 				free(___arr);
 				break;
 			}
 			default:
 			{
-				print((unsigned long)__data);
+				print(static_cast<unsigned long>(__data));
 				break;
 			}
 		}
@@ -158,7 +158,7 @@ namespace usart
 	*/
 	void println(int __data, NumSys __mode)
 	{
-		print((uint64_t)__data, __mode);
+		print(static_cast<uint64_t>(__data), __mode);
 		println();
 	}
 	/*
@@ -170,7 +170,7 @@ namespace usart
 	*/
 	void println(long __data, NumSys __mode)
 	{
-		print((uint64_t)__data, __mode);
+		print(static_cast<uint64_t>(__data), __mode);
 		println();
 	}/*
 	* Function println
@@ -181,7 +181,7 @@ namespace usart
 	*/
 	void println(unsigned long __data, NumSys __mode)
 	{
-		print((uint64_t)__data, __mode);
+		print(static_cast<uint64_t>(__data), __mode);
 		println();
 	}
 
@@ -254,7 +254,7 @@ namespace usart
 			inputBufCounterInput = 0;				//start writing from zero
 		}
 
-		inputBuf[inputBufCounterInput] = UDR0;	//save data
+		inputBuf[inputBufCounterInput] = static_cast<char>UDR0;	//save data
 
 		if(inputBuf[inputBufCounterInput] != '\0')//check for garbage
 		{
@@ -367,17 +367,17 @@ namespace usart
 			}
 
 		UCSR0A = 1 <<  U2X0;									 //double speed mode
-		uint16_t __baudPrescaller =  ((F_CPU / (8 * __baud))) - 1;//((Clock rate / (16 * baudrate))) - 1
+		uint16_t __baudPrescaller =  static_cast<uint16_t>((F_CPU / (8 * __baud)) - 1);//((Clock rate / (16 * baudrate))) - 1
 															//for U2X0 mode:
 															//((Clock rate / (8 * baudrate))) - 1
 			if (((F_CPU == 16000000UL) && (__baud == 57600)) || (__baudPrescaller > 4095))	//disable double speed mode
 			{																				//if prescaller is too high
 				UCSR0A = 0;
-				__baudPrescaller = (F_CPU / (16 * __baud));
+				__baudPrescaller = static_cast<uint16_t>(F_CPU / (16 * __baud));
 			}
 
-		UBRR0L = (uint8_t)(__baudPrescaller);//set low bits of baud prescaller
-		UBRR0H = (uint8_t)(__baudPrescaller >> 8);//set high bits of baud prescaller
+		UBRR0L = static_cast<uint8_t>(__baudPrescaller);//set low bits of baud prescaller
+		UBRR0H = static_cast<uint8_t>(__baudPrescaller >> 8);//set high bits of baud prescaller
 
 		UCSR0B |= (1 << RXEN0) | (1 << RXCIE0);//enable recieve and interrupt on recieve
 

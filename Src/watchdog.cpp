@@ -26,7 +26,7 @@ void WDSetMode(uint8_t __mode)
 */
 void WDSetCycles(uint8_t __cycles)
 {
-	WDTCSR &= ~WD_CYCLES_MASK;
+	WDTCSR = static_cast<uint8_t>(WDTCSR & ~WD_CYCLES_MASK);
 	#if USE_FUNC_INPUT_PROTECTOR == 0
 		WDTCSR = (1 << WDIE) | __cycles;
 	#else //if USE_FUNC_INPUT_PROTECTOR == 0
@@ -43,7 +43,7 @@ void WDSetCycles(uint8_t __cycles)
 void WDStop(void)
 {
 	asm volatile ("wdr"); //clear watchdog timer
-	MCUSR &= ~(1 << WDRF);
+	MCUSR = static_cast<uint8_t>(MCUSR & ~(1 << WDRF));
 	WDTCSR = 0x00;
 }
 

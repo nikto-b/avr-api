@@ -12,9 +12,9 @@
 /**/															\
 void TIMER ## n ## Init(uint8_t _com ,uint8_t _wfmode, uint8_t _clk)\
 {						/*Sorry for this, but i need 16bit timers*/	\
-	TCCR ## n ## A = (TCCR ## n ## A & ~((_wfmode & ((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1))) | _com)) \
-	| ((_wfmode & ((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1))) | _com);\
-	TCCR ## n ## B = (_clk & TIMER ## n ## _CLK_SRC_MASK) | (_wfmode & ~((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1)));		\
+	TCCR ## n ## A = static_cast<uint8_t>((TCCR ## n ## A & ~((_wfmode & ((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1))) | _com)) \
+	| ((_wfmode & ((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1))) | _com));\
+	TCCR ## n ## B = static_cast<uint8_t>((_clk & TIMER ## n ## _CLK_SRC_MASK) | (_wfmode & ~((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1))));		\
 }
 
 
@@ -29,8 +29,8 @@ void TIMER ## n ## Init(uint8_t _com ,uint8_t _wfmode, uint8_t _clk)\
 /**/															\
 void TIMER ## n ## SetCLK(uint8_t _clk)							\
 {																\
-	TCCR ## n ## B &= ~TIMER ## n ## _CLK_SRC_MASK;				\
-	TCCR ## n ## B |= _clk & TIMER ## n ## _CLK_SRC_MASK;		\
+	TCCR ## n ## B &= static_cast<uint8_t>(~(TIMER ## n ## _CLK_SRC_MASK));				\
+	TCCR ## n ## B |= static_cast<uint8_t>(_clk & TIMER ## n ## _CLK_SRC_MASK);		\
 }
 
 #define GENISR_COMPk(n, k)										\
@@ -54,8 +54,8 @@ ISR(TIMER ## n ## _COMP ## k ## _vect)							\
 /**/															\
 void TIMER ## n ## Set ## k (uint16_t __k)						\
 {																\
-	OCR ## n ## k ## L = (uint8_t)__k & 0xFF;		/*set high registers of num*/\
-	OCR ## n ## k ## H = (uint8_t)(__k >> 8);		/*set low registers of num*/\
+	OCR ## n ## k ## L = static_cast<uint8_t>(__k & 0xFF);		/*set high registers of num*/\
+	OCR ## n ## k ## H = static_cast<uint8_t>(__k >> 8);		/*set low registers of num*/\
 }
 
 #define GENSETk_8B(n, k)										\
@@ -67,7 +67,7 @@ void TIMER ## n ## Set ## k (uint16_t __k)						\
 /**/ 															\
 void TIMER ## n ## Set ## k(uint8_t __k)						\
 {																\
-	OCR ## n ## k = (uint8_t)__k;/*set k num*/ 					\
+	OCR ## n ## k = static_cast<uint8_t>(__k);/*set k num*/ 					\
 }
 
 #define GENENABLECOMPkINTERRUPT(n, k)							\
@@ -91,7 +91,7 @@ void TIMER ## n ## EnableCOMP ## k ## Interrupt(void)			\
 /**/															\
 void TIMER ## n ## DisableCOMP ## k ## Interrupt(void)			\
 {																\
-	TIMSK ## n &= ~(1 << OCIE ## n ## k );/*disable interrupt on compare with k num*/\
+	TIMSK ## n &= static_cast<uint8_t>(~(1 << OCIE ## n ## k ));/*disable interrupt on compare with k num*/\
 }
 
 #define GENFLUSH(n)												\
@@ -502,11 +502,17 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 		{
 			switch(_ch)
 			{
+				#ifdef OCIE0AL
+					#define TMP uint16_t
+				#else
+					#define TMP uint8_t
+				#endif
+				
 				#ifdef OCIE0A
 				case 0:
 				{
 					TIMER0Init(TIMER0_COMA_FPWM_CM_ST, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1024);
-					TIMER0SetA(_num);
+					TIMER0SetA(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -514,7 +520,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 1:
 				{
 					TIMER0Init(TIMER0_COMB_FPWM_CM_ST, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1024);
-					TIMER0SetB(_num);
+					TIMER0SetB(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -522,7 +528,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 2:
 				{
 					TIMER0Init(TIMER0_COMC_FPWM_NORMAL, TIMER0_WF_FPWM, TIMER0_CLK_SRC_1024);
-					TIMER0SetC(_num);
+					TIMER0SetC(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -535,11 +541,17 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 		{
 			switch(_ch)
 			{
+				#ifdef OCIE1AL
+					#define TMP uint16_t
+				#else
+					#define TMP uint8_t
+				#endif
+
 				#ifdef OCIE1A
 				case 0:
 				{
 					TIMER1Init(TIMER1_COMA_CM_ST, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1024);
-					TIMER1SetA(_num);
+					TIMER1SetA(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -547,7 +559,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 1:
 				{
 					TIMER1Init(TIMER1_COMB_CM_ST, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1024);
-					TIMER1SetB(_num);
+					TIMER1SetB(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -555,7 +567,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 2:
 				{
 					TIMER1Init(TIMER1_COMC_CM_ST, TIMER1_WF_FPWM_8B, TIMER1_CLK_SRC_1024);
-					TIMER1SetC(_num);
+					TIMER1SetC(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -568,11 +580,17 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 		{
 			switch(_ch)
 			{
+				#ifdef OCIE2AL
+					#define TMP uint16_t
+				#else
+					#define TMP uint8_t
+				#endif
+				
 				#ifdef OCIE2A
 				case 0:
 				{
 					TIMER2Init(TIMER2_COMA_CM_ST, TIMER2_WF_FPWM, TIMER2_CLK_SRC_1024);
-					TIMER2SetA(_num);
+					TIMER2SetA(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -580,7 +598,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 1:
 				{
 					TIMER2Init(TIMER2_COMB_CM_ST, TIMER2_WF_FPWM, TIMER2_CLK_SRC_1024);
-					TIMER2SetB(_num);
+					TIMER2SetB(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -588,7 +606,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 2:
 				{
 					TIMER2Init(TIMER2_COMC_CM_ST, TIMER2_WF_FPWM, TIMER2_CLK_SRC_1024);
-					TIMER2SetC(_num);
+					TIMER2SetC(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -601,11 +619,17 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 		{
 			switch(_ch)
 			{
+				#ifdef OCIE3AL
+					#define TMP uint16_t
+				#else
+					#define TMP uint8_t
+				#endif
+				
 				#ifdef OCIE3A
 				case 0:
 				{
 					TIMER3Init(TIMER3_COMA_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);
-					TIMER3SetA(_num);
+					TIMER3SetA(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -613,7 +637,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 1:
 				{
 					TIMER3Init(TIMER3_COMB_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);
-					TIMER3SetB(_num);
+					TIMER3SetB(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -621,7 +645,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 2:
 				{
 					TIMER3Init(TIMER3_COMC_CM_ST, TIMER3_WF_FPWM_8B, TIMER3_CLK_SRC_1024);
-					TIMER3SetC(_num);
+					TIMER3SetC(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -634,11 +658,18 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 		{
 			switch(_ch)
 			{
+
+				#ifdef OCIE4AL
+					#define TMP uint16_t
+				#else
+					#define TMP uint8_t
+				#endif
+				
 				#ifdef OCIE4A
 				case 0:
 				{
 					TIMER4Init(TIMER4_COMA_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
-					TIMER4SetA(_num);
+					TIMER4SetA(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -646,7 +677,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 1:
 				{
 					TIMER4Init(TIMER4_COMB_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
-					TIMER4SetB(_num);
+					TIMER4SetB(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -654,7 +685,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 2:
 				{
 					TIMER4Init(TIMER4_COMC_CM_ST, TIMER4_WF_FPWM_8B, TIMER4_CLK_SRC_1024);
-					TIMER4SetC(_num);
+					TIMER4SetC(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -667,11 +698,17 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 		{
 			switch(_ch)
 			{
+				#ifdef OCIE5AL
+					#define TMP uint16_t
+				#else
+					#define TMP uint8_t
+				#endif
+				
 				#ifdef OCIE5A
 				case 0:
 				{
 					TIMER5Init(TIMER5_COMA_CM_ST, TIMER5_WF_FPWM_8B, TIMER5_CLK_SRC_1024);
-					TIMER5SetA(_num);
+					TIMER5SetA(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -679,7 +716,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 1:
 				{
 					TIMER5Init(TIMER5_COMB_CM_ST, TIMER5_WF_FPWM_8B, TIMER5_CLK_SRC_1024);
-					TIMER5SetB(_num);
+					TIMER5SetB(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -687,7 +724,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 2:
 				{
 					TIMER5Init(TIMER5_COMC_CM_ST, TIMER5_WF_FPWM_8B, TIMER5_CLK_SRC_1024);
-					TIMER5SetC(_num);
+					TIMER5SetC(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -700,11 +737,17 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 		{
 			switch(_ch)
 			{
+				#ifdef OCIE6AL
+					#define TMP uint16_t
+				#else
+					#define TMP uint8_t
+				#endif
+				
 				#ifdef OCIE6A
 				case 0:
 				{
 					TIMER6Init(TIMER6_COMA_CM_ST, TIMER6_WF_FPWM, TIMER6_CLK_SRC_1024);
-					TIMER6SetA(_num);
+					TIMER6SetA(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -712,7 +755,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 1:
 				{
 					TIMER6Init(TIMER6_COMB_CM_ST, TIMER6_WF_FPWM, TIMER6_CLK_SRC_1024);
-					TIMER6SetB(_num);
+					TIMER6SetB(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -720,7 +763,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 2:
 				{
 					TIMER6Init(TIMER6_COMC_CM_ST, TIMER6_WF_FPWM, TIMER6_CLK_SRC_1024);
-					TIMER6SetC(_num);
+					TIMER6SetC(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -733,11 +776,17 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 		{
 			switch(_ch)
 			{
+				#ifdef OCIE7AL
+					#define TMP uint16_t
+				#else
+					#define TMP uint8_t
+				#endif
+				
 				#ifdef OCIE7A
 				case 0:
 				{
 					TIMER7Init(TIMER7_COMA_CM_ST, TIMER7_WF_FPWM, TIMER7_CLK_SRC_1024);
-					TIMER7SetA(_num);
+					TIMER7SetA(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -745,7 +794,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 1:
 				{
 					TIMER7Init(TIMER7_COMB_CM_ST, TIMER7_WF_FPWM, TIMER7_CLK_SRC_1024);
-					TIMER7SetB(_num);
+					TIMER7SetB(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -753,7 +802,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 2:
 				{
 					TIMER7Init(TIMER7_COMC_CM_ST, TIMER7_WF_FPWM, TIMER7_CLK_SRC_1024);
-					TIMER7SetC(_num);
+					TIMER7SetC(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -766,11 +815,17 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 		{
 			switch(_ch)
 			{
+				#ifdef OCIE8AL
+					#define TMP uint16_t
+				#else
+					#define TMP uint8_t
+				#endif
+				
 				#ifdef OCIE8A
 				case 0:
 				{
 					TIMER8Init(TIMER8_COMA_CM_ST, TIMER8_WF_FPWM, TIMER8_CLK_SRC_1024);
-					TIMER8SetA(_num);
+					TIMER8SetA(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -778,7 +833,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 1:
 				{
 					TIMER8Init(TIMER8_COMB_CM_ST, TIMER8_WF_FPWM, TIMER8_CLK_SRC_1024);
-					TIMER8SetB(_num);
+					TIMER8SetB(static_cast<TMP>(_num));
 					break;
 				}
 				#endif
@@ -786,7 +841,7 @@ void analogWrite(uint8_t _timer, uint8_t _ch, uint16_t _num)
 				case 2:
 				{
 					TIMER8Init(TIMER8_COMC_CM_ST, TIMER8_WF_FPWM, TIMER8_CLK_SRC_1024);
-					TIMER8SetC(_num);
+					TIMER8SetC(static_cast<TMP>(_num));
 					break;
 				}
 				#endif

@@ -17,7 +17,7 @@ namespace adc
 	*/
 	void ADCSetAnalogChanged(uint8_t __pin, uint8_t __state)
 	{
-		_analogPins[__pin] = (_analogPins[__pin] & ~ADC_CHANGED_MASK) | (__state * ADC_CHANGED_MASK);
+		_analogPins[__pin] = (_analogPins[__pin] & static_cast<uint8_t>(~ADC_CHANGED_MASK)) | static_cast<uint8_t>(__state * ADC_CHANGED_MASK);
 	}
 
 	/*
@@ -64,7 +64,7 @@ namespace adc
 	*/
 	void ADCSetPrescaller(uint8_t __prescaller)
 	{
-		ADCSRA = (ADCSRA & ~ADC_PRESCALLER_MASK) | __prescaller;
+		ADCSRA = static_cast<uint8_t>((ADCSRA & ~ADC_PRESCALLER_MASK) | __prescaller);
 	}
 
 	/*
@@ -75,7 +75,7 @@ namespace adc
 	*/
 	void ADCSetAutotriggerSRC(uint8_t __src)
 	{
-		ADCSRB = (ADCSRB & ~ADC_ADTS_MASK) | __src;
+		ADCSRB = static_cast<uint8_t>((ADCSRB & ~ADC_ADTS_MASK) | __src);
 	}
 
 	#ifdef DIDR0
@@ -123,7 +123,7 @@ namespace adc
 	*/
 	void ADCDisable(void)
 	{
-		ADCSRA = (ADCSRA & ~ADC_CONTROL_ENABLE);
+		ADCSRA = static_cast<uint8_t>(ADCSRA & ~ADC_CONTROL_ENABLE);
 	}
 
 	/*
@@ -145,7 +145,7 @@ namespace adc
 	*/
 	void ADCStopConvert(void)
 	{
-		ADCSRA = (ADCSRA & ~ADC_CONTROL_START_CONVERTION);
+		ADCSRA = static_cast<uint8_t>(ADCSRA & ~ADC_CONTROL_START_CONVERTION);
 	}
 
 	/*
@@ -176,12 +176,10 @@ namespace adc
 	void ADCInit(void)
 	{
 		for(int i = 0; i < NUM_OF_ANALOG_PINS; i++)
-		{
 			_analogPins[i] = 0;
-		}
 		ADCFlush();
 		ADCSetRef(ADC_REF_AVCC);
-		ADMUX |= (_currPin & NUM_OF_ANALOG_PINS);
+		ADMUX = ADMUX | _currPin;	//because -Wconversion breaks this thing
 		ADCSetPrescaller(ADC_PRESCALLER_32);
 		ADCSendControl(ADC_CONTROL_AUTOTRIGGER);
 		ADCSendControl(ADC_CONTROL_INTERRUPT_EN);
@@ -212,13 +210,13 @@ namespace adc
 */
 ISR(ADC_vect)
 {
-	adc::_analogPins[adc::_currPin] = ADCL | (ADCH << 8);
+	adc::_analogPins[adc::_currPin] = static_cast<uint16_t>(ADCL | (ADCH << 8));
 	adc::ADCSetAnalogChanged(adc::_currPin, 1);
 	adc::_currPin++;
 	if(adc::_currPin >= adc::NUM_OF_ANALOG_PINS)
 	{
 		adc::_currPin = 0;
 	}
-	ADMUX = adc::_analogRef | (adc::_currPin & adc::NUM_OF_ANALOG_PINS);
+	ADMUX = static_cast<uint8_t>(adc::_analogRef | (adc::_currPin & adc::NUM_OF_ANALOG_PINS));
 	interrupt::call(interrupt::ADC);
 }

@@ -110,7 +110,7 @@ namespace twi
 		ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 		{
 			//cli();										//block interrupts, must be atomic
-			addr <<= 1;
+			addr = static_cast<uint8_t>(addr << 1);
 			addr |= mode & 1;
 
 			#if DEBUG == 1
@@ -127,7 +127,7 @@ namespace twi
 				#endif //if DEBUG == 1
 				_usr_in_queue[_usr_len++] = data[i];
 			}
-			_usr_in_lens[_usr_lens++] = len + 1;	//set num of bytes in pack
+			_usr_in_lens[_usr_lens++] = static_cast<uint8_t>(len + 1);	//set num of bytes in pack
 			//sei();										//allow interrupts, atomic block ended
 		}
 	}
@@ -147,7 +147,7 @@ namespace twi
 	*/
 	void addPack(uint8_t addr, uint8_t data, uint8_t mode)
 	{
-		addr <<= 1;
+		addr = static_cast<uint8_t>(addr << 1);
 		addr |= mode & 1;
 		ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 		{
@@ -171,7 +171,7 @@ namespace twi
 	*/
 	void addPack(uint8_t addr, uint16_t data, uint8_t mode)
 	{
-		addr <<= 1;
+		addr = static_cast<uint8_t>(addr << 1);
 		addr |= mode & 1;
 		ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 		{
@@ -179,7 +179,7 @@ namespace twi
 			_usr_packs++;
 			_usr_in_queue[_usr_len++] = addr;		//add addr of slave device
 			_usr_in_queue[_usr_len++] = data & 0xFF;//,byte to send
-			_usr_in_queue[_usr_len++] = (data >> 8) & 0xFF;
+			_usr_in_queue[_usr_len++] = static_cast<uint8_t>((data >> 8) & 0xFF);
 			_usr_in_lens[_usr_lens++] = 2;			//				and num of bytes in pack
 			//sei();											//allow interrupts, atomic block ended
 		}
@@ -401,7 +401,7 @@ namespace twi
 	*/
 	void write(uint8_t addr, uint8_t reg, uint8_t data)
 	{
-		addPack(addr, (uint16_t)((reg << 8) | data), I2C_WRITE);
+		addPack(addr, static_cast<uint16_t>((reg << 8) | data), I2C_WRITE);
 		start();
 	}
 
