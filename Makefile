@@ -1,5 +1,4 @@
 MAINFILENAME=main
-#MCU=atmega2560
 MCU=atmega328p
 OPTIMIZE=-Os
 XTAL=16000000
@@ -21,6 +20,7 @@ Build/core.a:
 	avr-gcc-ar rcs Build/core.a Build/WatchdogTimer.o
 	avr-gcc-ar rcs Build/core.a Build/TWI.o
 	avr-gcc-ar rcs Build/core.a Build/NumFuncs.o
+	@echo -e '\033[0;32mLibrary compilation done\033[0m'
 
 link: Build/main Build/core.a lib
 	avr-gcc $(LFLAGS) Build/main.o Build/core.a -o Build/main.elf
@@ -61,10 +61,13 @@ Build/NumFuncs.o: Build
 	avr-g++ $(CFLAGS) "Src/numFuncs.cpp" -o "Build/NumFuncs.o"
 
 clean:
-	rm -rf Build
+	@rm -rf Build/*
+	@echo -e '\033[0;31mCleaned\033[0m'
 
 size: objcopy
-	avr-size Build/$(MAINFILENAME).elf -C --mcu=$(MCU)
+	@echo -e '\033[0;36m'
+	@avr-size Build/$(MAINFILENAME).elf -C --mcu=$(MCU)
+	@echo -e '\033[0m'
 
 
 Build:

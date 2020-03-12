@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "base.hpp"
 
 // #define byte uint8_t		//define for 8 bit var
 // #define bool uint8_t		//define for bool var because C has not bool or boolean variable
