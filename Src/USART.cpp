@@ -47,6 +47,21 @@ namespace usart
 	}
 
 	/*
+	* Function print
+	* Desc     Send byte array to USART0
+	* Input    __data: byte array to send
+	* Output   none
+	*/
+	void print(const unsigned char* __data)	//send C-string to USART0
+	{
+		while(*__data != 0x00)
+		{
+			send(static_cast<uint8_t>(*(__data)));
+			__data++;
+		}
+	}
+
+	/*
 	* Function println
 	* Desc     Send EndOfLine to USART0
 	* Input    none
@@ -192,6 +207,18 @@ namespace usart
 	* Output   none
 	*/
 	void println(const char* __data)
+	{
+		print(__data);
+		print(EOL);
+	}
+
+	/*
+	* Function println
+	* Desc     send char array and EndOfLine to USART0
+	* Input    __data: char array to send
+	* Output   none
+	*/
+	void println(const unsigned char* __data)
 	{
 		print(__data);
 		print(EOL);

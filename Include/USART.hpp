@@ -48,6 +48,7 @@ namespace usart
 
 	//send char array function
 	void print(const char* __data);
+	void print(const unsigned char* __data);
 	void print(int num);
 	void print(long num);
 	void print(unsigned long num);
@@ -55,6 +56,7 @@ namespace usart
 
 	void println();
 	void println(const char* __data);
+	void println(const unsigned char* __data);
 	void println(int num);
 	void println(long num);
 	void println(unsigned long num);

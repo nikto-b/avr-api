@@ -100,7 +100,7 @@ namespace adc
 		*/
 		void ADCDisableDigitalInput8to15(uint8_t __mask)
 		{
-			//DIDR2 = __mask;
+			DIDR2 = __mask;
 		}
 	#endif //ifdef DIDR2
 

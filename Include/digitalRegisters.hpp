@@ -33,7 +33,10 @@ namespace gpio
 	*/
 	inline void setState(volatile uint8_t *port, const uint8_t pin, const State state)
 	{
-		*port = static_cast<uint8_t>(((*port) & ~(1 << pin)) | (state << pin));
+		if(state != TOGGLE)
+			*port = static_cast<uint8_t>(((*port) & ~(1 << pin)) | (state << pin));
+		else
+			*port = static_cast<uint8_t>((*port) ^ (1 << pin));
 	}
 
 		
@@ -78,7 +81,10 @@ namespace gpio
 	*/
 	inline void setState(volatile uint8_t *port, const PinState status)
 	{
-		*port = static_cast<uint8_t>((*(port) & ~(1 << status.pin)) | (status.state << status.pin));
+		if(status.state != TOGGLE)
+			*port = static_cast<uint8_t>((*(port) & ~(1 << status.pin)) | (status.state << status.pin));
+		else
+			*port = static_cast<uint8_t>(*(port) ^ (1 << status.pin));
 	}
 
 	template <const size_t N>
