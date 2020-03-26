@@ -1,2 +1,2 @@
 # AVR-API [WIP]
-Basic API library for Atmel AVR without reverce compartability with Arduino library
+Basic API library for Atmel AVR that can replace Arduino library
