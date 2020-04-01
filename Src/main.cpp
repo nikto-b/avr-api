@@ -56,7 +56,7 @@ void scheduleAddFunc(void(* func)())
 	}
 	// ATOMIC_FORCED
 	// (
-		usart::println("ADD");
+		usart::println<0>("ADD");
 		scheduleQueue[scheduleQueueLen++] = func;
 		// return scheduleQueueLen - 1;
 	// )
@@ -219,7 +219,7 @@ void recvUsart()
 {
 	//digitalWrite(15, 0);
 	//char c = USART0Read();
-	usartInBuf[usartInBufCounter++] = usart::read();
+	usartInBuf[usartInBufCounter++] = usart::read<0>();
 	//usartInBuf[usartInBufCounter++] = c;
 	//USART0Println("A");
 }
@@ -227,7 +227,11 @@ void recvUsart()
 
 int main()
 {
-	usart::begin(115200);
+	usart::begin<0>(115200);
+	usart::begin<1>(115200);
+	
+	usart::println<0>("TEST MESSAGE");
+	usart::println<1>("TEST MESSAGE1");
 	for(uint16_t i = 0; i < SCH_MAX_LEN; i++)
 	{
 		scheduleQueue[i] = 0;
@@ -268,7 +272,7 @@ int main()
 	// TIMER0EnableCOMPAInterrupt();
 	// TIMER0SetA(255);
 	// sei();
-	// usart::println((long)scheduleQueue[0]);
+	// usart::println<0>((long)scheduleQueue[0]);
 
 
 	// loop:
