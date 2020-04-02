@@ -151,186 +151,194 @@ namespace usart
 		return N <= maxNum;
 	}
 
+
 	template<const size_t n>
-	constexpr uint8_t* _getUCSRnA()
+	constexpr volatile uint8_t* _getUCSRnA()
 	{
 		static_assert(isUsartNumberValid<n>(), "Bad USART num");
-
+		volatile uint8_t* ret = &UCSR0A;
 		switch (n)
 		{
 		case 0:
-			return UCSR0A;
+			ret = &UCSR0A;
+			break;
 		#ifdef UCSR1A
 		case 1:
-			return UCSR1A;
+			ret = &UCSR1A;
+			break;
 		#endif //ifdef UCSR1A
 		#ifdef UCSR2A
 		case 2:
-			return UCSR2A;
+			ret = &UCSR2A;
+			break;
 		#endif //ifdef UCSR2A
 		#ifdef UCSR3A
 		case 3:
-			return UCSR3A;
+			ret = &UCSR3A;
+			break;
 		#endif //ifdef UCSR3A
 		default:
-			return 0;
+			ret = &UCSR0A;
 		}
+		return ret;
 	}
 
 	template<const size_t n>
-	constexpr uint8_t* _getUDREn()
+	constexpr volatile uint8_t* _getUDRn()
 	{
 		static_assert(isUsartNumberValid<n>(), "Bad USART num");
-
+		volatile uint8_t* ret = &UDR0;
 		switch (n)
 		{
 		case 0:
-			return UDRE0;
-		#ifdef UDRE1
-		case 1:
-			return UDRE1;
-		#endif //ifdef UDRE1
-		#ifdef UDRE2
-		case 2:
-			return UDRE2;
-		#endif //ifdef UDRE2
-		#ifdef UDRE3
-		case 3:
-			return UDRE3;
-		#endif //ifdef UDRE3
-		default:
-			return 0;
-		}
-	}
-
-	template<const size_t n>
-	constexpr uint8_t* _getUDRn()
-	{
-		static_assert(isUsartNumberValid<n>(), "Bad USART num");
-		
-		switch (n)
-		{
-		case 0:
-			return UDR0;
+			ret = &UDR0;
+			break;
 		#ifdef UDR1
 		case 1:
-			return UDR1;
+			ret = &UDR1;
+			break;
 		#endif //ifdef UDR1
 		#ifdef UDR2
 		case 2:
-			return UDR2;
+			ret = &UDR2;
+			break;
 		#endif //ifdef UDR2
 		#ifdef UDR3
 		case 3:
-			return UDR3;
+			ret = &UDR3;
+			break;
 		#endif //ifdef UDR3
 		default:
-			return 0;
+			ret = &UDR0;
 		}
+		return ret;
 	}
 
 	template<const size_t n>
-	constexpr uint8_t* _getUBRRnL()
+	constexpr volatile uint8_t* _getUBRRnL()
 	{
 		static_assert(isUsartNumberValid<n>(), "Bad USART num");
-		
+		volatile uint8_t* ret = &UBRR0L;
+
 		switch (n)
 		{
 			case 0:
-				return UBRR0L;
+				ret = &UBRR0L;
+				break;
 			#ifdef UBRR1L
 			case 1:
-				return UBRR1L;
+				ret = &UBRR1L;
+				break;
 			#endif //ifdef UBRR1L
 			#ifdef UBRR2L
 			case 2:
-				return UBRR2L;
+				ret = &UBRR2L;
+				break;
 			#endif //ifdef UBRR2L
 			#ifdef UBRR3L
 			case 3:
-				return UBRR3L;
+				ret = &UBRR3L;
+				break;
 			#endif //ifdef UBRR3L
 			default:
-				return 0;
+				ret = &UBRR0L;
 		}
+		return ret;
 	}
 
 	template<const size_t n>
-	constexpr uint8_t* _getUBRRnH()
+	constexpr volatile uint8_t* _getUBRRnH()
 	{
 		static_assert(isUsartNumberValid<n>(), "Bad USART num");
+		volatile uint8_t* ret = &UBRR0L;
 		
 		switch (n)
 		{
 			case 0:
-				return UBRR0H;
+				ret = &UBRR0H;
+				break;
 			#ifdef UBRR1H
 			case 1:
-				return UBRR1H;
+				ret = &UBRR1H;
+				break;
 			#endif //ifdef UBRR1H
 			#ifdef UBRR2H
 			case 2:
-				return UBRR2H;
+				ret = &UBRR2H;
+				break;
 			#endif //ifdef UBRR2H
 			#ifdef UBRR3H
 			case 3:
-				return UBRR3H;
+				ret = &UBRR3H;
+				break;
 			#endif //ifdef UBRR3H
 			default:
-				return 0;
+				ret = &UBRR0L;
 		}
+		return ret;
 	}
 
 	template<const size_t n>
-	constexpr uint8_t* _getUCSRnB()
+	constexpr volatile uint8_t* _getUCSRnB()
 	{
 		static_assert(isUsartNumberValid<n>(), "Bad USART num");
-		
+		volatile uint8_t* ret = &UCSR0B;
 		switch (n)
 		{
 			case 0:
-				return UCSR0B;
+				ret = &UCSR0B;
+				break;
 			#ifdef UCSR1B
 			case 1:
-				return UCSR1B;
+				ret = &UCSR1B;
+				break;
 			#endif //ifdef UCSR1B
 			#ifdef UCSR2B
 			case 2:
-				return UCSR2B;
+				ret = &UCSR2B;
+				break;
 			#endif //ifdef UCSR2B
 			#ifdef UCSR3B
 			case 3:
-				return UCSR3B;
+				ret = &UCSR3B;
+				break;
 			#endif //ifdef UCSR3B
 			default:
-				return 0;
+				ret = &UCSR0B;
 		}
+		return ret;
 	}
 
 	template<const size_t n>
-	constexpr uint8_t* _getUCSRnC()
+	constexpr volatile uint8_t* _getUCSRnC()
 	{
 		static_assert(isUsartNumberValid<n>(), "Bad USART num");
+		volatile uint8_t* ret = &UCSR0C;
 		
 		switch (n)
 		{
 			case 0:
-				return UCSR0C;
+				ret = &UCSR0C;
+				break;
 			#ifdef UCSR1C
 			case 1:
-				return UCSR1C;
+				ret = &UCSR1C;
+				break;
 			#endif //ifdef UCSR1C
 			#ifdef UCSR2C
 			case 2:
-				return UCSR2C;
+				ret = &UCSR2C;
+				break;
 			#endif //ifdef UCSR2C
 			#ifdef UCSR3C
 			case 3:
-				return UCSR3C;
+				ret = &UCSR3C;
+				break;
 			#endif //ifdef UCSR3C
 			default:
-				return 0;
+				ret = &UCSR0C;
 		}
+		return ret;
 	}
 
 	
@@ -406,14 +414,14 @@ namespace usart
 
 	/*
 	* Function send
-	* Desc     Send byte to USART0
+	* Desc     Send byte to USARTN
 	* Input    _data: byte to send
 	* Output   none
 	*/
 	template <const size_t N>
-	void send(unsigned char __data)			//send 1 byte to USART0
+	void send(unsigned char __data)
 	{
-		while(!(*_getUCSRnA<N>() & (1 << *_getUDREn<N>()))){asm("NOP");}//TODO: send to buf and get with interrupt
+		while(!((*_getUCSRnA<N>()) & (1 << UDRE0))) {asm("NOP");}//TODO: send to buf and get with interrupt
 		*_getUDRn<N>() = __data;
 		/*
 		* The transmit buffer can only be written
@@ -429,7 +437,7 @@ namespace usart
 	* Output   none
 	*/
 	template <const size_t N>
-	void print(const char* __data)	//send C-string to USART0
+	void print(const char* __data)	//send C-string to USARTN
 	{
 		while(*__data != 0x00)
 		{
@@ -440,7 +448,7 @@ namespace usart
 
 	/*
 	* Function print
-	* Desc     Send byte array to USART0
+	* Desc     Send byte array to USARTN
 	* Input    __data: byte array to send
 	* Output   none
 	*/
@@ -456,7 +464,7 @@ namespace usart
 
 	/*
 	* Function println
-	* Desc     Send EndOfLine to USART0
+	* Desc     Send EndOfLine to USARTN
 	* Input    none
 	* Output   none
 	*/
@@ -468,7 +476,7 @@ namespace usart
 
 	/*
 	* Function print
-	* Desc     Convert to char array and send dec num to USART0
+	* Desc     Convert to char array and send dec num to USARTN
 	* Input    __data: dec num
 	* Output   none
 	*/
@@ -482,7 +490,7 @@ namespace usart
 
 	/*
 	* Function print
-	* Desc     Convert to char array and send dec num to USART0
+	* Desc     Convert to char array and send dec num to USARTN
 	* Input    __data: dec num
 	* Output   none
 	*/
@@ -496,7 +504,7 @@ namespace usart
 
 	/*
 	* Function print
-	* Desc     Convert to char array and send dec num to USART0
+	* Desc     Convert to char array and send dec num to USARTN
 	* Input    __data: dec num
 	* Output   none
 	*/
@@ -510,7 +518,7 @@ namespace usart
 
 	/*
 	* Function print
-	* Desc     Send num to USART0 with mode
+	* Desc     Send num to USARTN with mode
 	* Input    __data: num to send
 	* 			__mode: mode used for sending num
 	* Output   none
@@ -543,7 +551,7 @@ namespace usart
 
 	/*
 	* Function println
-	* Desc     Send to USART0 converted to char array num and EndOfLine
+	* Desc     Send to USARTN converted to char array num and EndOfLine
 	* Input    __data: Num to send
 	* Output   none
 	*/
@@ -556,7 +564,7 @@ namespace usart
 
 	/*
 	* Function println
-	* Desc     Send to USART0 converted to char array num and EndOfLine
+	* Desc     Send to USARTN converted to char array num and EndOfLine
 	* Input    __data: Num to send
 	* Output   none
 	*/
@@ -569,7 +577,7 @@ namespace usart
 
 	/*
 	* Function println
-	* Desc     Send num and EndOfLine to USART0 with mode
+	* Desc     Send num and EndOfLine to USARTN with mode
 	* Input    __data: num to send
 	* 			__mode: mode to send
 	* Output   none
@@ -583,7 +591,7 @@ namespace usart
 
 	/*
 	* Function println
-	* Desc     Send num and EndOfLine to USART0 with mode
+	* Desc     Send num and EndOfLine to USARTN with mode
 	* Input    __data: num to send
 	* 			__mode: mode to send
 	* Output   none
@@ -597,7 +605,7 @@ namespace usart
 
 	/*
 	* Function println
-	* Desc     Send num and EndOfLine to USART0 with mode
+	* Desc     Send num and EndOfLine to USARTN with mode
 	* Input    __data: num to send
 	* 			__mode: mode to send
 	* Output   none
@@ -611,7 +619,7 @@ namespace usart
 
 	/*
 	* Function println
-	* Desc     send char array and EndOfLine to USART0
+	* Desc     send char array and EndOfLine to USARTN
 	* Input    __data: char array to send
 	* Output   none
 	*/
@@ -624,7 +632,7 @@ namespace usart
 
 	/*
 	* Function println
-	* Desc     send char array and EndOfLine to USART0
+	* Desc     send char array and EndOfLine to USARTN
 	* Input    __data: char array to send
 	* Output   none
 	*/
@@ -701,7 +709,7 @@ namespace usart
 
 	/*
 	* Function flush
-	* Desc     Clear USART0 registers
+	* Desc     Clear USARTN registers
 	* Input    none
 	* Output   none
 	*/
@@ -746,7 +754,7 @@ namespace usart
 	void begin(uint64_t __baud)
 	{
 		#ifndef NO_USART_RXBUF
-		for(int i = 0; i < MAX_BUF_SIZE; i++)//flush data array
+		for(int i = 0; i < MAX_BUF_SIZE; i++)											//flush data array
 		{
 			_getBuffers<N>()->inputBuf[i] = '\0';
 		}
@@ -754,24 +762,24 @@ namespace usart
 		*_getInputValue<N>() = '\0';
 		#endif
 
-		*_getUCSRnA<N>() = 1 << U2X0;									 //double speed mode
-		uint16_t __baudPrescaller =  static_cast<uint16_t>((F_CPU / (8 * __baud)) - 1);//((Clock rate / (16 * baudrate))) - 1
-															//for U2X0 mode:
-															//((Clock rate / (8 * baudrate))) - 1
-			if (((F_CPU == 16000000UL) && (__baud == 57600)) || (__baudPrescaller > 4095))	//disable double speed mode
-			{																				//if prescaller is too high
-				*_getUCSRnA<N>() = 0;
-				__baudPrescaller = static_cast<uint16_t>(F_CPU / (16 * __baud));
-			}
+		*_getUCSRnA<N>() = 1 << U2X0;									 				//double speed mode
+		uint16_t __baudPrescaller =  static_cast<uint16_t>((F_CPU / (8 * __baud)) - 1);	//((Clock rate / (16 * baudrate))) - 1
+																						//for U2X0 mode:
+																						//((Clock rate / (8 * baudrate))) - 1
+		if (((F_CPU == 16000000UL) && (__baud == 57600)) || (__baudPrescaller > 4095))	//disable double speed mode
+		{																				//if prescaller is too high
+			*_getUCSRnA<N>() = 0;
+			__baudPrescaller = static_cast<uint16_t>(F_CPU / (16 * __baud));
+		}
 
-		*_getUBRRnL<N>() = static_cast<uint8_t>(__baudPrescaller);//set low bits of baud prescaller
-		*_getUBRRnH<N>() = static_cast<uint8_t>(__baudPrescaller >> 8);//set high bits of baud prescaller
+		*_getUBRRnL<N>() = static_cast<uint8_t>(__baudPrescaller);						//set low bits of baud prescaller
+		*_getUBRRnH<N>() = static_cast<uint8_t>(__baudPrescaller >> 8);					//set high bits of baud prescaller
 
-		*_getUCSRnB<N>() |= (1 << RXEN0) | (1 << RXCIE0);//enable recieve and interrupt on recieve
+		*_getUCSRnB<N>() |= (1 << RXEN0) | (1 << RXCIE0);								//enable recieve and interrupt on recieve
 
-		*_getUCSRnB<N>() |= (1 << TXEN0) | (1 << TXCIE0);//enable trancieve and interrupt on trancieve
-												//TODO: changable bit size
-		*_getUCSRnB<N>() = (1 << UCSZ00) | (1 << UCSZ01); //set USART0 Character Size to 8 bit
+		*_getUCSRnB<N>() |= (1 << TXEN0) | (1 << TXCIE0);								//enable trancieve and interrupt on trancieve
+																						//TODO: changable bit size
+		*_getUCSRnC<N>() = (1 << UCSZ00) | (1 << UCSZ01); 								//set USARTN Character Size to 8 bit
 		/*
 		* Character Size table:
 		* 000 5-bit

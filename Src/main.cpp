@@ -227,30 +227,40 @@ void recvUsart()
 
 int main()
 {
+	gpio::setMode(&PORTB, PB7, gpio::OUTPUT);
 	usart::begin<0>(115200);
-	usart::begin<1>(115200);
+	// usart::begin<1>(115200);
 	
 	usart::println<0>("TEST MESSAGE");
-	usart::println<1>("TEST MESSAGE1");
-	for(uint16_t i = 0; i < SCH_MAX_LEN; i++)
-	{
-		scheduleQueue[i] = 0;
-	}
-	interrupt::set(interrupt::USART0_RX, recvUsart);
+	// usart::send<0>('A');
+	gpio::setStates(&PORTB, { {PB7, LOW} });
+	delay(1000);
+	gpio::setStates(&PORTB, { {PB7, HIGH} });
+	delay(1000);
+	// usart::println<1>("TEST MESSAGE1");
+	// for(uint16_t i = 0; i < SCH_MAX_LEN; i++)
+	// {
+	// 	scheduleQueue[i] = 0;
+	// }
+	// interrupt::set(interrupt::USART0_RX, recvUsart);
 
-	gpio::setMode(&PORTB, PB5, gpio::OUTPUT);
 
 	sei();
 
+	while (!usart::available<0>())
+		asm("NOP");
+	
+	
+
 	while(1)
 	{
-		// PORTB = (PORTB & ~(1 << PB5)) | (1 << PB5);
-		gpio::setStates<1>(&PORTB, { {PB5, HIGH} });
-		// gpio::setState(&PORTB, PB5, HIGH);
+		// PORTB = (PORTB & ~(1 << PB7)) | (1 << PB7);
+		gpio::setStates(&PORTB, { {PB7, HIGH} });
+		// gpio::setState(&PORTB, PB7, HIGH);
 		delay(500);
-		// PORTB = PORTB & ~(1 << PB5);
-		// gpio::setState(&PORTB, PB5, LOW);
-		gpio::setStates<1>(&PORTB, { {PB5, LOW} });
+		// PORTB = PORTB & ~(1 << PB7);
+		// gpio::setState(&PORTB, PB7, LOW);
+		gpio::setStates(&PORTB, { {PB7, LOW} });
 		delay(500);
 	}
 

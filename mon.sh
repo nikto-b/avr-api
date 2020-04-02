@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#MCUNAME=atmega2560
-MCUNAME=atmega328p
+MCUNAME=atmega2560
+# MCUNAME=atmega328p
 #PROGRAMMER=wiring
 PROGRAMMER=arduino
 FILENAME=main

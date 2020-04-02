@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#MCUNAME=atmega2560
-MCUNAME=atmega328p
-#PROGRAMMER=wiring
-PROGRAMMER=arduino
+MCUNAME=atmega2560
+# MCUNAME=atmega328p
+PROGRAMMER=wiring
+# PROGRAMMER=arduino
 FILENAME=Build/main
 #USBPORT=/dev/ttyACM0
 USBPORT=$(ls /dev/tty*)
