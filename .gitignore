@@ -10,3 +10,5 @@
 *git*
 *sublime*
 .vscode
+*.a
+Build/
