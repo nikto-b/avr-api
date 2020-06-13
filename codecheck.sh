@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ -z "$1" ]]; then
-    CERT=$(cppcheck cppcheck --addon=cert -q ./Src/*.cpp ./Include/*.hpp 2>&1)
+    CERT=$(cppcheck cppcheck --force --addon=cert -q ./Src/*.cpp ./Include/*.hpp 2>&1)
     INFO="Checked all"
 else
     CERT=$(cppcheck cppcheck --addon=cert -q $1 2>&1)
