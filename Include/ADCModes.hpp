@@ -8,7 +8,9 @@ const uint8_t ADC_REF_INT_2_56V             = ((1 << REFS0) | (1 << REFS1));//In
 //				ADC CONTROL
 const uint8_t ADC_CONTROL_ENABLE            = (1 << ADEN);
 const uint8_t ADC_CONTROL_START_CONVERTION  = (1 << ADSC);
+#ifdef ADATE
 const uint8_t ADC_CONTROL_AUTOTRIGGER       = (1 << ADATE);
+#endif
 const uint8_t ADC_CONTROL_INTERRUPT_FLAG_EN = (1 << ADIF);
 const uint8_t ADC_CONTROL_INTERRUPT_EN      = (1 << ADIE);
 
@@ -24,8 +26,8 @@ const uint8_t ADC_PRESCALLER_64             = ((1 << ADPS2) | (1 << ADPS1));
 const uint8_t ADC_PRESCALLER_128            = ((1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0));
 
 //				ADC AUTOTRIGGER SOURCES
+#ifdef ADTS2
 const uint8_t ADC_ADTS_MASK                 = ((1 << ADTS2) | (1 << ADTS1) | (1 << ADTS0));
-const uint8_t ADC_ADTS_FREERUN              = 0;
 const uint8_t ADC_ADTS_ANALOG_COMPARATOR    = (1 << ADTS0);
 const uint8_t ADC_ADTS_EXT_INTERRUPT_REQ_0  = (1 << ADTS1);
 const uint8_t ADC_ADTS_TC0_COMPA            = ((1 << ADTS0) | (1 << ADTS1));
@@ -33,6 +35,8 @@ const uint8_t ADC_ADTS_TC0_OVF              = (1 << ADTS2);
 const uint8_t ADC_ADTS_TC1_COMPB            = ((1 << ADTS2) | (1 << ADTS0));
 const uint8_t ADC_ADTS_TC1_OVF              = ((1 << ADTS2) | (1 << ADTS1));
 const uint8_t ADC_ADTS_TC1_CAPT_EV          = ((1 << ADTS2) | (1 << ADTS1) | (1 << ADTS0));
+#endif
+const uint8_t ADC_ADTS_FREERUN              = 0;
 
 //				ADC MODES
 const uint8_t ADC_MODE_BACKGROUND           = 0;

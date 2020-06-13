@@ -5,263 +5,240 @@ using gpio::HIGH;
 using gpio::LOW;
 
 
-#define SCH_MAX_LEN			2047
+// #define SCH_MAX_LEN			2047
 
 
-void (*scheduleQueue[SCH_MAX_LEN])();
+// void (*scheduleQueue[SCH_MAX_LEN])();
 
-volatile uint16_t scheduleCounter = 0;
-volatile uint16_t scheduleQueueLen = 0;
-
-
-
-/*
- *	Function:	scheduleGetFuncIndex
- *	Desc:		Get index of function in sch queue
- *	Input:		void* func: ptr to func
- *	Output:		index of func
- */
-uint16_t scheduleGetFuncIndex(void(*func)())
-{
-	for(uint16_t i = 0; i < scheduleQueueLen; i++)
-	{
-		if(scheduleQueue[i] == func)
-		{
-			return i;
-		}
-	}
-	return 0x00;
-}
+// volatile uint16_t scheduleCounter = 0;
+// volatile uint16_t scheduleQueueLen = 0;
 
 
-/*
- *	Function:	scheduleAddFunc
- *	Desc:		Add func to repeat by schedule (adding instead of idle)
- *	Input:		void* func: ptr to func
- *	Output:		index of added func
- */
-void scheduleAddFunc(void(* func)())
-{
-	for(uint16_t i = 0; i < scheduleQueueLen; i++)
-	{
-		if(scheduleQueue[i] == 0)
-		{
-			ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-			{
-				scheduleQueue[i] = func;
-				// return i;
-			}
-			return;
-		}
-	}
-	// ATOMIC_FORCED
-	// (
-		usart::println<0>("ADD");
-		scheduleQueue[scheduleQueueLen++] = func;
-		// return scheduleQueueLen - 1;
-	// )
-}
 
-
-/*
- *	Function:	scheduleAddFunc
- *	Desc:		Add func to repeat by schedule (adding instead of idle)
- *	Input:		void* func: ptr to func
- *				uint8_t del: min index of added task
- *	Output:		index of added func
- */
-void scheduleAddFunc(void(* func)(), uint16_t del)
-{
-	for(uint16_t i = del; i < scheduleQueueLen; i++)
-	{
-		if(scheduleQueue[i] == 0)
-		{
-			ATOMIC_BLOCK(ATOMIC_FORCEON)
-			{
-				scheduleQueue[i] = func;
-				// return i;
-			}
-			return;
-		}
-	}
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		while(scheduleQueueLen < del)
-		{
-			scheduleQueueLen++;
-		}
-		scheduleQueue[scheduleQueueLen++] = func;
-		// return scheduleQueueLen - 1;
-	}
-}
-
-
-/*
- *	Function:	scheduleAddFunc
- *	Desc:		Add func to repeat by schedule (adding instead of idle)
- *	Input:		void* func: ptr to func
- *				uint8_t stfunc: index of func from starting counting del
- *				uint8_t del: min index of added task
- *	Output:		index of added func
- */
-void scheduleAddFunc(void(* func)(), uint16_t stfunc, uint16_t del)
-{
-	del += stfunc;
-	 scheduleAddFunc(func, del);
-}
-
-
-/*
- *	Function:	scheduleAddFunc
- *	Desc:		Add func to repeat by schedule (adding instead of idle)
- *	Input:		void* func: ptr to func
- *				void* stfunc: func from starting counting del
- *				uint8_t del: min index of added task
- *	Output:		index of added func
- */
-void scheduleAddFunc(void(* func)(), void(* stfunc)(), uint16_t del)
-{
-	del = scheduleGetFuncIndex(stfunc);
-	 scheduleAddFunc(func, del);
-}
-
-
-/*
- *	Function:	scheduleRemoveFunc
- *	Desc:		Remove func fom schedule task queue
- *	Input:		uint8_t func: index of ptr to func
- *	Output:		none
- */
-void scheduleRemoveFunc(uint16_t func)
-{
-	ATOMIC_BLOCK(ATOMIC_FORCEON)
-	{
-		scheduleQueue[func] = 0;
-	}
-}
-
-/*
- *	Function:	scheduleRemoveFunc
- *	Desc:		Remove func fom schedule task queue
- *	Input:		void* func: ptr to func
- *	Output:		none
- */
-void scheduleRemoveFunc(void(* func)())
-{
-	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
-	{
-		for(uint8_t i = 0; i < scheduleQueueLen; i++)
-		{
-			if(scheduleQueue[i] == func)
-			{
-				scheduleRemoveFunc(i);
-				//break;
-			}
-		}
-	}
-}
-
-
-char usartInBuf[512];
-volatile uint16_t usartInBufCounter = 0;
-
-
-// void parseInputCmds(void)
+// /*
+//  *	Function:	scheduleGetFuncIndex
+//  *	Desc:		Get index of function in sch queue
+//  *	Input:		void* func: ptr to func
+//  *	Output:		index of func
+//  */
+// uint16_t scheduleGetFuncIndex(void(*func)())
 // {
-// 	if (contains(usartInBuf, usartInBufCounter, '(') && contains(usartInBuf, usartInBufCounter, ')'))
+// 	for(uint16_t i = 0; i < scheduleQueueLen; i++)
 // 	{
-// 		char* _arr = strSplit(usartInBuf, usartInBufCounter + 1, '(', ')');
-// 		usartInBufCounter = 0;
-// 		//sei();
-//
-// 		if(_arr != 0)
+// 		if(scheduleQueue[i] == func)
 // 		{
-// 			USART0Println(_arr);
-// 			// runControlCmd(_arr);
-// 			free(_arr);
+// 			return i;
 // 		}
 // 	}
-// 	else if (contains(usartInBuf, usartInBufCounter, '{'))
+// 	return 0x00;
+// }
+
+
+// /*
+//  *	Function:	scheduleAddFunc
+//  *	Desc:		Add func to repeat by schedule (adding instead of idle)
+//  *	Input:		void* func: ptr to func
+//  *	Output:		index of added func
+//  */
+// void scheduleAddFunc(void(* func)())
+// {
+// 	for(uint16_t i = 0; i < scheduleQueueLen; i++)
 // 	{
-// 		//setVar(_arr);
+// 		if(scheduleQueue[i] == 0)
+// 		{
+// 			ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+// 			{
+// 				scheduleQueue[i] = func;
+// 				// return i;
+// 			}
+// 			return;
+// 		}
 // 	}
-// 	else if (contains(usartInBuf, usartInBufCounter, '['))
+// 	// ATOMIC_FORCED
+// 	// (
+// 		usart::println<0>("ADD");
+// 		scheduleQueue[scheduleQueueLen++] = func;
+// 		// return scheduleQueueLen - 1;
+// 	// )
+// }
+
+
+// /*
+//  *	Function:	scheduleAddFunc
+//  *	Desc:		Add func to repeat by schedule (adding instead of idle)
+//  *	Input:		void* func: ptr to func
+//  *				uint8_t del: min index of added task
+//  *	Output:		index of added func
+//  */
+// void scheduleAddFunc(void(* func)(), uint16_t del)
+// {
+// 	for(uint16_t i = del; i < scheduleQueueLen; i++)
 // 	{
-// 		//setArr(_arr);
+// 		if(scheduleQueue[i] == 0)
+// 		{
+// 			ATOMIC_BLOCK(ATOMIC_FORCEON)
+// 			{
+// 				scheduleQueue[i] = func;
+// 				// return i;
+// 			}
+// 			return;
+// 		}
+// 	}
+// 	ATOMIC_BLOCK(ATOMIC_FORCEON)
+// 	{
+// 		while(scheduleQueueLen < del)
+// 		{
+// 			scheduleQueueLen++;
+// 		}
+// 		scheduleQueue[scheduleQueueLen++] = func;
+// 		// return scheduleQueueLen - 1;
 // 	}
 // }
 
 
-/*
- *	Function:	schedule
- *	Desc:		If have new bytes to read return 1(t), else 0(f)
- *	Input:		none
- *	Output:		none
- */
-void schedule(void)
-{
-	// sei();
-	PORTB |= 1 << 5;//enable in-fg
-	// if(scheduleQueue[scheduleCounter] != 0)
-	// {
-		// USART0Println((long)scheduleQueue[scheduleCounter]);
-		// USART0Println((long)&scheduleQueue[scheduleCounter]);
-		// scheduleQueue[scheduleCounter]();
-	// }
-	scheduleCounter++;
+// /*
+//  *	Function:	scheduleAddFunc
+//  *	Desc:		Add func to repeat by schedule (adding instead of idle)
+//  *	Input:		void* func: ptr to func
+//  *				uint8_t stfunc: index of func from starting counting del
+//  *				uint8_t del: min index of added task
+//  *	Output:		index of added func
+//  */
+// void scheduleAddFunc(void(* func)(), uint16_t stfunc, uint16_t del)
+// {
+// 	del += stfunc;
+// 	 scheduleAddFunc(func, del);
+// }
 
-	if(scheduleCounter >= scheduleQueueLen)
-		scheduleCounter = 0;
-	PORTB = static_cast<uint8_t>(PORTB & ~(1 << 5));//disable in-fg
-}
 
-void recvUsart()
-{
-	//digitalWrite(15, 0);
-	//char c = USART0Read();
-	usartInBuf[usartInBufCounter++] = usart::read<0>();
-	//usartInBuf[usartInBufCounter++] = c;
-	//USART0Println("A");
-}
+// /*
+//  *	Function:	scheduleAddFunc
+//  *	Desc:		Add func to repeat by schedule (adding instead of idle)
+//  *	Input:		void* func: ptr to func
+//  *				void* stfunc: func from starting counting del
+//  *				uint8_t del: min index of added task
+//  *	Output:		index of added func
+//  */
+// void scheduleAddFunc(void(* func)(), void(* stfunc)(), uint16_t del)
+// {
+// 	del = scheduleGetFuncIndex(stfunc);
+// 	 scheduleAddFunc(func, del);
+// }
+
+
+// /*
+//  *	Function:	scheduleRemoveFunc
+//  *	Desc:		Remove func fom schedule task queue
+//  *	Input:		uint8_t func: index of ptr to func
+//  *	Output:		none
+//  */
+// void scheduleRemoveFunc(uint16_t func)
+// {
+// 	ATOMIC_BLOCK(ATOMIC_FORCEON)
+// 	{
+// 		scheduleQueue[func] = 0;
+// 	}
+// }
+
+// /*
+//  *	Function:	scheduleRemoveFunc
+//  *	Desc:		Remove func fom schedule task queue
+//  *	Input:		void* func: ptr to func
+//  *	Output:		none
+//  */
+// void scheduleRemoveFunc(void(* func)())
+// {
+// 	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
+// 	{
+// 		for(uint8_t i = 0; i < scheduleQueueLen; i++)
+// 		{
+// 			if(scheduleQueue[i] == func)
+// 			{
+// 				scheduleRemoveFunc(i);
+// 				//break;
+// 			}
+// 		}
+// 	}
+// }
+
+
+// char usartInBuf[512];
+// volatile uint16_t usartInBufCounter = 0;
+
+
+// // void parseInputCmds(void)
+// // {
+// // 	if (contains(usartInBuf, usartInBufCounter, '(') && contains(usartInBuf, usartInBufCounter, ')'))
+// // 	{
+// // 		char* _arr = strSplit(usartInBuf, usartInBufCounter + 1, '(', ')');
+// // 		usartInBufCounter = 0;
+// // 		//sei();
+// //
+// // 		if(_arr != 0)
+// // 		{
+// // 			USART0Println(_arr);
+// // 			// runControlCmd(_arr);
+// // 			free(_arr);
+// // 		}
+// // 	}
+// // 	else if (contains(usartInBuf, usartInBufCounter, '{'))
+// // 	{
+// // 		//setVar(_arr);
+// // 	}
+// // 	else if (contains(usartInBuf, usartInBufCounter, '['))
+// // 	{
+// // 		//setArr(_arr);
+// // 	}
+// // }
+
+
+// /*
+//  *	Function:	schedule
+//  *	Desc:		If have new bytes to read return 1(t), else 0(f)
+//  *	Input:		none
+//  *	Output:		none
+//  */
+// void schedule(void)
+// {
+// 	// sei();
+// 	PORTB |= 1 << 5;//enable in-fg
+// 	// if(scheduleQueue[scheduleCounter] != 0)
+// 	// {
+// 		// USART0Println((long)scheduleQueue[scheduleCounter]);
+// 		// USART0Println((long)&scheduleQueue[scheduleCounter]);
+// 		// scheduleQueue[scheduleCounter]();
+// 	// }
+// 	scheduleCounter++;
+
+// 	if(scheduleCounter >= scheduleQueueLen)
+// 		scheduleCounter = 0;
+// 	PORTB = static_cast<uint8_t>(PORTB & ~(1 << 5));//disable in-fg
+// }
+
+// void recvUsart()
+// {
+// 	//digitalWrite(15, 0);
+// 	//char c = USART0Read();
+// 	usartInBuf[usartInBufCounter++] = usart::read<0>();
+// 	//usartInBuf[usartInBufCounter++] = c;
+// 	//USART0Println("A");
+// }
 
 
 int main()
 {
-	gpio::setMode(&PORTB, PB7, gpio::OUTPUT);
-	usart::begin<0>(115200);
-	// usart::begin<1>(115200);
-	
-	usart::println<0>("TEST MESSAGE");
-	// usart::send<0>('A');
-	gpio::setStates(&PORTB, { {PB7, LOW} });
-	delay(1000);
-	gpio::setStates(&PORTB, { {PB7, HIGH} });
-	delay(1000);
-	// usart::println<1>("TEST MESSAGE1");
-	// for(uint16_t i = 0; i < SCH_MAX_LEN; i++)
-	// {
-	// 	scheduleQueue[i] = 0;
-	// }
-	// interrupt::set(interrupt::USART0_RX, recvUsart);
-
-
+	gpio::setMode(&PORTA, PA7, gpio::OUTPUT);
 	sei();
 
-	while (!usart::available<0>())
-		asm("NOP");
+	// while (!usart::available<0>())
+	// 	asm("NOP");
 	
 	
 
 	while(1)
 	{
-		// PORTB = (PORTB & ~(1 << PB7)) | (1 << PB7);
-		gpio::setStates(&PORTB, { {PB7, HIGH} });
-		// gpio::setState(&PORTB, PB7, HIGH);
-		delay(500);
-		// PORTB = PORTB & ~(1 << PB7);
-		// gpio::setState(&PORTB, PB7, LOW);
-		gpio::setStates(&PORTB, { {PB7, LOW} });
-		delay(500);
+		PORTA = 0;
+		PORTA = 1 << PA7;
 	}
 
 

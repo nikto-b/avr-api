@@ -73,10 +73,12 @@ namespace adc
 	* Input    __src: source
 	* Output   none
 	*/
+	#ifdef ADCSRB
 	void ADCSetAutotriggerSRC(uint8_t __src)
 	{
 		ADCSRB = static_cast<uint8_t>((ADCSRB & ~ADC_ADTS_MASK) | __src);
 	}
+	#endif
 
 	#ifdef DIDR0
 		/*
@@ -156,8 +158,12 @@ namespace adc
 	*/
 	void ADCFlush(void)
 	{
+		#ifdef ADCSRB
 		ADCSRA = 0;
 		ADCSRB = 0;
+		#else
+		ADCSR = 0;
+		#endif
 		#ifdef DIDR2
 		DIDR2  = 0;
 		#endif //ifdef DIDR2
@@ -181,7 +187,9 @@ namespace adc
 		ADCSetRef(ADC_REF_AVCC);
 		ADMUX = ADMUX | _currPin;	//because -Wconversion breaks this thing
 		ADCSetPrescaller(ADC_PRESCALLER_32);
+		#ifdef ADC_CONTROL_AUTOTRIGGER
 		ADCSendControl(ADC_CONTROL_AUTOTRIGGER);
+		#endif
 		ADCSendControl(ADC_CONTROL_INTERRUPT_EN);
 		ADCEnable();
 		ADCStartConvert();
@@ -216,7 +224,7 @@ ISR(ADC_vect)
 	if(adc::_currPin >= adc::NUM_OF_ANALOG_PINS)
 	{
 		adc::_currPin = 0;
-	}
+	}														//NOTE: why?
 	ADMUX = static_cast<uint8_t>(adc::_analogRef | (adc::_currPin & adc::NUM_OF_ANALOG_PINS));
 	interrupt::call(interrupt::ADC);
 }
