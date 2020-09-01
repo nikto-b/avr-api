@@ -438,6 +438,8 @@ namespace usart
 	template <const size_t N>
 	void print(const char* __data)	//send C-string to USARTN
 	{
+        if(__data == 0x00)
+            return;
 		while(*__data != 0x00)
 		{
 			send<N>(static_cast<uint8_t>(*(__data)));

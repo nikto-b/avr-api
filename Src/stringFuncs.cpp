@@ -247,6 +247,9 @@ char* long2str(long __in)//convert long var to char array
 		a = true;
 	}
 	char* __ret = static_cast<char*>(malloc(static_cast<size_t>(__len + 1)));//!WARNING! memory leak!
+    if(__ret == 0x00) {
+        return 0;
+    }
 	__ret[__len] = 0x00;
 	while(__len)
 	{
