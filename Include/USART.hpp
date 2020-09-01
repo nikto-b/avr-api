@@ -138,16 +138,15 @@ namespace usart
 	template<const size_t N>
 	constexpr bool isUsartNumberValid()
 	{
-		size_t maxNum = 0;
-		#ifdef UCSR1A
-			maxNum = 1;
-		#endif //ifdef UCSR1A
-		#ifdef UCSR2A
-			maxNum = 2;
-		#endif //ifdef UCSR2A
-		#ifdef UCSR3A
-			maxNum = 3;
-		#endif //ifdef UCSR3A
+        #ifdef UCSR3A
+            const size_t maxNum = 3;
+        #elif defined(UCSR2A)
+            const size_t maxNum = 2;
+        #elif defined(UCSR1A)
+            const size_t maxNum = 1;
+        #else
+            const size_t maxNum = 0;
+        #endif
 		return N <= maxNum;
 	}
 

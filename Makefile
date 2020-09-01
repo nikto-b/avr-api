@@ -11,7 +11,7 @@ Build/main: lib
 	@avr-g++ $(CFLAGS) "Src/$(MAINFILENAME).cpp" -o "Build/$(MAINFILENAME).o"
 	@echo 'CC main'
 
-Build/core.a:
+Build/core.a: _lib
 	@avr-gcc-ar rcs Build/core.a Build/DigitalRegisters.o
 	@avr-gcc-ar rcs Build/core.a Build/CustomFuncs.o
 	@avr-gcc-ar rcs Build/core.a Build/StringFuncs.o
