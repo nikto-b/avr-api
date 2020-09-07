@@ -21,8 +21,8 @@ namespace gpio
         //get pin register of port whitch PORTn register given
     inline const volatile uint8_t* 	_PinReg(const volatile uint8_t* port) 	{ return port - 2; }
     inline volatile uint8_t* 		_PinReg(volatile uint8_t* port) 		{ return port - 2; }
+	
 
-		
 	/*
 	 * Function setState
 	 * Desc     set pin to some state (LOW/HIGH) if it's output
@@ -31,12 +31,13 @@ namespace gpio
 	 * 			state:	state of pin	(example: LOW)
 	 * Output	none
 	*/
-	inline void setState(volatile uint8_t *port, const uint8_t pin, const State state)
-	{
-		if(state != TOGGLE)
-			*port = static_cast<uint8_t>(((*port) & ~(1 << pin)) | (state << pin));
-		else
+	template<State state>
+	inline void setState(volatile uint8_t *port, const uint8_t pin)
+	{	
+		if constexpr (state == TOGGLE) 
 			*port = static_cast<uint8_t>((*port) ^ (1 << pin));
+		else
+			*port = static_cast<uint8_t>(((*port) & ~(1 << pin)) | (state << pin));
 	}
 
 		
@@ -61,7 +62,7 @@ namespace gpio
             }
             case INPUT_PULLUP:
             {
-                setState(port, pin, HIGH);
+                setState<HIGH>(port, pin);
                 [[fallthrough]];
             }
             case INPUT:
@@ -75,6 +76,7 @@ namespace gpio
 	/*
 	 * Function setState
 	 * Desc     set pin to some state (LOW/HIGH) if it's output
+	 * 			Prefer to use templated variant because it can be faster inlined
 	 * Input    port: 	port of pin 	(example: PORTD)
 	 * 			status:	status of pin	(example: {PD2, HIGH})
 	 * Output	none
