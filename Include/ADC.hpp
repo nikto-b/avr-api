@@ -8,21 +8,21 @@ namespace adc
 	const uint16_t ADC_CHANGED_MASK    = 1024;
 		
 
-	void ADCSetAnalogChanged(uint8_t __pin, uint8_t __state);
-	bool ADCGetAnalogChanged(uint8_t __pin);
-	void ADCSendControl(uint8_t __contr);
-	void ADCSetRef(uint8_t __ref);
-	void ADCSetPrescaller(uint8_t __prescaller);
-	void ADCSetAutotriggerSRC(uint8_t __src);
-	void ADCDisableDigitalInput0to7(uint8_t __mask);
+	void setAnalogChanged(uint8_t __pin, uint8_t __state);
+	bool getAnalogChanged(uint8_t __pin);
+	void sendControl(uint8_t __contr);
+	void setRef(uint8_t __ref);
+	void setPrescaller(uint8_t __prescaller);
+	void setAutotriggerSRC(uint8_t __src);
+	void disableDigitalInput0to7(uint8_t __mask);
 	#ifdef DIDR2
 	void ADCDisableDigitalInput8to15(uint8_t __mask);
 	#endif
-	void ADCEnable(void);
-	void ADCDisable(void);
-	void ADCStartConvert(void);
-	void ADCStopConvert(void);
-	void ADCFlush(void);
-	void ADCInit(void);
+	void enable(void);
+	void disable(void);
+	void startConvert(void);
+	void stopConvert(void);
+	void flush(void);
+	void init(void);
 	int analogRead(uint8_t _pin);
 } // namespace adc

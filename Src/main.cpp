@@ -8,15 +8,14 @@ using gpio::TOGGLE;
 
 int main()
 {
-	gpio::setMode(&PORTB, PB7, gpio::OUTPUT);
+	usart::begin<0>(115200);
+	adc::setRef(adc::ref::AREF);
+	adc::init();
 	sei();
-	
-	gpio::setState(&PORTB, {PB7, HIGH});
-	
 
 	while(1)
 	{
-        gpio::setState<TOGGLE>(&PORTB, PB7);
+		usart::println<0>(adc::analogRead(0));
         delay(100);
 	}
 	return 0;
