@@ -58,7 +58,13 @@ int main()
   while(1) asm("NOP");
 }
 ```
-
+## ADC module
+```C++
+adc::init();
+adc::setRef(adc::ref::AREF);
+sei();
+adc::analogRead(0);
+```
 
 
 
