@@ -1,6 +1,7 @@
 # AVR-API [WIP]
 Basic API library for Atmel AVR that can replace Arduino library
-### Simple blink example:
+## GPIO module
+### Example of single pin blink
 
 ```C++
 gpio::setMode(&PORTB, PB7, gpio::OUTPUT);
@@ -11,7 +12,7 @@ while(1)
 }
 ```
 
-### Simple blink example for many pins:
+### Example of many pins blinking
 ```C++
 gpio::setMode(&PORTB, PB7, gpio::OUTPUT);
 gpio::setMode(&PORTB, PB5, gpio::OUTPUT);
@@ -26,10 +27,37 @@ while(1)
   delay(100);
 }
 ```
+## USART module
+### Example using USART0 on 115200 baud
+```C++
+usart::begin<0>(115200);
+sei();
+usart::println<0>();
+long i = 0;
+while(1)
+{
+    usart::print<0>("NICE");    
+    usart::println<0>(i);
+    i++;
+    delay(200);
+}
+```
+## Timers and interrupts module
+```C++
+void schedule(void)
+{
+  //foo
+}
 
-
-
-
+int main() 
+{
+  interrupt::set(interrupt::TC0_COMPA, schedule);
+  TIMER0Init(TIMER0_COMA_NPWM_NORMAL, TIMER0_WF_CTC, TIMER0_CLK_SRC_1024);
+  TIMER0EnableCOMPAInterrupt();
+  TIMER0SetA(255);
+  while(1) asm("NOP");
+}
+```
 
 
 
