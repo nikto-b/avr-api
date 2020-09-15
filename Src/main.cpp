@@ -9,8 +9,8 @@ using gpio::TOGGLE;
 int main()
 {
 	usart::begin<0>(115200);
-	adc::setRef(adc::ref::AREF);
 	adc::init();
+	adc::setRef(adc::ref::AREF);
 	sei();
 
 	while(1)

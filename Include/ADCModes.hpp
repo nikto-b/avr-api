@@ -56,8 +56,8 @@ namespace adc
 	//					ADC MODES
 	namespace mode 
 	{
-		const uint8_t MODE_BACKGROUND           = 0;
-		const uint8_t MODE_DEADLINE             = 1;
-		const uint8_t MODE_MANUAL               = 3;
+		const uint8_t BACKGROUND           = 0;
+		const uint8_t DEADLINE             = 1;
+		const uint8_t MANUAL               = 3;
 	} // namespace mode
 }
