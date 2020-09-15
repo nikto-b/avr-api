@@ -2,9 +2,14 @@
 
 #include "base.hpp"
 #include "TimerModes.hpp"
+#include "type_traits.hpp"
 
 namespace timer
 {
+	enum Var {
+		A, B, C
+	};
+
 	template <const int N>
 	constexpr bool isTimerNumberValid()
 	{
@@ -38,46 +43,158 @@ namespace timer
 	}
 
 	template <const int N>
-	constexpr uint8_t* getTCCRA()
+	constexpr volatile uint8_t* getTCCRA()
 	{
 		assert_timer_number<N>();
+		volatile uint8_t* ret = NULL;
 		switch (N)
 		{
 			#ifdef TCCR0A
 			case 0:
-				return &TCCR0A;
+				ret = &TCCR0A;
+				break;
 			#endif
 			#ifdef TCCR1A
 			case 1:
-				return &TCCR1A;
+				ret =  &TCCR1A;
+				break;
 			#endif
 			#ifdef TCCR2A
 			case 2:
-				return &TCCR2A;
+				ret =  &TCCR2A;
+				break;
 			#endif
 			#ifdef TCCR3A
 			case 3:
-				return &TCCR3A;
+				ret =  &TCCR3A;
+				break;
 			#endif
 			#ifdef TCCR4A
 			case 4:
-				return &TCCR4A;
+				ret =  &TCCR4A;
+				break;
 			#endif
 			#ifdef TCCR5A
 			case 5:
-				return &TCCR5A;
+				ret =  &TCCR5A;
+				break;
 			#endif
 			#ifdef TCCR6A
 			case 6:
-				return &TCCR6A;
+				ret =  &TCCR6A;
+				break;
 			#endif
 			#ifdef TCCR7A
 			case 7:
-				return &TCCR7A;
+				ret =  &TCCR7A;
+				break;
 			#endif
 			#ifdef TCCR8A
 			case 8:
-				return &TCCR8A;
+				ret =  &TCCR8A;
+				break;
+			#endif
+		}
+		return ret;
+	}
+
+	template <const int N>
+	constexpr volatile uint8_t* getTCCRB()
+	{
+		assert_timer_number<N>();
+		volatile uint8_t* ret = NULL;
+		switch (N)
+		{
+			#ifdef TCCR0B
+			case 0:
+				ret = &TCCR0B;
+				break;
+			#endif
+			#ifdef TCCR1B
+			case 1:
+				ret = &TCCR1B;
+				break;
+			#endif
+			#ifdef TCCR2B
+			case 2:
+				ret = &TCCR2B;
+				break;
+			#endif
+			#ifdef TCCR3B
+			case 3:
+				ret = &TCCR3B;
+				break;
+			#endif
+			#ifdef TCCR4B
+			case 4:
+				ret = &TCCR4B;
+				break;
+			#endif
+			#ifdef TCCR5B
+			case 5:
+				ret = &TCCR5B;
+				break;
+			#endif
+			#ifdef TCCR6B
+			case 6:
+				ret = &TCCR6B;
+				break;
+			#endif
+			#ifdef TCCR7B
+			case 7:
+				ret = &TCCR7B;
+				break;
+			#endif
+			#ifdef TCCR8B
+			case 8:
+				ret = &TCCR8B;
+				break;
+			#endif
+		}
+		return ret;
+	}
+
+	template <const int N>
+	constexpr volatile uint8_t* getOCRA8b()
+	{
+		assert_timer_number<N>();
+		switch (N)
+		{
+			#if defined(OCR0A) && !defined(OCR0AL)
+			case 0:
+				return &OCR0A;
+			#endif
+			#if defined(OCR1A) && !defined(OCR1AL)
+			case 1:
+				return &OCR1A;
+			#endif
+			#if defined(OCR2A) && !defined(OCR2AL)
+			case 2:
+				return &OCR2A;
+			#endif
+			#if defined(OCR3A) && !defined(OCR3AL)
+			case 3:
+				return &OCR3A;
+			#endif
+			#if defined(OCR4A) && !defined(OCR4AL)
+			case 4:
+				return &OCR4A;
+			#endif
+			#if defined(OCR5A) && !defined(OCR5AL)
+			case 5:
+				return &OCR5A;
+			#endif
+			#if defined(OCR6A) && !defined(OCR6AL)
+			case 6:
+				return &OCR6A;
+			#endif
+			#if defined(OCR7A) && !defined(OCR7AL)
+			case 7:
+				return &OCR7A;
+			#endif
+			#if defined(OCR8A) && !defined(OCR8AL)
+			case 8:
+				return &OCR8A;
 			#endif
 			default:
 				return NULL;
@@ -85,51 +202,581 @@ namespace timer
 	}
 
 	template <const int N>
-	constexpr uint8_t* getTCCRB()
+	constexpr volatile uint8_t* getOCRB8b()
 	{
 		assert_timer_number<N>();
 		switch (N)
 		{
-			#ifdef TCCR0B
+			#if defined(OCR0B) && !defined(OCR0BL)
 			case 0:
-				return &TCCR0B;
+				return &OCR0B;
 			#endif
-			#ifdef TCCR1B
+			#if defined(OCR1B) && !defined(OCR1BL)
 			case 1:
-				return &TCCR1B;
+				return &OCR1B;
 			#endif
-			#ifdef TCCR2B
+			#if defined(OCR2B) && !defined(OCR2BL)
 			case 2:
-				return &TCCR2B;
+				return &OCR2B;
 			#endif
-			#ifdef TCCR3B
+			#if defined(OCR3B) && !defined(OCR3BL)
 			case 3:
-				return &TCCR3B;
+				return &OCR3B;
 			#endif
-			#ifdef TCCR4B
+			#if defined(OCR4B) && !defined(OCR4BL)
 			case 4:
-				return &TCCR4B;
+				return &OCR4B;
 			#endif
-			#ifdef TCCR5B
+			#if defined(OCR5B) && !defined(OCR5BL)
 			case 5:
-				return &TCCR5B;
+				return &OCR5B;
 			#endif
-			#ifdef TCCR6B
+			#if defined(OCR6B) && !defined(OCR6BL)
 			case 6:
-				return &TCCR6B;
+				return &OCR6B;
 			#endif
-			#ifdef TCCR7B
+			#if defined(OCR7B) && !defined(OCR7BL)
 			case 7:
-				return &TCCR7B;
+				return &OCR7B;
 			#endif
-			#ifdef TCCR8B
+			#if defined(OCR8B) && !defined(OCR8BL)
 			case 8:
-				return &TCCR8B;
+				return &OCR8B;
 			#endif
 			default:
 				return NULL;
 		}
 	}
+
+	template <const int N>
+	constexpr volatile uint8_t* getOCRC8b()
+	{
+		assert_timer_number<N>();
+		switch (N)
+		{
+			#if defined(OCR0C) && !defined(OCR0CL)
+			case 0:
+				return &OCR0C;
+			#endif
+			#if defined(OCR1C) && !defined(OCR1CL)
+			case 1:
+				return &OCR1C;
+			#endif
+			#if defined(OCR2C) && !defined(OCR2CL)
+			case 2:
+				return &OCR2C;
+			#endif
+			#if defined(OCR3C) && !defined(OCR3CL)
+			case 3:
+				return &OCR3C;
+			#endif
+			#if defined(OCR4C) && !defined(OCR4CL)
+			case 4:
+				return &OCR4C;
+			#endif
+			#if defined(OCR5C) && !defined(OCR5CL)
+			case 5:
+				return &OCR5C;
+			#endif
+			#if defined(OCR6C) && !defined(OCR6CL)
+			case 6:
+				return &OCR6C;
+			#endif
+			#if defined(OCR7C) && !defined(OCR7CL)
+			case 7:
+				return &OCR7C;
+			#endif
+			#if defined(OCR8C) && !defined(OCR8CL)
+			case 8:
+				return &OCR8C;
+			#endif
+			default:
+				return NULL;
+		}
+	}
+
+	template <const int N>
+	constexpr volatile uint16_t* getOCRA16b()
+	{
+		assert_timer_number<N>();
+		switch (N)
+		{
+			#if defined(OCR0A) && defined(OCR0AH)
+			case 0:
+				return &OCR0A;
+			#endif
+			#if defined(OCR1A) && defined(OCR1AH)
+			case 1:
+				return &OCR1A;
+			#endif
+			#if defined(OCR2A) && defined(OCR2AH)
+			case 2:
+				return &OCR2A;
+			#endif
+			#if defined(OCR3A) && defined(OCR3AH)
+			case 3:
+				return &OCR3A;
+			#endif
+			#if defined(OCR4A) && defined(OCR4AH)
+			case 4:
+				return &OCR4A;
+			#endif
+			#if defined(OCR5A) && defined(OCR5AH)
+			case 5:
+				return &OCR5A;
+			#endif
+			#if defined(OCR6A) && defined(OCR6AH)
+			case 6:
+				return &OCR6A;
+			#endif
+			#if defined(OCR7A) && defined(OCR7AH)
+			case 7:
+				return &OCR7A;
+			#endif
+			#if defined(OCR8A) && defined(OCR8AH)
+			case 8:
+				return &OCR8A;
+			#endif
+			default:
+				return NULL;
+		}
+	}
+
+	template <const int N>
+	constexpr volatile uint16_t* getOCRB16b()
+	{
+		assert_timer_number<N>();
+		switch (N)
+		{
+			#if defined(OCR0B) && defined(OCR0BH)
+			case 0:
+				return &OCR0B;
+			#endif
+			#if defined(OCR1B) && defined(OCR1BH)
+			case 1:
+				return &OCR1B;
+			#endif
+			#if defined(OCR2B) && defined(OCR2BH)
+			case 2:
+				return &OCR2B;
+			#endif
+			#if defined(OCR3B) && defined(OCR3BH)
+			case 3:
+				return &OCR3B;
+			#endif
+			#if defined(OCR4B) && defined(OCR4BH)
+			case 4:
+				return &OCR4B;
+			#endif
+			#if defined(OCR5B) && defined(OCR5BH)
+			case 5:
+				return &OCR5B;
+			#endif
+			#if defined(OCR6B) && defined(OCR6BH)
+			case 6:
+				return &OCR6B;
+			#endif
+			#if defined(OCR7B) && defined(OCR7BH)
+			case 7:
+				return &OCR7B;
+			#endif
+			#if defined(OCR8B) && defined(OCR8BH)
+			case 8:
+				return &OCR8B;
+			#endif
+			default:
+				return NULL;
+		}
+	}
+
+	template <const int N>
+	constexpr volatile uint16_t* getOCRC16b()
+	{
+		assert_timer_number<N>();
+		switch (N)
+		{
+			#if defined(OCR0C) && defined(OCR8CH)
+			case 0:
+				return &OCR0C;
+			#endif
+			#if defined(OCR1C) && defined(OCR8CH)
+			case 1:
+				return &OCR1C;
+			#endif
+			#if defined(OCR2C) && defined(OCR8CH)
+			case 2:
+				return &OCR2C;
+			#endif
+			#if defined(OCR3C) && defined(OCR8CH)
+			case 3:
+				return &OCR3C;
+			#endif
+			#if defined(OCR4C) && defined(OCR8CH)
+			case 4:
+				return &OCR4C;
+			#endif
+			#if defined(OCR5C) && defined(OCR8CH)
+			case 5:
+				return &OCR5C;
+			#endif
+			#if defined(OCR6C) && defined(OCR8CH)
+			case 6:
+				return &OCR6C;
+			#endif
+			#if defined(OCR7C) && defined(OCR8CH)
+			case 7:
+				return &OCR7C;
+			#endif
+			#if defined(OCR8C) && defined(OCR8CH)
+			case 8:
+				return &OCR8C;
+			#endif
+			default:
+				return NULL;
+		}
+	}
+
+	// template <const int N>
+	// constexpr volatile uint8_t* getOCRAL()
+	// {
+	// 	assert_timer_number<N>();
+	// 	switch (N)
+	// 	{
+	// 		#ifdef OCR0AL
+	// 		case 0:
+	// 			return &OCR0AL;
+	// 		#endif
+	// 		#ifdef OCR1AL
+	// 		case 1:
+	// 			return &OCR1AL;
+	// 		#endif
+	// 		#ifdef OCR2AL
+	// 		case 2:
+	// 			return &OCR2AL;
+	// 		#endif
+	// 		#ifdef OCR3AL
+	// 		case 3:
+	// 			return &OCR3AL;
+	// 		#endif
+	// 		#ifdef OCR4AL
+	// 		case 4:
+	// 			return &OCR4AL;
+	// 		#endif
+	// 		#ifdef OCR5AL
+	// 		case 5:
+	// 			return &OCR5AL;
+	// 		#endif
+	// 		#ifdef OCR6AL
+	// 		case 6:
+	// 			return &OCR6AL;
+	// 		#endif
+	// 		#ifdef OCR7AL
+	// 		case 7:
+	// 			return &OCR7AL;
+	// 		#endif
+	// 		#ifdef OCR8AL
+	// 		case 8:
+	// 			return &OCR8AL;
+	// 		#endif
+	// 		default:
+	// 			return NULL;
+	// 	}
+	// }
+
+	// template <const int N>
+	// constexpr volatile uint8_t* getOCRBL()
+	// {
+	// 	assert_timer_number<N>();
+	// 	switch (N)
+	// 	{
+	// 		#ifdef OCR0BL
+	// 		case 0:
+	// 			return &OCR0BL;
+	// 		#endif
+	// 		#ifdef OCR1BL
+	// 		case 1:
+	// 			return &OCR1BL;
+	// 		#endif
+	// 		#ifdef OCR2BL
+	// 		case 2:
+	// 			return &OCR2BL;
+	// 		#endif
+	// 		#ifdef OCR3BL
+	// 		case 3:
+	// 			return &OCR3BL;
+	// 		#endif
+	// 		#ifdef OCR4BL
+	// 		case 4:
+	// 			return &OCR4BL;
+	// 		#endif
+	// 		#ifdef OCR5BL
+	// 		case 5:
+	// 			return &OCR5BL;
+	// 		#endif
+	// 		#ifdef OCR6BL
+	// 		case 6:
+	// 			return &OCR6BL;
+	// 		#endif
+	// 		#ifdef OCR7BL
+	// 		case 7:
+	// 			return &OCR7BL;
+	// 		#endif
+	// 		#ifdef OCR8BL
+	// 		case 8:
+	// 			return &OCR8BL;
+	// 		#endif
+	// 		default:
+	// 			return NULL;
+	// 	}
+	// }
+
+	// template <const int N>
+	// constexpr volatile uint8_t* getOCRCL()
+	// {
+	// 	assert_timer_number<N>();
+	// 	switch (N)
+	// 	{
+	// 		#ifdef OCR0CL
+	// 		case 0:
+	// 			return &OCR0CL;
+	// 		#endif
+	// 		#ifdef OCR1CL
+	// 		case 1:
+	// 			return &OCR1CL;
+	// 		#endif
+	// 		#ifdef OCR2CL
+	// 		case 2:
+	// 			return &OCR2CL;
+	// 		#endif
+	// 		#ifdef OCR3CL
+	// 		case 3:
+	// 			return &OCR3CL;
+	// 		#endif
+	// 		#ifdef OCR4CL
+	// 		case 4:
+	// 			return &OCR4CL;
+	// 		#endif
+	// 		#ifdef OCR5CL
+	// 		case 5:
+	// 			return &OCR5CL;
+	// 		#endif
+	// 		#ifdef OCR6CL
+	// 		case 6:
+	// 			return &OCR6CL;
+	// 		#endif
+	// 		#ifdef OCR7CL
+	// 		case 7:
+	// 			return &OCR7CL;
+	// 		#endif
+	// 		#ifdef OCR8CL
+	// 		case 8:
+	// 			return &OCR8CL;
+	// 		#endif
+	// 		default:
+	// 			return NULL;
+	// 	}
+	// }
+
+	// template <const int N>
+	// constexpr volatile uint8_t* getOCRAH()
+	// {
+	// 	assert_timer_number<N>();
+	// 	switch (N)
+	// 	{
+	// 		#ifdef OCR0AH
+	// 		case 0:
+	// 			return &OCR0AH;
+	// 		#endif
+	// 		#ifdef OCR1AH
+	// 		case 1:
+	// 			return &OCR1AH;
+	// 		#endif
+	// 		#ifdef OCR2AH
+	// 		case 2:
+	// 			return &OCR2AH;
+	// 		#endif
+	// 		#ifdef OCR3AH
+	// 		case 3:
+	// 			return &OCR3AH;
+	// 		#endif
+	// 		#ifdef OCR4AH
+	// 		case 4:
+	// 			return &OCR4AH;
+	// 		#endif
+	// 		#ifdef OCR5AH
+	// 		case 5:
+	// 			return &OCR5AH;
+	// 		#endif
+	// 		#ifdef OCR6AH
+	// 		case 6:
+	// 			return &OCR6AH;
+	// 		#endif
+	// 		#ifdef OCR7AH
+	// 		case 7:
+	// 			return &OCR7AH;
+	// 		#endif
+	// 		#ifdef OCR8AH
+	// 		case 8:
+	// 			return &OCR8AH;
+	// 		#endif
+	// 		default:
+	// 			return NULL;
+	// 	}
+	// }
+
+	// template <const int N>
+	// constexpr volatile uint8_t* getOCRBH()
+	// {
+	// 	assert_timer_number<N>();
+	// 	switch (N)
+	// 	{
+	// 		#ifdef OCR0BH
+	// 		case 0:
+	// 			return &OCR0BH;
+	// 		#endif
+	// 		#ifdef OCR1BH
+	// 		case 1:
+	// 			return &OCR1BH;
+	// 		#endif
+	// 		#ifdef OCR2BH
+	// 		case 2:
+	// 			return &OCR2BH;
+	// 		#endif
+	// 		#ifdef OCR3BH
+	// 		case 3:
+	// 			return &OCR3BH;
+	// 		#endif
+	// 		#ifdef OCR4BH
+	// 		case 4:
+	// 			return &OCR4BH;
+	// 		#endif
+	// 		#ifdef OCR5BH
+	// 		case 5:
+	// 			return &OCR5BH;
+	// 		#endif
+	// 		#ifdef OCR6BH
+	// 		case 6:
+	// 			return &OCR6BH;
+	// 		#endif
+	// 		#ifdef OCR7BH
+	// 		case 7:
+	// 			return &OCR7BH;
+	// 		#endif
+	// 		#ifdef OCR8BH
+	// 		case 8:
+	// 			return &OCR8BH;
+	// 		#endif
+	// 		default:
+	// 			return NULL;
+	// 	}
+	// }
+
+	// template <const int N>
+	// constexpr volatile uint8_t* getOCRCH()
+	// {
+	// 	assert_timer_number<N>();
+	// 	switch (N)
+	// 	{
+	// 		#ifdef OCR0CH
+	// 		case 0:
+	// 			return &OCR0CH;
+	// 		#endif
+	// 		#ifdef OCR1CH
+	// 		case 1:
+	// 			return &OCR1CH;
+	// 		#endif
+	// 		#ifdef OCR2CH
+	// 		case 2:
+	// 			return &OCR2CH;
+	// 		#endif
+	// 		#ifdef OCR3CH
+	// 		case 3:
+	// 			return &OCR3CH;
+	// 		#endif
+	// 		#ifdef OCR4CH
+	// 		case 4:
+	// 			return &OCR4CH;
+	// 		#endif
+	// 		#ifdef OCR5CH
+	// 		case 5:
+	// 			return &OCR5CH;
+	// 		#endif
+	// 		#ifdef OCR6CH
+	// 		case 6:
+	// 			return &OCR6CH;
+	// 		#endif
+	// 		#ifdef OCR7CH
+	// 		case 7:
+	// 			return &OCR7CH;
+	// 		#endif
+	// 		#ifdef OCR8CH
+	// 		case 8:
+	// 			return &OCR8CH;
+	// 		#endif
+	// 		default:
+	// 			return NULL;
+	// 	}
+	// }
+
+	template <const int N, const Var V, class T>
+	constexpr T* getOCR()
+	{
+		if constexpr (std::is_same<T, volatile uint16_t>::value)
+		{
+			switch (V)
+			{
+			case A:
+				return getOCRA16b<N>();
+			case B:
+				return getOCRB16b<N>();
+			case C:
+				return getOCRC16b<N>();
+			}
+		}
+		else if constexpr (std::is_same<T, volatile uint8_t>::value){
+			switch (V)
+			{
+			case A:
+				return getOCRA8b<N>();
+			case B:
+				return getOCRB8b<N>();
+			case C:
+				return getOCRC8b<N>();
+			}
+		}
+		else {
+			static_assert(std::is_same<T, uint8_t>::value || std::is_same<T, uint16_t>::value, "Invalid type");
+			return NULL;
+		}
+	}
+
+	// template <const int N, const Var V>
+	// constexpr volatile uint8_t* getOCRL()
+	// {
+	// 	switch (V)
+	// 	{
+	// 	case A:
+	// 		return getOCRAL<N>();
+	// 	case B:
+	// 		return getOCRBL<N>();
+	// 	case C:
+	// 		return getOCRCL<N>();
+	// 	}
+	// }
+
+	// template <const int N, const Var V>
+	// constexpr volatile uint8_t* getOCRH()
+	// {
+	// 	switch (V)
+	// 	{
+	// 	case A:
+	// 		return getOCRAH<N>();
+	// 	case B:
+	// 		return getOCRBH<N>();
+	// 	case C:
+	// 		return getOCRCH<N>();
+	// 	}
+	// }
 
 	template <const int N, const int K>
 	constexpr uint8_t getWGM()
@@ -206,6 +853,22 @@ namespace timer
 		*getTCCRB<N>() &= static_cast<uint8_t>(~timer::clk::getMask<N>());
 		*getTCCRB<N>() |= static_cast<uint8_t>(clk & timer::clk::getMask<N>());
 	}
+
+	template<const int N, const Var V, class T>
+	void setVar(const T var)
+	{
+		*getOCR<N, V, T>() = var;
+	}
+
+	
+	// template<const int N, const Var V>
+	// void setVar(const uint16_t var)
+	// {
+	// 	*getOCR<N, V, uint16_t>() = var;
+	// }
+
+	
+
 } // namespace timer
 
 

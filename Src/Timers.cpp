@@ -3,38 +3,6 @@
 
 
 
-#define GENINIT(n)												\
-/*															*/	\
-/* Function TIMERnInit										*/	\
-/* Desc     init T/Cn 										*/	\
-/* Input    _com: what Compare Output Mode use to 			*/	\
-/*			_wfmode: what Waveform generation mode use to 	*/	\
-/*			_clk: what clock source use to 					*/	\
-/* Output   none	 										*/	\
-/**/															\
-void TIMER ## n ## Init(uint8_t _com ,uint8_t _wfmode, uint8_t _clk)\
-{						/*Sorry for this, but i need 16bit timers*/	\
-	TCCR ## n ## A = static_cast<uint8_t>((TCCR ## n ## A & ~((_wfmode & ((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1))) | _com)) \
-	| ((_wfmode & ((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1))) | _com));\
-	TCCR ## n ## B = static_cast<uint8_t>((_clk & TIMER ## n ## _CLK_SRC_MASK) | (_wfmode & ~((1 << WGM ## n ## 0) | (1 << WGM ## n ## 1))));		\
-}
-
-
-
-
-#define GENSETCLK(n)											\
-/*															*/	\
-/* Function TIMERnSetCLK									*/	\
-/* Desc     Change clock source in T/Cn 					*/	\
-/* Input    _clk: what clk change to 						*/	\
-/* Output   none 											*/	\
-/**/															\
-void TIMER ## n ## SetCLK(uint8_t _clk)							\
-{																\
-	TCCR ## n ## B &= static_cast<uint8_t>(~(TIMER ## n ## _CLK_SRC_MASK));				\
-	TCCR ## n ## B |= static_cast<uint8_t>(_clk & TIMER ## n ## _CLK_SRC_MASK);		\
-}
-
 #define GENISR_COMPk(n, k)										\
 /*														*/		\
 /* Function: ISR(TIMERn_COMPk_vect)						*/		\
@@ -45,31 +13,6 @@ void TIMER ## n ## SetCLK(uint8_t _clk)							\
 ISR(TIMER ## n ## _COMP ## k ## _vect)							\
 {																\
 	interrupt::call(interrupt::TC ## n ## _COMP ## k);	\
-}
-
-#define GENSETk_16B(n, k)										\
-/*										*/						\
-/* Function TIMERnSetk					*/						\
-/* Desc     Set k num of T/Cn 			*/						\
-/* Input    __k: what num set to 		*/						\
-/* Output   none						*/						\
-/**/															\
-void TIMER ## n ## Set ## k (uint16_t __k)						\
-{																\
-	OCR ## n ## k ## L = static_cast<uint8_t>(__k & 0xFF);		/*set high registers of num*/\
-	OCR ## n ## k ## H = static_cast<uint8_t>(__k >> 8);		/*set low registers of num*/\
-}
-
-#define GENSETk_8B(n, k)										\
-/*															*/	\
-/* Function TIMERnSetk 										*/	\
-/* Desc     set k num of T/Cn 								*/	\
-/* Input    __k: what num seIt to 							*/	\
-/* Output   none 											*/	\
-/**/ 															\
-void TIMER ## n ## Set ## k(uint8_t __k)						\
-{																\
-	OCR ## n ## k = static_cast<uint8_t>(__k);/*set k num*/ 					\
 }
 
 #define GENENABLECOMPkINTERRUPT(n, k)							\
