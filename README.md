@@ -43,6 +43,7 @@ while(1)
 }
 ```
 ## Timers and interrupts module
+Warning: timers module is under refactor now, methods Will be changed
 ```C++
 void schedule(void)
 {
